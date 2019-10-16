@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="de7c385d-89a3-460a-b594-216dba68cc1e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+
+
+
+
+<introduction address="Intro">
+      <!-- No depth option so only show top-level sections here -->
+      <autoOutline />
+      <para>The introduction.  If <codeInline>&lt;autoOutline /&gt;</codeInline>
+is included, this paragraph can be omitted.
+      </para>
+      <!-- Note that placing the autoOutline element here would place
+           the section outline below the intro paragraph. -->
+</introduction>
+    
+    
+    <section address="S1">
+      <title>Section 1</title>
+      <content>
+        <para>This is section 1.</para>
+        <!-- This will include sub-sections in the outline up to three
+             levels down.  It also uses custom lead-in text. -->
+        <autoOutline lead="Select a sub-section:">3</autoOutline>
+      </content>
+      <sections>
+        <section address="SS1">
+          <title>Sub-section 1</title>
+          <content>
+            <para>This is sub-section 1.</para>
+          </content>
+        </section>
+        <section address="SS2">
+          <title>Sub-section 2</title>
+          <content>
+            <!-- No <autoOutline /> in here so no outline -->
+            <para>This is sub-section 2.</para>
+          </content>
+          <sections>
+            <section address="SSS1">
+              <title>Sub-sub-section 1</title>
+              <content>
+                <para>This is sub-sub-section 1.</para>
+              </content>
+            </section>
+            <section address="SSS2">
+              <title>Sub-sub-section 2</title>
+              <content>
+                <para>This is sub-sub-section 2.</para>
+                <para>
+                  <link xlink:href="#Intro">Back to the Top</link>
+                </para>
+              </content>
+            </section>
+          </sections>
+        </section>
+      </sections>
+    </section>
+    <section address="S2">
+      <title>Section 2</title>
+      <content>
+        <para>This is section 2.</para>
+      </content>
+    </section>
+
+
+
+    <relatedTopics>
+      <!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference-->
+
+      <link xlink:href="Other Topic's ID"/>
+      <link xlink:href="Other Topic's ID">Link inner text</link>
+
+      <!--<externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8270" />
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on GitHub</linkText>
+          <linkAlternateText>Go to GitHub</linkAlternateText>
+          <linkUri>https://GitHub.com/EWSoftware/SHFB</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

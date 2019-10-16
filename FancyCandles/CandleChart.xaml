@@ -1,0 +1,359 @@
+﻿<UserControl x:Class="FancyCandles.CandleChart"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FancyCandles"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             x:Name="thisUserControl">
+
+    <UserControl.Resources>
+        <local:FirstCandleMaxIndexConverter x:Key="firstCandleMaxIndexConverter"/>
+        <local:TopBottomMarginConverter x:Key="topBottomMarginConverter"/>
+
+        <local:CrossPriceMarginConverter x:Key="crossPriceMarginConverter"/>
+        <local:CrossPriceValueConverter x:Key="crossPriceValueConverter"/>
+        <local:CrossVolumeConverter x:Key="crossVolumeConverter"/>
+
+        <local:IntRange_Start_i_Converter x:Key="intRange_Start_i_Converter"/>
+        <local:IntRange_Count_Converter x:Key="intRange_Count_Converter"/>
+
+        <local:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
+        <local:NotBoolToVisibilityConverter x:Key="notBoolToVisibilityConverter"/>
+        <local:SquareBoolToVisibilityConverter x:Key="squareBoolToVisibilityConverter"/>
+        <local:VerticalCrossLineVisibilityConverter x:Key="verticalCrossLineVisibilityConverter"/>
+
+        <Style x:Key="rowSpanPriceChartIfVolumeDisabled">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsVolumePanelVisible}" Value="False">
+                    <Setter Property="Grid.RowSpan" Value="3"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Background="{Binding Path=Background, Mode=OneWay}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="{Binding Path=TimeAxisHeight, Mode=OneWay}"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="{Binding Path=PriceAxisWidth, Mode=OneWay}"/>
+        </Grid.ColumnDefinitions>
+        <!-- ============================================================================================================================================================== -->
+        <!-- ГРАФИК ЦЕНЫ (Панель со свечками): -->
+        <!-- Подложка для графика цены, чтобы можно было ее подкрасить и нарисовать рамочку -->
+        <Border Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                Style="{StaticResource rowSpanPriceChartIfVolumeDisabled}"
+                Background="{Binding Path=ChartAreaBackground, Mode=OneWay}"
+                BorderBrush="Black"
+                BorderThickness="1"
+                RenderOptions.EdgeMode="Aliased"/>
+
+        <!-- Обертка для ItemsControl нужна для определения размеров. -->
+        <Grid x:Name="priceChartContainer" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+              Style="{StaticResource rowSpanPriceChartIfVolumeDisabled}"
+              SizeChanged="OnPanelCandlesContainerSizeChanged" MouseWheel="OnMouseWheel" MouseMove="OnMouseMoveInsidePriceChartContainer" Panel.ZIndex="2">
+
+            <!-- Нужно заполнить весь контейнер прозрачным содержимым, а иначе перекрестие не работает: -->
+            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent"/>
+
+            <ItemsControl Name="candlesItemsControl" ItemsSource="{Binding VisibleCandles}">
+
+                <ItemsControl.Margin>
+                    <MultiBinding Converter="{StaticResource topBottomMarginConverter}">
+                        <Binding ElementName="thisUserControl" Path="PriceChartTopMargin" Mode="OneWay"/>
+                        <Binding ElementName="thisUserControl" Path="PriceChartBottomMargin" Mode="OneWay"/>
+                    </MultiBinding>
+                </ItemsControl.Margin>
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="{Binding ElementName=priceChartContainer, Path=ActualWidth, Mode=OneWay}"  HorizontalAlignment="Right"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Bottom" Value="0"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:WholeContainerCandleElement CandleData="{Binding Path=.,Mode=OneWay}" 
+                                             BullishCandleBrush="{Binding ElementName=thisUserControl, Path=BullishCandleBrush, Mode=OneWay}"              
+                                             BearishCandleBrush="{Binding ElementName=thisUserControl, Path=BearishCandleBrush, Mode=OneWay}"              
+                                             Height="{Binding ElementName=candlesItemsControl, Path=ActualHeight}" Width="{Binding ElementName=candlesItemsControl, Path=ActualWidth}"
+                                             ToolTipService.PlacementTarget="{Binding ElementName=priceChartContainer, Path=., Mode=OneWay}"
+                                             ToolTipService.Placement="Relative" RenderOptions.EdgeMode="Aliased"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Легенда -->
+            <TextBlock TextAlignment="Center" IsHitTestVisible="False"
+                       VerticalAlignment="{Binding LegendVerticalAlignment, Mode=OneWay}" 
+                       HorizontalAlignment="{Binding LegendHorizontalAlignment, Mode=OneWay}" 
+                       Margin="{Binding LegendMargin, Mode=OneWay}"
+                       FontFamily="{Binding LegendFontFamily, Mode=OneWay}"
+                       FontSize="{Binding LegendFontSize, Mode=OneWay}" 
+                       FontStyle="{Binding LegendFontStyle, Mode=OneWay}"
+                       Text="{Binding LegendText, Mode=OneWay}" 
+                       FontWeight="{Binding LegendFontWeight, Mode=OneWay}" 
+                       Foreground="{Binding LegendForeground, Mode=OneWay}" />
+
+            <!-- Горизонтальная линия перекрестия: -->
+            <Line Stroke="{Binding Path=CrossLinesBrush, Mode=OneWay}" StrokeThickness="1"
+                    IsHitTestVisible="False" RenderOptions.EdgeMode="Aliased"
+                    X1="0" 
+                    Y1="{Binding Path=CurrentMousePosition.Y, Mode=OneWay}" 
+                    X2="{Binding ElementName=priceChartContainer, Path=ActualWidth, Mode=OneWay}" 
+                    Y2="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Y1, Mode=OneWay}">
+                <Line.Visibility>
+                    <MultiBinding Converter="{StaticResource squareBoolToVisibilityConverter}">
+                        <Binding Path="IsCrossLinesVisible" Mode="OneWay"/>
+                        <Binding ElementName="priceChartContainer" Path="IsMouseOver" Mode="OneWay"/>
+                    </MultiBinding>
+                </Line.Visibility>
+            </Line>
+
+            <!-- Вертикальная линия перекрестия: -->
+            <Line Stroke="{Binding Path=CrossLinesBrush, Mode=OneWay}" StrokeThickness="1"
+                    IsHitTestVisible="False" RenderOptions.EdgeMode="Aliased"
+                    X1="{Binding Path=CurrentMousePosition.X, Mode=OneWay}" 
+                    Y1="0" 
+                    X2="{Binding RelativeSource={RelativeSource Mode=Self}, Path=X1, Mode=OneWay}" 
+                    Y2="{Binding ElementName=priceChartContainer, Path=ActualHeight, Mode=OneWay}">
+                <Line.Visibility>
+                    <MultiBinding Converter="{StaticResource verticalCrossLineVisibilityConverter}">
+                        <Binding Path="IsCrossLinesVisible" Mode="OneWay"/>
+                        <Binding ElementName="priceChartContainer" Path="IsMouseOver" Mode="OneWay"/>
+                        <Binding ElementName="volumeHistogramContainer" Path="IsMouseOver" Mode="OneWay"/>
+                    </MultiBinding>
+                </Line.Visibility>
+            </Line>
+
+        </Grid>
+        <!-- ============================================================================================================================================================== -->
+        <!-- Разделитель между графиком цены и диаграммой объема: -->
+        <GridSplitter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ShowsPreview="False" Height="3"
+        HorizontalAlignment="Stretch" VerticalAlignment="Center" Visibility="{Binding Path=IsVolumePanelVisible, Converter={StaticResource boolToVisibilityConverter}}"/>
+        <!-- ============================================================================================================================================================== -->
+        <!-- ДИАГРАММА V: -->
+        <!-- Подложка для диаграммы объемов, чтобы можно было ее подкрасить и нарисовать рамочку -->
+        <Border Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                Background="{Binding Path=ChartAreaBackground, Mode=OneWay}"
+                BorderBrush="Black"
+                BorderThickness="1"
+                RenderOptions.EdgeMode="Aliased"
+                Visibility="{Binding Path=IsVolumePanelVisible, Converter={StaticResource boolToVisibilityConverter}}" />
+
+        <!-- Обертка для ItemsControl нужна для определения размеров. -->
+        <Grid x:Name="volumeHistogramContainer" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+              MouseWheel="OnMouseWheel" MouseMove="OnMouseMoveInsideVolumeHistogramContainer" Panel.ZIndex="2"
+              Visibility="{Binding Path=IsVolumePanelVisible, Converter={StaticResource boolToVisibilityConverter}}" >
+
+            <!-- Нужно заполнить весь контейнер прозрачным содержимым, а иначе перекрестие не работает: -->
+            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent"/>
+
+            <ItemsControl Name="volumesHistogramItemsControl" ItemsSource="{Binding VisibleCandles}">
+
+                <ItemsControl.Margin>
+                    <MultiBinding Converter="{StaticResource topBottomMarginConverter}">
+                        <Binding ElementName="thisUserControl" Path="VolumeHistogramTopMargin" Mode="OneWay"/>
+                        <Binding ElementName="thisUserControl" Path="VolumeHistogramBottomMargin" Mode="OneWay"/>
+                    </MultiBinding>
+                </ItemsControl.Margin>
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="{Binding ElementName=volumeHistogramContainer, Path=ActualWidth, Mode=OneWay}"  HorizontalAlignment="Right"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Bottom" Value="0"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:WholeContainerHistogramBarElement CandleData="{Binding Path=.,Mode=OneWay}" 
+                                                                BullishVolumeBarBrush="{Binding ElementName=thisUserControl, Path=BullishVolumeBarBrush, Mode=OneWay}"              
+                                                                BearishVolumeBarBrush="{Binding ElementName=thisUserControl, Path=BearishVolumeBarBrush, Mode=OneWay}"              
+                                                                Height="{Binding ElementName=volumesHistogramItemsControl, Path=ActualHeight}" 
+                                                                Width="{Binding ElementName=volumesHistogramItemsControl, Path=ActualWidth}"
+                                                                VolumeBarWidthToCandleWidthRatio="{Binding ElementName=thisUserControl, Path=VolumeBarWidthToCandleWidthRatio}"
+                                                                ToolTipService.PlacementTarget="{Binding ElementName=volumeHistogramContainer, Path=., Mode=OneWay}"
+                                                                ToolTipService.Placement="Relative"
+                                                                RenderOptions.EdgeMode="Aliased"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Горизонтальная линия перекрестия: -->
+            <Line Stroke="{Binding Path=CrossLinesBrush, Mode=OneWay}" StrokeThickness="1"
+                    IsHitTestVisible="False" RenderOptions.EdgeMode="Aliased"
+                    X1="0" 
+                    Y1="{Binding Path=CurrentMousePosition.Y, Mode=OneWay}" 
+                    X2="{Binding ElementName=volumeHistogramContainer, Path=ActualWidth, Mode=OneWay}" 
+                    Y2="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Y1, Mode=OneWay}">
+                <Line.Visibility>
+                    <MultiBinding Converter="{StaticResource squareBoolToVisibilityConverter}">
+                        <Binding Path="IsCrossLinesVisible" Mode="OneWay"/>
+                        <Binding ElementName="volumeHistogramContainer" Path="IsMouseOver" Mode="OneWay"/>
+                    </MultiBinding>
+                </Line.Visibility>
+            </Line>
+
+            <!-- Вертикальная линия перекрестия: -->
+            <Line Stroke="{Binding Path=CrossLinesBrush, Mode=OneWay}" StrokeThickness="1"
+                    IsHitTestVisible="False" RenderOptions.EdgeMode="Aliased"
+                    X1="{Binding Path=CurrentMousePosition.X, Mode=OneWay}" 
+                    Y1="0" 
+                    X2="{Binding RelativeSource={RelativeSource Mode=Self}, Path=X1, Mode=OneWay}" 
+                    Y2="{Binding ElementName=volumeHistogramContainer, Path=ActualHeight, Mode=OneWay}">
+                <Line.Visibility>
+                    <MultiBinding Converter="{StaticResource verticalCrossLineVisibilityConverter}">
+                        <Binding Path="IsCrossLinesVisible" Mode="OneWay"/>
+                        <Binding ElementName="priceChartContainer" Path="IsMouseOver" Mode="OneWay"/>
+                        <Binding ElementName="volumeHistogramContainer" Path="IsMouseOver" Mode="OneWay"/>
+                    </MultiBinding>
+                </Line.Visibility>
+            </Line>
+
+        </Grid>
+        <!-- ============================================================================================================================================================== -->
+        <!-- Вертикальная шкала с метками цены: -->
+        <local:PriceTicksElement Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch"
+                                 Style="{StaticResource rowSpanPriceChartIfVolumeDisabled}"
+                                 GapBetweenTickLabels="{Binding Path=GapBetweenPriceTickLabels, Mode=OneWay}"
+                                 ChartBottomMargin="{Binding Path=PriceChartBottomMargin, Mode=OneWay}"
+                                 ChartTopMargin="{Binding Path=PriceChartTopMargin, Mode=OneWay}"
+                                 PriceAxisWidth="{Binding Path=PriceAxisWidth, Mode=OneWay}"
+                                 CandlesLH="{Binding Path=CandlesLH, Mode=OneWay}"
+                                 IsGridlinesEnabled="{Binding Path=IsHorizontalGridlinesEnabled, Mode=OneWay}"
+                                 GridlinesPen="{Binding Path=HorizontalGridlinesPen, Mode=OneWay}"
+                                 RenderOptions.EdgeMode="Aliased"/>
+        <!-- ============================================================================================================================================================== -->
+        <!-- Вертикальная шкала с метками объема: -->
+        <local:VolumeTicksElement Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch"
+                                  GapBetweenTickLabels="{Binding Path=GapBetweenPriceTickLabels, Mode=OneWay}"
+                                  ChartBottomMargin="{Binding Path=VolumeHistogramBottomMargin, Mode=OneWay}"
+                                  ChartTopMargin="{Binding Path=VolumeHistogramTopMargin, Mode=OneWay}"
+                                  PriceAxisWidth="{Binding Path=PriceAxisWidth, Mode=OneWay}"
+                                  CandlesMaxVolume="{Binding Path=CandlesMaxVolume, Mode=OneWay}"
+                                  IsGridlinesEnabled="{Binding Path=IsHorizontalGridlinesEnabled, Mode=OneWay}"
+                                  GridlinesPen="{Binding Path=HorizontalGridlinesPen, Mode=OneWay}"
+                                  RenderOptions.EdgeMode="Aliased"
+                                  Visibility="{Binding Path=IsVolumePanelVisible, Converter={StaticResource boolToVisibilityConverter}}"/>
+        <!-- ============================================================================================================================================================== -->
+        <!-- Горизонтальная шкала c метками времени: -->
+        <local:TimeTicksElement Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"
+                                TimeAxisHeight="{Binding Path=TimeAxisHeight, Mode=OneWay}"
+                                CandlesSource="{Binding Path=CandlesSource, Mode=OneWay}"
+                                CandleWidth="{Binding Path=CandleWidth, Mode=OneWay}"
+                                GapBetweenCandles="{Binding Path=GapBetweenCandles, Mode=OneWay}"
+                                TimeFrame="{Binding Path=TimeFrame, Mode=OneWay}"
+                                VisibleCandlesRange="{Binding Path=VisibleCandlesRange, Mode=OneWay}"
+                                IsGridlinesEnabled="{Binding Path=IsVerticalGridlinesEnabled, Mode=OneWay}"
+                                GridlinesPen="{Binding Path=VerticalGridlinesPen, Mode=OneWay}"
+                                HideMinorGridlines="{Binding Path=HideMinorVerticalGridlines, Mode=OneWay}"
+                                RenderOptions.EdgeMode="Aliased"/>
+
+        <!-- Совпадает с расположением шкалы меток времени. Нужно для корректной работы колесика мыши в этой области. + Курсор перестает реагировать на текстовые метки времени. -->
+        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" MouseWheel="OnMouseWheel"/>
+        <!-- ============================================================================================================================================================== -->
+        <!-- Цена перекрестия для графика цены -->
+        <Border Grid.Row="0" Grid.Column="1" BorderThickness="1" VerticalAlignment="Top" HorizontalAlignment="Left"
+                Style="{StaticResource rowSpanPriceChartIfVolumeDisabled}"
+                Background="{Binding CrossPriceBackground, Mode=OneWay}" BorderBrush="{Binding CrossPriceForeground, Mode=OneWay}">
+
+            <Border.Visibility>
+                <MultiBinding Converter="{StaticResource squareBoolToVisibilityConverter}">
+                    <Binding Path="IsCrossPriceVisible" Mode="OneWay"/>
+                    <Binding ElementName="priceChartContainer" Path="IsMouseOver" Mode="OneWay"/>
+                </MultiBinding>
+            </Border.Visibility>
+
+            <Border.Margin>
+                <MultiBinding Converter="{StaticResource crossPriceMarginConverter}">
+                    <Binding Path="CurrentMousePosition" Mode="OneWay"/>
+                    <Binding Path="PriceTickTextHeight" Mode="OneWay"/>
+                </MultiBinding>
+            </Border.Margin>
+
+            <TextBlock Foreground="{Binding CrossPriceForeground, Mode=OneWay}">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource crossPriceValueConverter}">
+                        <Binding Path="CurrentMousePosition" Mode="OneWay"/>
+                        <Binding ElementName="priceChartContainer" Path="ActualHeight" Mode="OneWay"/>
+                        <Binding Path="CandlesLH" Mode="OneWay"/>
+                        <Binding Path="PriceChartTopMargin" Mode="OneWay"/>
+                        <Binding Path="PriceChartBottomMargin" Mode="OneWay"/>
+                        <Binding Path="MaxNumberOfDigitsAfterPointInPrice" Mode="OneWay"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </Border>
+
+        <!-- Объем перекрестия для гистограммы объема -->
+        <Border Grid.Row="2" Grid.Column="1" BorderThickness="1" VerticalAlignment="Top" HorizontalAlignment="Left"
+                Background="{Binding CrossPriceBackground, Mode=OneWay}" BorderBrush="{Binding CrossPriceForeground, Mode=OneWay}">
+
+            <Border.Visibility>
+                <MultiBinding Converter="{StaticResource squareBoolToVisibilityConverter}">
+                    <Binding Path="IsCrossPriceVisible" Mode="OneWay"/>
+                    <Binding ElementName="volumeHistogramContainer" Path="IsMouseOver" Mode="OneWay"/>
+                </MultiBinding>
+            </Border.Visibility>
+
+            <Border.Margin>
+                <MultiBinding Converter="{StaticResource crossPriceMarginConverter}">
+                    <Binding Path="CurrentMousePosition" Mode="OneWay"/>
+                    <Binding Path="PriceTickTextHeight" Mode="OneWay"/>
+                </MultiBinding>
+            </Border.Margin>
+
+            <TextBlock Foreground="{Binding CrossPriceForeground, Mode=OneWay}">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource crossVolumeConverter}">
+                        <Binding Path="CurrentMousePosition" Mode="OneWay"/>
+                        <Binding ElementName="volumeHistogramContainer" Path="ActualHeight" Mode="OneWay"/>
+                        <Binding Path="CandlesMaxVolume" Mode="OneWay"/>
+                        <Binding Path="VolumeHistogramTopMargin" Mode="OneWay"/>
+                        <Binding Path="VolumeHistogramBottomMargin" Mode="OneWay"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </Border>
+        <!-- ============================================================================================================================================================== -->
+        <!-- Горизонтальный скроллер: -->
+        <ScrollBar Grid.Row="4" Grid.Column="0" Orientation="Horizontal" Margin="0,0,0,0" Minimum="0" SmallChange="1" 
+                   Background="{Binding ElementName=thisUserControl, Path=ScrollBarBackground}"
+                   Height="{Binding ElementName=thisUserControl, Path=ScrollBarHeight}"
+                   Value="{Binding Path=VisibleCandlesRange, Converter={StaticResource intRange_Start_i_Converter}, Mode=TwoWay}"
+                   ViewportSize="{Binding Path=VisibleCandlesRange, Converter={StaticResource intRange_Count_Converter}, Mode=OneWay}">
+            <ScrollBar.Maximum>
+                <MultiBinding Converter="{StaticResource firstCandleMaxIndexConverter}">
+                    <Binding Path="CandlesSource"/>
+                    <Binding Path="VisibleCandlesRange" Mode="OneWay"/>
+                </MultiBinding>
+            </ScrollBar.Maximum>
+        </ScrollBar>
+        <!-- ============================================================================================================================================================== -->
+        <!-- Затемнитель на весь контрол для случая, когда IsEnabled=False : -->
+        <Rectangle Grid.Row="0" Grid.RowSpan="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="{Binding Path=DisabledFill}" Panel.ZIndex="3" 
+                   Visibility="{Binding Path=IsEnabled, Converter={StaticResource notBoolToVisibilityConverter}}"/>
+        <!-- ============================================================================================================================================================== -->
+    </Grid>
+</UserControl>
