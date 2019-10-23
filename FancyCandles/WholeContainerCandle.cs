@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace FancyCandles
 {
@@ -44,7 +45,7 @@ namespace FancyCandles
             BodyHeight = Math.Abs(O - C) / visibleCandlesRangeLH;
             ShadowsBottomMargin = (L - visibleCandlesLow) / visibleCandlesRangeLH;
             BodyBottomMargin = (Math.Min(O, C) - visibleCandlesLow) / visibleCandlesRangeLH;
-            ToolTipText = $"{t.ToString("d.MM.yyyy H:mm")}\nO={O}\nH={H}\nL={L}\nC={C}\nV={V}";
+            ToolTipText = $"{t.ToString("g", CultureInfo.CurrentCulture)}\nO={O}\nH={H}\nL={L}\nC={C}\nV={V}"; //"d.MM.yyyy H:mm"
             VolumeToolTipText = $"{t.ToString("d.MM.yyyy H:mm")}\nV={V}";
             BodyWidth = bodyWidth;
             LeftMargin = (bodyWidth + betweenCandlesWidth) * index;

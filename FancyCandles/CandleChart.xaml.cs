@@ -29,8 +29,12 @@ namespace FancyCandles
     public partial class CandleChart : UserControl, INotifyPropertyChanged
     {
         //----------------------------------------------------------------------------------------------------------------------------------
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.candleToolTipFontSize'
         public static double candleToolTipFontSize = 9.0;
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.candleToolTipFontSize'
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.calcDependentPropertiesInSetter'
         public bool calcDependentPropertiesInSetter = true;
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.calcDependentPropertiesInSetter'
         //public bool IsAlreadyLoaded { get; private set; }
 
         //----------------------------------------------------------------------------------------------------------------------------------
@@ -1132,7 +1136,9 @@ namespace FancyCandles
             get { return (ObservableCollection<WholeContainerCandle>)GetValue(VisibleCandlesProperty); }
             set { SetValue(VisibleCandlesProperty, value); }
         }
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.VisibleCandlesProperty'
         public static readonly DependencyProperty VisibleCandlesProperty =
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.VisibleCandlesProperty'
             DependencyProperty.Register("VisibleCandles", typeof(ObservableCollection<WholeContainerCandle>), typeof(CandleChart), new PropertyMetadata(null));
 
         bool visibleCandles_needReCalc;
@@ -1195,7 +1201,9 @@ namespace FancyCandles
         public static readonly DependencyProperty CandlesSourceProperty =
             DependencyProperty.Register("CandlesSource", typeof(ObservableCollection<ICandle>), typeof(CandleChart), new UIPropertyMetadata(null, OnCandlesSourceChanged, CoerceCandlesSource));
 
+#pragma warning disable CS0169 // The field 'CandleChart.candlesSource_needReCalc' is never used
         bool candlesSource_needReCalc;
+#pragma warning restore CS0169 // The field 'CandleChart.candlesSource_needReCalc' is never used
 
         DateTime lastCenterCandleDateTime;
         private static object CoerceCandlesSource(DependencyObject objWithOldDP, object newDPValue)
@@ -1417,7 +1425,9 @@ namespace FancyCandles
             }
         }
         //----------------------------------------------------------------------------------------------------------------------------------
+#pragma warning disable CS0649 // Field 'CandleChart.visibleCandlesRange_needReCalc' is never assigned to, and will always have its default value false
         bool visibleCandlesRange_needReCalc;
+#pragma warning restore CS0649 // Field 'CandleChart.visibleCandlesRange_needReCalc' is never assigned to, and will always have its default value false
 
         /// <summary>Gets the range of indexes of candles, currently visible in this chart window.</summary>
         ///<value>The range of indexes of candles, currently visible in this chart window. The default value is <see cref="IntRange.Undefined"/>.</value>
@@ -1722,9 +1732,13 @@ namespace FancyCandles
                 ReCalc_VisibleCandlesRange();
         }
         //---------------- INotifyPropertyChanged ----------------------------------------------------------
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.PropertyChanged'
         public event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.PropertyChanged'
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.OnPropertyChanged(string)'
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.OnPropertyChanged(string)'
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             if (IsLoaded)
@@ -1775,7 +1789,9 @@ namespace FancyCandles
         }
         //----------------------------------------------------------------------------------------------------------------------------------
         // Пересчитывает все зависимые (от других свойств-факторов) свойства, которые нужно пересчитать:
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.CalcDelayedDependentProperties()'
         public void CalcDelayedDependentProperties()
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.CalcDelayedDependentProperties()'
         {
             if (visibleCandlesRange_needReCalc)
                 ReCalc_VisibleCandlesRange();
