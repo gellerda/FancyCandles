@@ -64,7 +64,7 @@ namespace FancyCandles
             ShadowsBottomMargin = (L - visibleCandlesLow) / visibleCandlesRangeLH;
             BodyBottomMargin = (Math.Min(O, C) - visibleCandlesLow) / visibleCandlesRangeLH;
             ToolTipText = $"{t.ToString("g", CultureInfo.CurrentCulture)}\nO={O}\nH={H}\nL={L}\nC={C}\nV={V}"; //"d.MM.yyyy H:mm"
-            VolumeToolTipText = $"{t.ToString("d.MM.yyyy H:mm")}\nV={V}";
+            VolumeToolTipText = $"{t.ToString("g", CultureInfo.CurrentCulture)}\nV={V}";
             BodyWidth = bodyWidth;
             LeftMargin = (bodyWidth + betweenCandlesWidth) * index;
             VolumeBarHeight = V / (double)visibleCandlesMaxVolume;
