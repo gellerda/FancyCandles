@@ -76,6 +76,18 @@
       "version": ""
     },
     {
+      "type": "Conceptual",
+      "source_relative_path": "articles/creating_candlestick_chart.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/creating_candlestick_chart.html",
+          "hash": "m02zJf7JLs34h/snjo+YRA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "log_codes": [
         "UidNotFound"
       ],
@@ -87,7 +99,19 @@
           "hash": "6zh2V0AGxP0XZcHljYGSgg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/populating_candlestick_chart.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/populating_candlestick_chart.html",
+          "hash": "/gjHdNf7tKb5ZIJM287hcA=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -96,7 +120,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "cr660h+SyMQVuwUxIQxeKg=="
+          "hash": "I9cQyy9gGf75FYlcJT9vZQ=="
         }
       },
       "is_incremental": false,
@@ -108,10 +132,10 @@
       "output": {
         ".html": {
           "relative_path": "download/download_doc.html",
-          "hash": "m43Vr200iqjMHIdB3utVrA=="
+          "hash": "yrTnfjauNXJ1Nsjssfigcw=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -179,7 +203,7 @@
           "hash": "H9UKqtGyf+Bve11M7PtQ0g=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -211,24 +235,24 @@
           "total_file_count": 0,
           "skipped_file_count": 0
         },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 4,
+          "skipped_file_count": 4
+        },
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 6,
+          "skipped_file_count": 3
+        },
         "TocDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
           "total_file_count": 0,
           "skipped_file_count": 0
-        },
-        "ConceptualDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 4,
-          "skipped_file_count": 3
-        },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 4,
-          "skipped_file_count": 4
         }
       }
     },
