@@ -1,2 +1,8 @@
 - name: Overview
   href: overview.md
+- name: Getting started
+  items:
+    - name: Creating empty candlestick chart
+      href: creating_candlestick_chart.md
+    - name: Populating candlestick chart with candles
+      href: populating_candlestick_chart.md
