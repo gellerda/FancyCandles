@@ -84,7 +84,7 @@
           "hash": "m02zJf7JLs34h/snjo+YRA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -99,7 +99,7 @@
           "hash": "6zh2V0AGxP0XZcHljYGSgg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -111,7 +111,7 @@
           "hash": "/gjHdNf7tKb5ZIJM287hcA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -120,7 +120,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "C/ptmnNdgSgevVEnjE5z2Q=="
+          "hash": "Gm5c7nKc0kcmSCD/gvyp1g=="
         }
       },
       "is_incremental": false,
@@ -200,10 +200,10 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "XuYieaASE13ek9Ph9pEP3A=="
+          "hash": "H9UKqtGyf+Bve11M7PtQ0g=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -212,7 +212,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "tzZWA5p4H+Jq7XVdNr4OEQ=="
+          "hash": "LdlrGl4zrdT+a6FvsXOX6g=="
         }
       },
       "is_incremental": false,
@@ -235,24 +235,24 @@
           "total_file_count": 0,
           "skipped_file_count": 0
         },
-        "ConceptualDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 6,
-          "skipped_file_count": 6
-        },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 4,
-          "skipped_file_count": 4
-        },
         "TocDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
           "total_file_count": 0,
           "skipped_file_count": 0
+        },
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 6,
+          "skipped_file_count": 5
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 4,
+          "skipped_file_count": 4
         }
       }
     },

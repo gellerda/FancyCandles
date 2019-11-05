@@ -5,6 +5,7 @@
 - name: Populating candlestick chart with candles
   href: populating_candlestick_chart.md
 - name: Getting started
+  href: creating_candlestick_chart.md
   items:
     - name: Creating empty candlestick chart
       href: creating_candlestick_chart.md
