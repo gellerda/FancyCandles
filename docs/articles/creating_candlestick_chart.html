@@ -86,17 +86,17 @@
 </ul>
 </li>
 <li><p>Open the MainWindow.xaml file of your project and add the declaration of the FancyCandles namespace. To do this, add the new <em>xmlns</em> property inside the <em>Window</em> open tag:</p>
-<pre><code class="lang-xaml">    &lt;Window x:Class=&quot;MyProjectThatWouldUseFancyCandles.MainWindow&quot;
+<pre><code class="lang-xml">    &lt;Window x:Class=&quot;MyProjectThatWouldUseFancyCandles.MainWindow&quot;
     ...
     xmlns:fc=&quot;clr-namespace:FancyCandles;assembly=FancyCandles&quot;
     ... &gt;
 </code></pre>
 </li>
 <li><p>Inside the body of the aforementioned XML document add the <em>FancyCandles.CandleChart</em> control element:</p>
-<pre><code class="lang-xaml">    &lt;fc:CandleChart /&gt;
+<pre><code class="lang-xml">    &lt;fc:CandleChart /&gt;
 </code></pre>
 <p>As a result your MainWindow.xaml may looks like this:</p>
-<pre><code class="lang-xaml">   &lt;Window x:Class=&quot;MyProjectThatWouldUseFancyCandles.MainWindow&quot;
+<pre><code class="lang-xml">   &lt;Window x:Class=&quot;MyProjectThatWouldUseFancyCandles.MainWindow&quot;
            xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
            xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
            xmlns:d=&quot;http://schemas.microsoft.com/expression/blend/2008&quot;

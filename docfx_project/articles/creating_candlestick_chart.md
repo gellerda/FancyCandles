@@ -9,7 +9,7 @@
     * Click *OK*.
 1. Open the MainWindow.xaml file of your project and add the declaration of the FancyCandles namespace. To do this, add the new *xmlns* property inside the *Window* open tag:
 
-    ```xaml
+    ```xml
         <Window x:Class="MyProjectThatWouldUseFancyCandles.MainWindow"
         ...
         xmlns:fc="clr-namespace:FancyCandles;assembly=FancyCandles"
@@ -17,12 +17,12 @@
     ```
 1. Inside the body of the aforementioned XML document add the *FancyCandles.CandleChart* control element:
 
-    ```xaml
+    ```xml
         <fc:CandleChart />
     ```
    As a result your MainWindow.xaml may looks like this:
 
-    ```xaml
+    ```xml
        <Window x:Class="MyProjectThatWouldUseFancyCandles.MainWindow"
                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
