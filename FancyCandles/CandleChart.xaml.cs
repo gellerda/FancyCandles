@@ -40,11 +40,6 @@ namespace FancyCandles
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.candleToolTipFontSize'
         public static double candleToolTipFontSize = 9.0;
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.candleToolTipFontSize'
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.calcDependentPropertiesInSetter'
-        public bool calcDependentPropertiesInSetter = true;
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.calcDependentPropertiesInSetter'
-        //public bool IsAlreadyLoaded { get; private set; }
-
         //----------------------------------------------------------------------------------------------------------------------------------
         void OnUserControlLoaded(object sender, RoutedEventArgs e)
         {
@@ -1149,8 +1144,6 @@ namespace FancyCandles
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.VisibleCandlesProperty'
             DependencyProperty.Register("VisibleCandles", typeof(ObservableCollection<WholeContainerCandle>), typeof(CandleChart), new PropertyMetadata(null));
 
-        bool visibleCandles_needReCalc;
-
         void ReCalc_VisibleCandles()
         {
             if (VisibleCandles == null)
@@ -1209,10 +1202,6 @@ namespace FancyCandles
         public static readonly DependencyProperty CandlesSourceProperty =
             DependencyProperty.Register("CandlesSource", typeof(ObservableCollection<ICandle>), typeof(CandleChart), new UIPropertyMetadata(null, OnCandlesSourceChanged, CoerceCandlesSource));
 
-#pragma warning disable CS0169 // The field 'CandleChart.candlesSource_needReCalc' is never used
-        bool candlesSource_needReCalc;
-#pragma warning restore CS0169 // The field 'CandleChart.candlesSource_needReCalc' is never used
-
         DateTime lastCenterCandleDateTime;
         private static object CoerceCandlesSource(DependencyObject objWithOldDP, object newDPValue)
         {
@@ -1255,7 +1244,19 @@ namespace FancyCandles
             }
 
             if (thisCandleChart.IsLoaded)
-                thisCandleChart.CalcOrDelayDependentProperties("CandlesSource");
+            {
+                thisCandleChart.ReCalc_TimeFrame();
+                thisCandleChart.ReCalc_MaxNumberOfCharsInPrice();
+                thisCandleChart.ReCalc_MaxNumberOfDigitsAfterPointInPrice();
+
+                if (thisCandleChart.lastCenterCandleDateTime != DateTime.MinValue)
+                    thisCandleChart.SetVisibleCandlesRangeCenter(thisCandleChart.lastCenterCandleDateTime);
+                else
+                    thisCandleChart.ReCalc_VisibleCandlesRange();
+                thisCandleChart.ReCalc_CandlesLH();
+                thisCandleChart.ReCalc_CandlesMaxVolume();
+                thisCandleChart.ReCalc_VisibleCandles();
+            }
         }
 
         // Произошли изменения содержимого коллекции CandlesSource:
@@ -1352,8 +1353,6 @@ namespace FancyCandles
             }
         }
 
-        bool candlesMaxVolume_needReCalc;
-
         void ReCalc_CandlesMaxVolume()
         {
             int end_i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - 1;
@@ -1365,10 +1364,7 @@ namespace FancyCandles
             }
 
             if (CandlesMaxVolume != maxVolume)
-            {
-                candlesMaxVolume_needReCalc = false;
                 CandlesMaxVolume = maxVolume;
-            }
         }
 
         void ReCalc_CandlesMaxVolume_AfterOneCandleChanged(int changedCandle_i)
@@ -1400,8 +1396,6 @@ namespace FancyCandles
             }
         }
 
-        bool candlesLH_needReCalc;
-
         void ReCalc_CandlesLH()
         {
             //Debug.WriteLine($"ReCalc_CandlesLH {VisibleCandlesRange.Start_i}");
@@ -1417,7 +1411,6 @@ namespace FancyCandles
 
             if (CandlesLH.X != candlesTotalL || CandlesLH.Y != candlesTotalH)
             {
-                candlesLH_needReCalc = false;
                 CandlesLH = new Vector(candlesTotalL, candlesTotalH);
             }
         }
@@ -1433,10 +1426,6 @@ namespace FancyCandles
             }
         }
         //----------------------------------------------------------------------------------------------------------------------------------
-#pragma warning disable CS0649 // Field 'CandleChart.visibleCandlesRange_needReCalc' is never assigned to, and will always have its default value false
-        bool visibleCandlesRange_needReCalc;
-#pragma warning restore CS0649 // Field 'CandleChart.visibleCandlesRange_needReCalc' is never assigned to, and will always have its default value false
-
         /// <summary>Gets the range of indexes of candles, currently visible in this chart window.</summary>
         ///<value>The range of indexes of candles, currently visible in this chart window. The default value is <see cref="IntRange.Undefined"/>.</value>
         ///<remarks>
@@ -1459,9 +1448,132 @@ namespace FancyCandles
         {
             CandleChart thisCandleChart = (CandleChart)obj;
             if (thisCandleChart.IsLoaded)
-                thisCandleChart.CalcOrDelayDependentProperties("VisibleCandlesRange");
+            {
+                thisCandleChart.ReCalc_CandlesLH();
+                thisCandleChart.ReCalc_CandlesMaxVolume();
+                thisCandleChart.ReCalc_VisibleCandles();
+            }
         }
 
+        private static object CoerceVisibleCandlesRange(DependencyObject objWithOldDP, object baseValue)
+        {
+            // Если произошли изменения CandleWidth или GapBetweenCandles, то возвращает true. Иначе - false.
+            CandleChart thisCandleChart = (CandleChart)objWithOldDP; // Содержит старое значение для изменяемого свойства.
+            IntRange newValue = (IntRange)baseValue;
+
+            if (IntRange.IsUndefined(newValue))
+                return newValue;
+            // Это хак для привязки к скроллеру, когда передается только компонента IntRange.Start_i, а компонента IntRange.Count берется из старого значения свойства:
+            else if (IntRange.IsContainsOnlyStart_i(newValue))
+                return new IntRange(newValue.Start_i, thisCandleChart.VisibleCandlesRange.Count);
+            // А это обычная ситуация:
+            else
+            {
+                int newVisibleCandlesStart_i = Math.Max(0, newValue.Start_i);
+                int newVisibleCandlesEnd_i = Math.Min(thisCandleChart.CandlesSource.Count - 1, newValue.Start_i + Math.Max(1, newValue.Count) - 1);
+                int maxVisibleCandlesCount = thisCandleChart.MaxVisibleCandlesCount;
+                int newVisibleCandlesCount = newVisibleCandlesEnd_i - newVisibleCandlesStart_i + 1;
+                if (newVisibleCandlesCount > maxVisibleCandlesCount)
+                {
+                    newVisibleCandlesStart_i = newVisibleCandlesEnd_i - maxVisibleCandlesCount + 1;
+                    newVisibleCandlesCount = maxVisibleCandlesCount;
+                }
+
+                return new IntRange(newVisibleCandlesStart_i, newVisibleCandlesCount);
+            }
+        }
+
+        // Пересчитывает VisibleCandlesRange.Count таким образом, чтобы по возможности сохранить индекс последней видимой свечи 
+        // и соответствовать текущим значениям CandleWidth и GapBetweenCandles.
+        void ReCalc_VisibleCandlesRange()
+        {
+            if (priceChartContainer.ActualWidth == 0 || CandlesSource == null)
+            {
+                VisibleCandlesRange = IntRange.Undefined;
+                return;
+            }
+
+            int newCount = (int)(priceChartContainer.ActualWidth / (CandleWidth + GapBetweenCandles));
+            if (newCount > CandlesSource.Count) newCount = CandlesSource.Count;
+            int new_start_i = IntRange.IsUndefined(VisibleCandlesRange) ? (CandlesSource.Count - newCount) : VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - newCount;
+            if (new_start_i < 0) new_start_i = 0;
+            if (new_start_i + newCount > CandlesSource.Count)
+                new_start_i = CandlesSource.Count - newCount;
+
+            VisibleCandlesRange = new IntRange(new_start_i, newCount);
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        int MaxVisibleCandlesCount
+        { get { return (int)(priceChartContainer.ActualWidth / 2); } }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        ///<summary>Shifts the range of visible candles to the position where the <c>t</c> property of the central visible candle is equal (or closest) to specified value.</summary>
+        ///<param name="visibleCandlesRangeCenter">Central visible candle should have its <c>t</c> property equal to this parameter (or close to it as much as possible).</param>
+        public void SetVisibleCandlesRangeCenter(DateTime visibleCandlesRangeCenter)
+        {
+            ICandle cndl = CandlesSource[VisibleCandlesRange.Count / 2];
+            if (visibleCandlesRangeCenter < cndl.t) //MyDateAndTime.YYMMDDHHMM_to_Datetime(cndl.YYMMDD, cndl.HHMM))
+            {
+                VisibleCandlesRange = new IntRange(0, VisibleCandlesRange.Count);
+                return;
+            }
+
+            cndl = CandlesSource[CandlesSource.Count - 1 - VisibleCandlesRange.Count / 2];
+            if (visibleCandlesRangeCenter > cndl.t) // MyDateAndTime.YYMMDDHHMM_to_Datetime(cndl.YYMMDD, cndl.HHMM))
+            {
+                VisibleCandlesRange = new IntRange(CandlesSource.Count - VisibleCandlesRange.Count, VisibleCandlesRange.Count);
+                return;
+            }
+
+            VisibleCandlesRange = IntRange.CreateContainingOnlyStart_i(CandlesSource.FindCandleByDatetime(visibleCandlesRangeCenter) - VisibleCandlesRange.Count / 2);
+        }
+
+        ///<summary>Sets the range of visible candles, that starts and ends at specified moments in time.</summary>
+        ///<param name="lowerBound">The datetime value at which the range of visible candles must start.</param>
+        ///<param name="upperBound">The datetime value at which the range of visible candles must end.</param>
+        ///<remarks>
+        ///This function finds in the <see cref="CandlesSource"/> collection of candles two of them that has its <c>t</c> property equal or closest to <c>datetime0</c> and <c>datetime1</c>. 
+        ///Then it sets the <see cref="VisibleCandlesRange"/> to the <see cref="IntRange"/> value that starts at the index of the first aforementioned candle, and ends at the index of the second one.
+        ///</remarks>
+        public void SetVisibleCandlesRangeBounds(DateTime lowerBound, DateTime upperBound)
+        {
+            if (CandlesSource == null || CandlesSource.Count == 0) return;
+
+            if (lowerBound > upperBound)
+            {
+                DateTime t_ = lowerBound;
+                lowerBound = upperBound;
+                upperBound = t_;
+            }
+
+            int i0, i1;
+            int N = CandlesSource.Count;
+            if (CandlesSource[0].t > upperBound)
+            {
+                VisibleCandlesRange = new IntRange(0, 1);
+                return;
+            }
+
+            if (CandlesSource[N - 1].t < lowerBound)
+            {
+                VisibleCandlesRange = new IntRange(N - 1, 1);
+                return;
+            }
+
+            if (CandlesSource[0].t > lowerBound)
+                i0 = 0;
+            else
+                i0 = CandlesSource.FindCandleByDatetime(lowerBound);
+
+            if (CandlesSource[N - 1].t < upperBound)
+                i1 = N - 1;
+            else
+                i1 = CandlesSource.FindCandleByDatetime(upperBound);
+
+            int newVisibleCandlesCount = i1 - i0 + 1;
+            ReCalc_CandleWidthAndGapBetweenCandles(newVisibleCandlesCount);
+            VisibleCandlesRange = new IntRange(i0, newVisibleCandlesCount);
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
         bool ReCalc_CandleWidthAndGapBetweenCandles(int new_VisibleCandlesCount)
         {
             if (new_VisibleCandlesCount <= 0) return false;
@@ -1487,155 +1599,6 @@ namespace FancyCandles
 
             GapBetweenCandles = (new_ActualWidth - new_VisibleCandlesCount * CandleWidth - 1.0) / new_VisibleCandlesCount;
             return true;
-        }
-
-        int MaxVisibleCandlesCount
-        { get { return (int)(priceChartContainer.ActualWidth/2); } }
-
-        private static object CoerceVisibleCandlesRange(DependencyObject objWithOldDP, object newDPValue)
-        {
-            // Если произошли изменения CandleWidth или GapBetweenCandles, то возвращает true. Иначе - false.
-            CandleChart thisCandleChart = (CandleChart)objWithOldDP; // Содержит старое значение для изменяемого свойства.
-            IntRange newValue = (IntRange)newDPValue;
-
-            if (IntRange.IsUndefined(newValue))
-                return newValue;
-            // Это хак для привязки к скроллеру, когда передается только компонента IntRange.Start_i, а компонента IntRange.Count берется из старого значения свойства:
-            else if (IntRange.IsContainsOnlyStart_i(newValue))
-            {
-                return new IntRange(newValue.Start_i, thisCandleChart.VisibleCandlesRange.Count);
-            }
-            // А это обычная ситуация:
-            else
-            {
-                int newVisibleCandlesStart_i = Math.Max(0, newValue.Start_i);
-                int newVisibleCandlesEnd_i = Math.Min(thisCandleChart.CandlesSource.Count-1, newValue.Start_i + Math.Max(1,newValue.Count) - 1);
-                int maxVisibleCandlesCount = thisCandleChart.MaxVisibleCandlesCount;
-                int newVisibleCandlesCount = newVisibleCandlesEnd_i - newVisibleCandlesStart_i + 1;
-                if (newVisibleCandlesCount > maxVisibleCandlesCount)
-                {
-                    newVisibleCandlesStart_i = newVisibleCandlesEnd_i - maxVisibleCandlesCount + 1;
-                    newVisibleCandlesCount = maxVisibleCandlesCount;
-                }
-
-                if (newVisibleCandlesCount != thisCandleChart.VisibleCandlesRange.Count)
-                    thisCandleChart.ReCalc_CandleWidthAndGapBetweenCandles(newVisibleCandlesCount);
-
-                return new IntRange(newVisibleCandlesStart_i, newVisibleCandlesCount);
-            }
-        }
-
-        // Если нужно задать компоненту VisibleCandlesRange.Count. Это происходит, например, при растяжении/сжатии графика колесиком мыши.
-        bool Set_VisibleCandlesRange_Count(int newCount)
-        {
-            // Если график уже нельзя больше сжимать, то отказываем в изменении VisibleCandlesRange:
-            if (!ReCalc_CandleWidthAndGapBetweenCandles(newCount))
-                return false;
-            else if (newCount > CandlesSource.Count)
-                VisibleCandlesRange = new IntRange(0, CandlesSource.Count);
-            else
-            {
-                int new_start_i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - newCount;
-                if (new_start_i < 0)
-                    VisibleCandlesRange = new IntRange(0, newCount);
-                else
-                    VisibleCandlesRange = new IntRange(VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - newCount, newCount);
-            }
-
-            return true;
-        }
-
-        // Если нужно рассчитать заново VisibleCandlesRange после изменения таких переменных окружения, как: ширина окна графика, CandlesSource и т.д.
-        bool ReCalc_VisibleCandlesRange()
-        {
-            IntRange old_VisibleCandlesRange = VisibleCandlesRange;
-
-            if (priceChartContainer.ActualWidth == 0 || CandlesSource == null)
-            {
-                VisibleCandlesRange = IntRange.Undefined;
-                return old_VisibleCandlesRange != VisibleCandlesRange;
-            }
-
-            int new_N = (int)(priceChartContainer.ActualWidth / (CandleWidth + GapBetweenCandles));
-            if (new_N > CandlesSource.Count)
-                VisibleCandlesRange = new IntRange(0, CandlesSource.Count);
-            else
-            {
-                int new_start_i = IntRange.IsUndefined(VisibleCandlesRange) ? (CandlesSource.Count - new_N) : VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - new_N;
-                if (new_start_i < 0) new_start_i = 0;
-                if (new_start_i + new_N > CandlesSource.Count)
-                    VisibleCandlesRange = new IntRange(CandlesSource.Count - new_N, new_N);
-                else
-                    VisibleCandlesRange = new IntRange(new_start_i, new_N);
-            }
-
-            return old_VisibleCandlesRange != VisibleCandlesRange;
-        }
-
-        ///<summary>Shifts the range of visible candles to the position where the <c>t</c> property of the central visible candle is equal (or closest) to specified value.</summary>
-        ///<param name="datetimeToCenter">Central visible candle should have its <c>t</c> property equal to this parameter (or close to it as much as possible).</param>
-        public void CenterOnDateTime(DateTime datetimeToCenter)
-        {
-            ICandle cndl = CandlesSource[VisibleCandlesRange.Count / 2];
-            if (datetimeToCenter < cndl.t) //MyDateAndTime.YYMMDDHHMM_to_Datetime(cndl.YYMMDD, cndl.HHMM))
-            {
-                VisibleCandlesRange = new IntRange(0, VisibleCandlesRange.Count);
-                return;
-            }
-
-            cndl = CandlesSource[CandlesSource.Count - 1 - VisibleCandlesRange.Count / 2];
-            if (datetimeToCenter > cndl.t) // MyDateAndTime.YYMMDDHHMM_to_Datetime(cndl.YYMMDD, cndl.HHMM))
-            {
-                VisibleCandlesRange = new IntRange(CandlesSource.Count - VisibleCandlesRange.Count, VisibleCandlesRange.Count);
-                return;
-            }
-
-            VisibleCandlesRange = IntRange.CreateContainingOnlyStart_i(CandlesSource.FindCandleByDatetime(datetimeToCenter) - VisibleCandlesRange.Count / 2);
-        }
-
-        ///<summary>Sets the range of visible candles, that starts and ends at specified moments.</summary>
-        ///<param name="datetime0">The datetime value at which the range of visible candles must start.</param>
-        ///<param name="datetime1">The datetime value at which the range of visible candles must end.</param>
-        ///<remarks>
-        ///This function finds in the <see cref="CandlesSource"/> collection of candles two of them that has its <c>t</c> property equal or closest to <c>datetime0</c> and <c>datetime1</c>. 
-        ///Then it sets the <see cref="VisibleCandlesRange"/> to the <see cref="IntRange"/> value that starts at the index of the first aforementioned candle, and ends at the index of the second one.
-        ///</remarks>
-        public void SetVisibleCandlesRange(DateTime datetime0, DateTime datetime1)
-        {
-            if (CandlesSource == null || CandlesSource.Count == 0) return;
-
-            if (datetime0 > datetime1)
-            {
-                DateTime t_ = datetime0;
-                datetime0 = datetime1;
-                datetime1 = t_;
-            }
-
-            int i0 = -1, i1 = -1;
-            int N = CandlesSource.Count;
-            if (CandlesSource[0].t > datetime1)
-            {
-                VisibleCandlesRange = new IntRange(0,1);
-                return;
-            }
-
-            if (CandlesSource[N - 1].t < datetime0)
-            {
-                VisibleCandlesRange = new IntRange(N - 1, 1);
-                return;
-            }
-
-            if (CandlesSource[0].t > datetime0)
-                i0 = 0;
-            else
-                i0 = CandlesSource.FindCandleByDatetime(datetime0);
-
-            if (CandlesSource[N - 1].t < datetime1)
-                i1 = N - 1;
-            else
-                i1 = CandlesSource.FindCandleByDatetime(datetime1);
-
-            VisibleCandlesRange = new IntRange(i0, i1 - i0 + 1);
         }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the modifier key that in conjunction with mouse wheel rolling will cause a change of the visible candles range width.</summary>
@@ -1680,18 +1643,26 @@ namespace FancyCandles
         //--------
         private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
+            // Пересчитывает VisibleCandlesRange.Start_i, CandleWidth и GapBetweenCandles таким образом, 
+            // чтобы установить заданное значение для VisibleCandlesRange.Count и по возможности сохраняет индекс последней видимой свечи. 
+            void SetVisibleCandlesRangeCount(int newCount)
+            {
+                if (newCount > CandlesSource.Count) newCount = CandlesSource.Count;
+                if (newCount == VisibleCandlesRange.Count) return;
+                if (!ReCalc_CandleWidthAndGapBetweenCandles(newCount)) return; // Если график уже нельзя больше сжимать.
+
+                int new_start_i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - newCount;
+                if (new_start_i < 0) new_start_i = 0;
+                VisibleCandlesRange = new IntRange(new_start_i, newCount);
+            }
+            //------
+
             if (Keyboard.Modifiers == MouseWheelModifierKeyForCandleWidthChanging)
             {
                 if (e.Delta > 0)
-                {
-                    //VisibleCandlesRange = IntRange.CreateContainingOnlyCount(VisibleCandlesRange.Count - 1);
-                    Set_VisibleCandlesRange_Count(VisibleCandlesRange.Count - 1);
-                }
+                    SetVisibleCandlesRangeCount(VisibleCandlesRange.Count - 1);
                 else if (e.Delta < 0)
-                {
-                    //VisibleCandlesRange = IntRange.CreateContainingOnlyCount(VisibleCandlesRange.Count + 1);
-                    Set_VisibleCandlesRange_Count(VisibleCandlesRange.Count + 1);
-                }
+                    SetVisibleCandlesRangeCount(VisibleCandlesRange.Count + 1);
             }
             else if (Keyboard.Modifiers == MouseWheelModifierKeyForScrollingThroughCandles)
             {
@@ -1740,162 +1711,16 @@ namespace FancyCandles
                 ReCalc_VisibleCandlesRange();
         }
         //---------------- INotifyPropertyChanged ----------------------------------------------------------
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.PropertyChanged'
+        /// <summary>INotifyPropertyChanged interface realization.</summary>
         public event PropertyChangedEventHandler PropertyChanged;
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.PropertyChanged'
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.OnPropertyChanged(string)'
+        /// <summary>INotifyPropertyChanged interface realization.</summary>
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.OnPropertyChanged(string)'
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            if (IsLoaded)
-                CalcOrDelayDependentProperties(propertyName);
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        void CalcOrDelayDependentProperties(string propertyName)
-        {
-            // Зависимость свойств:
-
-            if (propertyName == "CandlesSource") // - Фактор (свойство) от которого зависят следующие свойства.
-            { 
-                ReCalc_TimeFrame();
-                ReCalc_MaxNumberOfCharsInPrice();
-                ReCalc_MaxNumberOfDigitsAfterPointInPrice();
-
-                if (lastCenterCandleDateTime != DateTime.MinValue)
-                    CenterOnDateTime(lastCenterCandleDateTime);
-                else
-                    ReCalc_VisibleCandlesRange();
-                ReCalc_CandlesLH();
-                ReCalc_CandlesMaxVolume();
-                ReCalc_VisibleCandles();
-            }
-
-            if (propertyName == "VisibleCandlesRange") // - Фактор, свойство от которого зависят следующие свойства.
-            { // Зависимые свойства (от фактора):
-
-                if (calcDependentPropertiesInSetter)
-                {
-                    ReCalc_CandlesLH();
-                    ReCalc_CandlesMaxVolume();
-                    ReCalc_VisibleCandles();
-
-                    //ReCalc_CentralCandleDateTime();
-                    /*int centralCandle_i = CentralCandleIndex;
-                    DateTime centralCandle_t = centralCandle_i >= 0 ? CandlesSource[centralCandle_i].t : DateTime.MinValue;
-                    if (CentralCandleDateTime != centralCandle_t)
-                        CoerceValue(CentralCandleDateTimeProperty);*/
-                }
-                else
-                    candlesLH_needReCalc = visibleCandles_needReCalc = true;
-            }
-
-            if (propertyName == "CandlesLH") // - Фактор, свойство от которого зависят следующие свойства.
-            { // Зависимые свойства (от фактора):
-            }
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        // Пересчитывает все зависимые (от других свойств-факторов) свойства, которые нужно пересчитать:
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.CalcDelayedDependentProperties()'
-        public void CalcDelayedDependentProperties()
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.CalcDelayedDependentProperties()'
-        {
-            if (visibleCandlesRange_needReCalc)
-                ReCalc_VisibleCandlesRange();
-
-            if (candlesLH_needReCalc)
-                ReCalc_CandlesLH();
-
-            if (candlesMaxVolume_needReCalc)
-                ReCalc_CandlesMaxVolume();
-
-            if (visibleCandles_needReCalc)
-                ReCalc_VisibleCandles();
-
-            calcDependentPropertiesInSetter = true;
         }
         //----------------------------------------------------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------------------------------------------------
-        /*
-        // Индекс центральной видимой свечи. Если невозможно определить, то -1.
-        int CentralCandleIndex
-        {
-            get
-            {
-                if (IntRange.IsUndefined(VisibleCandlesRange) || IntRange.IsContainsOnlyStart_i(VisibleCandlesRange))
-                    return -1;
-                return (2*VisibleCandlesRange.Start_i + VisibleCandlesRange.Count) / 2;
-            }
-        }
-
-        // Устанавливает положение в максимально возможную правую позицию.
-        bool Reset_VisibleCandlesRange()
-        {
-            IntRange old_VisibleCandlesRange = VisibleCandlesRange;
-
-            if (priceChartContainer.ActualWidth == 0 || CandlesSource == null)
-            {
-                VisibleCandlesRange = new IntRange(0, 0);
-                return old_VisibleCandlesRange != VisibleCandlesRange;
-            }
-
-            int N = Math.Min((int)(priceChartContainer.ActualWidth / (CandleWidth + GapBetweenCandles)), CandlesSource.Count);
-            VisibleCandlesRange = new IntRange(CandlesSource.Count - N, N);
-
-            return old_VisibleCandlesRange != VisibleCandlesRange;
-        }
-
-        public DateTime CentralCandleDateTime
-        {
-            private get { return (DateTime)GetValue(CentralCandleDateTimeProperty); }
-            set { SetValue(CentralCandleDateTimeProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for CentralCandleDateTime.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CentralCandleDateTimeProperty =
-            DependencyProperty.Register("CentralCandleDateTime", typeof(DateTime), typeof(CandleChart), new PropertyMetadata(new DateTime(0), OnCentralCandleDateTimeChanged, CoerceCentralCandleDateTime));
-
-        static void OnCentralCandleDateTimeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
-        {
-            CandleChart thisCandleChart = (CandleChart)obj;
-
-            if (thisCandleChart.IsLoaded)
-            {
-                if (e.NewValue != null)
-                {
-                    int centralCandle_i = thisCandleChart.CentralCandleIndex;
-                    DateTime centralCandle_t = centralCandle_i >= 0 ? thisCandleChart.CandlesSource[centralCandle_i].t : DateTime.MinValue;
-                    if (thisCandleChart.CentralCandleDateTime != centralCandle_t)
-                        thisCandleChart.CoerceValue(VisibleCandlesRangeProperty);
-                }
-            }
-        }
-
-        private static object CoerceCentralCandleDateTime(DependencyObject objWithOldDP, object baseDPValue)
-        {
-            CandleChart thisCandleChart = (CandleChart)objWithOldDP; // Содержит старое значение для изменяемого свойства.
-            DateTime baseValue = (DateTime)baseDPValue;
-
-            int centralCandle_i = thisCandleChart.CentralCandleIndex;
-            DateTime centralCandle_t = centralCandle_i >= 0 ? thisCandleChart.CandlesSource[centralCandle_i].t : DateTime.MinValue;
-            if (baseValue != centralCandle_t)
-                return DateTime.MinValue;//centralCandle_t;
-            return baseValue;
-        }
-
-        bool ReCalc_CentralCandleDateTime()
-        {
-            int centralCandle_i = CentralCandleIndex;
-            DateTime centralCandle_t = centralCandle_i>=0 ? CandlesSource[centralCandle_i].t : DateTime.MinValue;
-            if (CentralCandleDateTime != centralCandle_t)
-            {
-                CentralCandleDateTime = centralCandle_t;
-                return true;
-            }
-            return false;
-        }*/
         //----------------------------------------------------------------------------------------------------------------------------------
     }
 }

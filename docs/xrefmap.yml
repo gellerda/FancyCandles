@@ -102,25 +102,6 @@ references:
   commentId: F:FancyCandles.CandleChart.BullishVolumeBarBrushProperty
   fullName: FancyCandles.CandleChart.BullishVolumeBarBrushProperty
   nameWithType: CandleChart.BullishVolumeBarBrushProperty
-- uid: FancyCandles.CandleChart.CalcDelayedDependentProperties
-  name: CalcDelayedDependentProperties()
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CalcDelayedDependentProperties
-  commentId: M:FancyCandles.CandleChart.CalcDelayedDependentProperties
-  fullName: FancyCandles.CandleChart.CalcDelayedDependentProperties()
-  nameWithType: CandleChart.CalcDelayedDependentProperties()
-- uid: FancyCandles.CandleChart.CalcDelayedDependentProperties*
-  name: CalcDelayedDependentProperties
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CalcDelayedDependentProperties_
-  commentId: Overload:FancyCandles.CandleChart.CalcDelayedDependentProperties
-  isSpec: "True"
-  fullName: FancyCandles.CandleChart.CalcDelayedDependentProperties
-  nameWithType: CandleChart.CalcDelayedDependentProperties
-- uid: FancyCandles.CandleChart.calcDependentPropertiesInSetter
-  name: calcDependentPropertiesInSetter
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_calcDependentPropertiesInSetter
-  commentId: F:FancyCandles.CandleChart.calcDependentPropertiesInSetter
-  fullName: FancyCandles.CandleChart.calcDependentPropertiesInSetter
-  nameWithType: CandleChart.calcDependentPropertiesInSetter
 - uid: FancyCandles.CandleChart.CandlesLH
   name: CandlesLH
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesLH
@@ -185,19 +166,6 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.CandleWidth
   nameWithType: CandleChart.CandleWidth
-- uid: FancyCandles.CandleChart.CenterOnDateTime(System.DateTime)
-  name: CenterOnDateTime(DateTime)
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CenterOnDateTime_System_DateTime_
-  commentId: M:FancyCandles.CandleChart.CenterOnDateTime(System.DateTime)
-  fullName: FancyCandles.CandleChart.CenterOnDateTime(System.DateTime)
-  nameWithType: CandleChart.CenterOnDateTime(DateTime)
-- uid: FancyCandles.CandleChart.CenterOnDateTime*
-  name: CenterOnDateTime
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CenterOnDateTime_
-  commentId: Overload:FancyCandles.CandleChart.CenterOnDateTime
-  isSpec: "True"
-  fullName: FancyCandles.CandleChart.CenterOnDateTime
-  nameWithType: CandleChart.CenterOnDateTime
 - uid: FancyCandles.CandleChart.ChartAreaBackground
   name: ChartAreaBackground
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_ChartAreaBackground
@@ -1379,19 +1347,32 @@ references:
   commentId: F:FancyCandles.CandleChart.ScrollBarHeightProperty
   fullName: FancyCandles.CandleChart.ScrollBarHeightProperty
   nameWithType: CandleChart.ScrollBarHeightProperty
-- uid: FancyCandles.CandleChart.SetVisibleCandlesRange(System.DateTime,System.DateTime)
-  name: SetVisibleCandlesRange(DateTime, DateTime)
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_SetVisibleCandlesRange_System_DateTime_System_DateTime_
-  commentId: M:FancyCandles.CandleChart.SetVisibleCandlesRange(System.DateTime,System.DateTime)
-  fullName: FancyCandles.CandleChart.SetVisibleCandlesRange(System.DateTime, System.DateTime)
-  nameWithType: CandleChart.SetVisibleCandlesRange(DateTime, DateTime)
-- uid: FancyCandles.CandleChart.SetVisibleCandlesRange*
-  name: SetVisibleCandlesRange
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_SetVisibleCandlesRange_
-  commentId: Overload:FancyCandles.CandleChart.SetVisibleCandlesRange
+- uid: FancyCandles.CandleChart.SetVisibleCandlesRangeBounds(System.DateTime,System.DateTime)
+  name: SetVisibleCandlesRangeBounds(DateTime, DateTime)
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_SetVisibleCandlesRangeBounds_System_DateTime_System_DateTime_
+  commentId: M:FancyCandles.CandleChart.SetVisibleCandlesRangeBounds(System.DateTime,System.DateTime)
+  fullName: FancyCandles.CandleChart.SetVisibleCandlesRangeBounds(System.DateTime, System.DateTime)
+  nameWithType: CandleChart.SetVisibleCandlesRangeBounds(DateTime, DateTime)
+- uid: FancyCandles.CandleChart.SetVisibleCandlesRangeBounds*
+  name: SetVisibleCandlesRangeBounds
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_SetVisibleCandlesRangeBounds_
+  commentId: Overload:FancyCandles.CandleChart.SetVisibleCandlesRangeBounds
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.SetVisibleCandlesRange
-  nameWithType: CandleChart.SetVisibleCandlesRange
+  fullName: FancyCandles.CandleChart.SetVisibleCandlesRangeBounds
+  nameWithType: CandleChart.SetVisibleCandlesRangeBounds
+- uid: FancyCandles.CandleChart.SetVisibleCandlesRangeCenter(System.DateTime)
+  name: SetVisibleCandlesRangeCenter(DateTime)
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_SetVisibleCandlesRangeCenter_System_DateTime_
+  commentId: M:FancyCandles.CandleChart.SetVisibleCandlesRangeCenter(System.DateTime)
+  fullName: FancyCandles.CandleChart.SetVisibleCandlesRangeCenter(System.DateTime)
+  nameWithType: CandleChart.SetVisibleCandlesRangeCenter(DateTime)
+- uid: FancyCandles.CandleChart.SetVisibleCandlesRangeCenter*
+  name: SetVisibleCandlesRangeCenter
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_SetVisibleCandlesRangeCenter_
+  commentId: Overload:FancyCandles.CandleChart.SetVisibleCandlesRangeCenter
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.SetVisibleCandlesRangeCenter
+  nameWithType: CandleChart.SetVisibleCandlesRangeCenter
 - uid: FancyCandles.CandleChart.TimeAxisHeight
   name: TimeAxisHeight
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_TimeAxisHeight

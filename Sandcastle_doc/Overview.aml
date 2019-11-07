@@ -160,7 +160,9 @@
       
       <content>
 	      <mediaLink> <image xlink:href="img2"/> </mediaLink>
-	      <para>The CandlesSource property defines the candles data source of your chart. In most cases a chart window accomodates only a part of all candles. The VisibleCandlesRange property defines the range of indexes of the candles that are currently shown in the chart window. This property is changed every time you scroll through the candles via the scrollbar, resize the chart window or change the number of visible candles via mouse wheel. But you can set it up directly via the property setter or via some special methods - CenterOnDateTime() or SetVisibleCandlesRange().</para>
+	      <para>The CandlesSource property defines the candles data source of your chart. In most cases a chart window accomodates only a part of all candles. The VisibleCandlesRange property defines the range of indexes of the candles that are currently shown in the chart window. This property is changed every time you scroll through the candles via the scrollbar, resize the chart window or change the number of visible candles via mouse wheel. But you can set it up directly via the property setter or via some special methods - 
+	      <codeEntityReference qualifyHint="false" autoUpgrade="true">M:FancyCandles.CandleChart.SetVisibleCandlesRangeCenter(System.DateTime)</codeEntityReference> or 
+	      <codeEntityReference qualifyHint="false" autoUpgrade="true">M:FancyCandles.CandleChart.SetVisibleCandlesRangeBounds(System.DateTime,System.DateTime)</codeEntityReference> .</para>
 	      
 	      <para>Besides scrollbar, you can use mouse wheel in conjunction with certain modifier key (defined by the 
 	      		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.MouseWheelModifierKeyForScrollingThroughCandles</codeEntityReference> 
@@ -176,7 +178,6 @@
 	      <para>See also: 
 	      		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.CandlesSource</codeEntityReference>, 
 	      		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.VisibleCandlesRange</codeEntityReference>,
-	      		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:FancyCandles.CandleChart.CenterOnDateTime(System.DateTime)</codeEntityReference>
 	      </para>
 	      <!--<mediaLink> <image xlink:href="img2"/> </mediaLink>
 		  <link xlink:href="cd2ffb76-50e1-40f2-bce0-53d5ad2ac713">ИИИИBack to Intro</link>
