@@ -8,7 +8,7 @@
     <owners>Dennis Geller</owners>
     <license type="expression">GPL-3.0-only</license>
     <projectUrl>https://github.com/gellerda/FancyCandles</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/gellerda/FancyCandles/master/icon.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/gellerda/FancyCandles/FancyCandles/master/icon.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>A candlestick chart control for WPF.</description>
     <releaseNotes>11/11/2019. FancyCandles for WPF.</releaseNotes>
