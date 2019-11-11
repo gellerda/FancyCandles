@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>FancyCandles</id>
+    <version>1.0.0</version>
+    <title>FancyCandles for WPF</title>
+    <authors>Dennis Geller</authors>
+    <owners>Dennis Geller</owners>
+    <license type="expression">GPL-3.0-only</license>
+    <projectUrl>https://github.com/gellerda/FancyCandles</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/gellerda/FancyCandles/master/icon.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>A candlestick chart control for WPF.</description>
+    <releaseNotes>11/11/2019. FancyCandles for WPF.</releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <tags>candlestick chart candle OHLC WPF control</tags>
+  </metadata>
+</package>

@@ -8,9 +8,9 @@ using System.Windows;
 // атрибутов. Отредактируйте значения этих атрибутов, чтобы изменить
 // связанные с этой сборкой.
 [assembly: AssemblyTitle("FancyCandles")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Candlestick chart control for WPF")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Dennis Geller")]
 [assembly: AssemblyProduct("FancyCandles")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
