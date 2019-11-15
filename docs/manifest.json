@@ -9,10 +9,10 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.CandleChart.html",
-          "hash": "l3SLLZ3rZPBNpnZhjGCZnA=="
+          "hash": "XjWxmSM4vlfAKdp5ydWBtA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -21,10 +21,10 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.ICandle.html",
-          "hash": "g73b2fS0j3xsi/crz/LCEw=="
+          "hash": "o0iMDaM1qhrmh7JDtGe+Tw=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -33,10 +33,10 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.IntRange.html",
-          "hash": "dVmVd7NeFvS0mXcXgRxZQg=="
+          "hash": "HVSJATR1VbcUU9rIj7hPWA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -45,10 +45,10 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.html",
-          "hash": "RUpWQPJpuRfuURUg5XEESg=="
+          "hash": "oTPqpA2mhZHn/+omViNVAQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -57,7 +57,7 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "i662eSMCzm6ZcBBb6FOUCw=="
+          "hash": "N5d1HqV+9YmUyfzRmpVxEQ=="
         }
       },
       "is_incremental": true,
@@ -81,7 +81,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/creating_candlestick_chart.html",
-          "hash": "j6ofaMMeHfGKfWp8H+b84Q=="
+          "hash": "UY/vOh1vEOQ5ra8IlI+Kdw=="
         }
       },
       "is_incremental": true,
@@ -96,10 +96,10 @@
       "output": {
         ".html": {
           "relative_path": "articles/overview.html",
-          "hash": "I1Pc4tAiOSONwiri0v+Xpg=="
+          "hash": "OCQFie9NpzhggaWwX9UYAA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -108,7 +108,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/populating_candlestick_chart.html",
-          "hash": "/gjHdNf7tKb5ZIJM287hcA=="
+          "hash": "0kzkhqxAQEhVu7CIV+EMdA=="
         }
       },
       "is_incremental": true,
@@ -132,7 +132,7 @@
       "output": {
         ".html": {
           "relative_path": "download/download_doc.html",
-          "hash": "yrTnfjauNXJ1Nsjssfigcw=="
+          "hash": "8gfv/YqxorjQ27HST+S5LQ=="
         }
       },
       "is_incremental": true,
@@ -200,10 +200,10 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "H9UKqtGyf+Bve11M7PtQ0g=="
+          "hash": "XEwVv2fo13phjcIAySDbDQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -228,18 +228,6 @@
         "skipped_file_count": 0
       },
       "processors": {
-        "ConceptualDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 6,
-          "skipped_file_count": 5
-        },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 4,
-          "skipped_file_count": 1
-        },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
@@ -253,6 +241,18 @@
           "incrementalPhase": "build",
           "total_file_count": 0,
           "skipped_file_count": 0
+        },
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 6,
+          "skipped_file_count": 5
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 4,
+          "skipped_file_count": 4
         }
       }
     },
