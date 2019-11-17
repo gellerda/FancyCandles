@@ -91,7 +91,7 @@ namespace FancyCandles
             Brush transparentBrush = Brushes.Transparent;
             Pen transparentPen = new Pen(transparentBrush, 0);
             Brush brush = CandleData.C > CandleData.O ? BullishVolumeBarBrush : BearishVolumeBarBrush;
-            double penThickness = (VolumeBarWidthToCandleWidthRatio == 1.0) ? CandleData.BodyWidth : (VolumeBarWidthToCandleWidthRatio == 0.0 ? 1.0 : System.Math.Max(CandleData.BodyWidth*VolumeBarWidthToCandleWidthRatio, 1.0));
+            double penThickness = (VolumeBarWidthToCandleWidthRatio == 1.0) ? CandleData.BodyWidth : (VolumeBarWidthToCandleWidthRatio == 0.0 ? 1.0 : System.Math.Max(System.Math.Round(CandleData.BodyWidth*VolumeBarWidthToCandleWidthRatio), 1.0));
             Pen pen = new Pen(brush, penThickness) { StartLineCap=PenLineCap.Flat, EndLineCap=PenLineCap.Flat };
 
             // Нарисуем бар гистограммы:
