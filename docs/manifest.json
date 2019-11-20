@@ -77,11 +77,23 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/adding_fancycandles_to_project.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/adding_fancycandles_to_project.html",
+          "hash": "BHzrdC4GZjHXBNI74a5ieg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/creating_candlestick_chart.md",
       "output": {
         ".html": {
           "relative_path": "articles/creating_candlestick_chart.html",
-          "hash": "UY/vOh1vEOQ5ra8IlI+Kdw=="
+          "hash": "nihQ6miuRa8j0Zjf52IAOA=="
         }
       },
       "is_incremental": true,
@@ -120,7 +132,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "V0AluXiUG3vEUF7IufAfLg=="
+          "hash": "Ybwxp/TdVEo9295grJEJjQ=="
         }
       },
       "is_incremental": false,
@@ -195,6 +207,83 @@
       "version": ""
     },
     {
+      "type": "Resource",
+      "source_relative_path": "images/screen_add_existing_project.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/screen_add_existing_project.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/screen_add_reference.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/screen_add_reference.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/screen_check_fancycandles_project.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/screen_check_fancycandles_project.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/screen_fancycandles_in_references.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/screen_fancycandles_in_references.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/screen_github_clone.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/screen_github_clone.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/screen_install_fancycandles.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/screen_install_fancycandles.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/screen_nuget_packages.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/screen_nuget_packages.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "index.md",
       "output": {
@@ -242,17 +331,17 @@
           "total_file_count": 0,
           "skipped_file_count": 0
         },
-        "ConceptualDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 6,
-          "skipped_file_count": 5
-        },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 4,
           "skipped_file_count": 4
+        },
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 7,
+          "skipped_file_count": 6
         }
       }
     },

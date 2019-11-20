@@ -1,12 +1,4 @@
 # Creating empty CandleChart
-1. Clone or Download FancyCandles repository to your computer.
-1. Add FancyCandles project to the solution of your WPF application that would use the candlestick chart control:
-    * Right-click on solution of your application in Solution Explorer and select *Add/Existing project...*.
-    * Select path to the *...FancyCandles-master/FancyCandles/FancyCandles.csproj* project file and click *Open* button.
-1. Add to your project that would use the candlestick chart control reference to the FancyCandles project:
-    * Right-click on *References* under your project in Solution Explorer and select *Add reference...*.
-    * In the *Projects* tab find the *FancyCandles* project row and ckeck it.
-    * Click *OK*.
 1. Open the MainWindow.xaml file of your project and add the declaration of the FancyCandles namespace. To do this, add the new *xmlns* property inside the *Window* open tag:
 
     ```xml

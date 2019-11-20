@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Consuming FancyCandles in your WPF (.NET Framework) project </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Consuming FancyCandles in your WPF (.NET Framework) project ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+        
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../fancy_candles_logo_in_circle_85x85.png" alt="">
+              </a>
+              
+              <a id="navbar-header-logo-text" class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../fancy_candles_logo_text.png" alt="">
+              </a>
+            </div>
+        
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+        
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="consuming-fancycandles-in-your-wpf-net-framework-project">Consuming FancyCandles in your WPF (.NET Framework) project</h1>
+
+<p>To use the FancyCandles library in your project you have two options:</p>
+<p>      <strong>A) To <a href="#nuget_package">install the FancyCandles NuGet package</a> in your project.</strong><br>
+      <strong>B) To <a href="#add_project">add the FancyCandles project</a> to your solution.</strong></p>
+<p>If you are planning to change the source code of the FancyCandles library for your specific needs or to contribute to its open source project, then your choice is 2.
+Otherwise, you don't need to be able to change the source code of the FancyCandles library, and your choice is 1.<a name="nuget_package"></a></p>
+<h1 id="a-installing-fancycandles-nuget-package-in-your-project">A) Installing FancyCandles NuGet package in your project</h1>
+<ol>
+<li><p>In Visual Studio <strong>Solution Explorer</strong>, right-click on <strong>References</strong> of your project and select <strong>Manage NuGet Packages....</strong><br><br>
+<img src="../images/screen_nuget_packages.png" alt="Manage NuGet Packages"></p>
+</li>
+<li><p>In <strong>NuGet Package Manager</strong> select the <strong>Browse</strong> tab and type <em>FancyCandles</em> in the search box. Select <strong>FancyCandles</strong> from the list of filtered packages. Select a desired version of the FancyCandles package (the latest is recommended) and click the <strong>Install</strong> button.<br><br>
+<img src="../images/screen_install_fancycandles.png" alt="Install the FancyCandles NuGet package"></p>
+</li>
+<li><p>Accept a license prompt.</p>
+</li>
+<li><p>If everything went successfully, Visual Studio installs the FancyCandles package into your project. Once the installation is complete, the FancyCandles package appears on the <strong>Installed</strong> tab of <strong>NuGet Package Manager</strong>, and in the <strong>References</strong> list of your project in <strong>Solution Explorer</strong>.<br><br>
+<img src="../images/screen_fancycandles_in_references.png" alt="FancyCandles appears in References"></p>
+</li>
+</ol>
+<p><a name="add_project"></a>Now you can go on to <a href="creating_candlestick_chart.html">create your first FancyCandles candlestick chart</a> in your application.</p>
+<h1 id="b-adding-fancycandles-project-to-your-solution">B) Adding FancyCandles project to your solution</h1>
+<ol>
+<li><p>Clone or Download the <a href="https://github.com/gellerda/FancyCandles">FancyCandles repository</a> to your computer.<br><br>
+<img src="../images/screen_github_clone.png" alt="Download or clone the FancyCandles repository"></p>
+</li>
+<li><p>Add the FancyCandles project to the solution of your project, which going to use the candlestick chart control:</p>
+<ul>
+<li>In <strong>Solution Explorer</strong>, right-click on the Solution of your project and select <strong>Add/Existing project...</strong>.<br><br>
+<img src="../images/screen_add_existing_project.png" alt="Add the FancyCandles project to the solution"><br><br></li>
+<li>Select a path to the project file <strong>FancyCandles.csproj</strong> of the FancyCandles project (eg. <em>.../FancyCandles/FancyCandles.csproj</em>) and click <strong>Open</strong>.<br><br></li>
+</ul>
+</li>
+<li><p>Add to your project a reference to the FancyCandles project:</p>
+<ul>
+<li>Right-click on <strong>References</strong> under your project in <strong>Solution Explorer</strong> and click <strong>Add reference...</strong>.<br><br>
+<img src="../images/screen_add_reference.png" alt="Add a reference to the FancyCandles project"><br><br></li>
+<li>In the <strong>Projects</strong> tab find the <strong>FancyCandles</strong> project row and check it. Click <strong>OK</strong>.<br><br>
+<img src="../images/screen_check_fancycandles_project.png" alt="Check the FancyCandles project"><br></li>
+</ul>
+</li>
+</ol>
+<p>Now you can go on to <a href="creating_candlestick_chart.html">create your first FancyCandles candlestick chart</a> in your application.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/gellerda/FancyCandles/blob/master/docfx_project/articles/adding_fancycandles_to_project.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>. Copyright &#9400; Dennis Geller 2019.
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

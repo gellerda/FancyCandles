@@ -11,8 +11,8 @@
     <iconUrl>https://raw.githubusercontent.com/gellerda/FancyCandles/master/FancyCandles/icon.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>A candlestick chart control for WPF.</description>
-    <releaseNotes>11/11/2019. FancyCandles for WPF.</releaseNotes>
+    <releaseNotes>November 18, 2019. FancyCandles for WPF.</releaseNotes>
     <copyright>Copyright 2019</copyright>
-    <tags>candlestick chart candle OHLC WPF control</tags>
+    <tags>candlestick price chart candle OHLC WPF control</tags>
   </metadata>
 </package>
