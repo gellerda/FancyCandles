@@ -4,8 +4,8 @@ To use the FancyCandles library in your project you have two options:
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**A) To [install the FancyCandles NuGet package](#nuget_package) in your project.**<br>
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**B) To [add the FancyCandles project](#add_project) to your solution.**
 
-If you are planning to change the source code of the FancyCandles library for your specific needs or to contribute to its open source project, then your choice is 2.
-Otherwise, you don't need to be able to change the source code of the FancyCandles library, and your choice is 1.<a name="nuget_package"></a>
+If you are planning to change the source code of the FancyCandles library for your specific needs or to contribute to its open source project, then your choice is **B**.
+Otherwise, you don't need to be able to change the source code of the FancyCandles library, and your choice is **A**.<a name="nuget_package"></a>
 
 # A) Installing FancyCandles NuGet package in your project
 1. In Visual Studio **Solution Explorer**, right-click on **References** of your project and select **Manage NuGet Packages....**<br><br>
