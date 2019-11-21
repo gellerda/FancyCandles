@@ -76,19 +76,21 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="creating-empty-candlechart">Creating empty CandleChart</h1>
 
+<p>The <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart class</a>, which derives from the <a href="https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.usercontrol?view=netframework-4.8">UserControl class</a>, provides you a simple way to create a candlestick chart control. The <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart class</a> is declared inside the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.html">FancyCandles namespace</a>, which is within the <em>FancyCandles assembly</em>.</p>
+<p>After the FancyCandles project has been added to your solution or the FancyCandles NuGet package has been installed in your project, you can go on and create an instance of the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart control</a> in your project:</p>
 <ol>
-<li><p>Open the MainWindow.xaml file of your project and add the declaration of the FancyCandles namespace. To do this, add the new <em>xmlns</em> property inside the <em>Window</em> open tag:</p>
-<pre><code class="lang-xml">    &lt;Window x:Class=&quot;MyProjectThatWouldUseFancyCandles.MainWindow&quot;
+<li><p>In the root tag of the <strong>MainWindow.xaml</strong> file of your project, declare the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.html">FancyCandles namespace</a>. In this example we map this namespace to the <em>fc:</em> prefix:</p>
+<pre><code class="lang-xml">    &lt;Window x:Class=&quot;MyProject.MainWindow&quot;
     ...
     xmlns:fc=&quot;clr-namespace:FancyCandles;assembly=FancyCandles&quot;
     ... &gt;
 </code></pre>
 </li>
-<li><p>Inside the body of the aforementioned XML document add the <em>FancyCandles.CandleChart</em> control element:</p>
+<li><p>Inside the <strong>MainWindow.xaml</strong>, add the <em>CandleChart</em> control element:</p>
 <pre><code class="lang-xml">    &lt;fc:CandleChart /&gt;
 </code></pre>
-<p>As a result your MainWindow.xaml may looks like this:</p>
-<pre><code class="lang-xml">   &lt;Window x:Class=&quot;MyProjectThatWouldUseFancyCandles.MainWindow&quot;
+<p>As a result your <strong>MainWindow.xaml</strong> may looks like this:</p>
+<pre><code class="lang-xml">   &lt;Window x:Class=&quot;MyProject.MainWindow&quot;
            xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
            xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
            xmlns:d=&quot;http://schemas.microsoft.com/expression/blend/2008&quot;
@@ -102,7 +104,9 @@
        &lt;/Grid&gt;
    &lt;/Window&gt;       
 </code></pre>
-<p>Congratulations! You have added the candlestick chart control (<em>CandleChart class</em>) to your application. But it is empty yet and contains no candles! The next step is to <a href="populating_candlestick_chart.html">populate it with candles</a>.</p>
+<p>Congratulations! You have added the candlestick chart control to your application.<br><br>
+<img src="../images/screen_empty_chart.png" alt="Manage NuGet Packages"><br><br>
+But it is empty yet and contains no candles! The next step is to <a href="populating_candlestick_chart.html">populate it with candles</a>.</p>
 </li>
 </ol>
 </article>
