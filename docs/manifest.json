@@ -9,7 +9,7 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.CandleChart.html",
-          "hash": "XjWxmSM4vlfAKdp5ydWBtA=="
+          "hash": "EbAFCFMUr/z5szOZK9WuQg=="
         }
       },
       "is_incremental": true,
@@ -33,7 +33,7 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.IntRange.html",
-          "hash": "HVSJATR1VbcUU9rIj7hPWA=="
+          "hash": "s7wtYWpFmfX1IwmRlKKWlw=="
         }
       },
       "is_incremental": true,
@@ -324,12 +324,11 @@
           "total_file_count": 0,
           "skipped_file_count": 0
         },
-        "TocDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
+          "total_file_count": 7,
+          "skipped_file_count": 6
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
@@ -337,11 +336,12 @@
           "total_file_count": 4,
           "skipped_file_count": 4
         },
-        "ConceptualDocumentProcessor": {
-          "can_incremental": true,
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
-          "total_file_count": 7,
-          "skipped_file_count": 6
+          "total_file_count": 0,
+          "skipped_file_count": 0
         }
       }
     },

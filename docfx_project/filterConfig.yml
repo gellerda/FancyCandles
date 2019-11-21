@@ -1,0 +1,10 @@
+apiRules:
+- exclude:
+      uidRegex: ^System\.Object
+      type: Method
+- exclude:
+      uidRegex: ^System\.Windows\..*$
+      type: Member
+- exclude:
+      uidRegex: ^System\.ValueType\..*$
+      type: Member
