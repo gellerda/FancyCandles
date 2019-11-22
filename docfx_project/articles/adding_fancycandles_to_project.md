@@ -1,8 +1,8 @@
 # Consuming FancyCandles in your WPF (.NET Framework) project
 To use the FancyCandles library in your project you have two options:
 
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**A) To [install the FancyCandles NuGet package](#nuget_package) in your project.**<br>
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**B) To [add the FancyCandles project](#add_project) to your solution.**
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**A)** To [install the FancyCandles NuGet package](#nuget_package) in your project.<br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**B)** To [add the FancyCandles project](#add_project) to your solution.
 
 If you are planning to change the source code of the FancyCandles library for your specific needs or to contribute to its open source project, then your choice is **B**.
 Otherwise, you don't need to be able to change the source code of the FancyCandles library, and your choice is **A**.<a name="nuget_package"></a>

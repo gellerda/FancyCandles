@@ -34,6 +34,7 @@ After the FancyCandles project has been added to your solution or the FancyCandl
            </Grid>
        </Window>       
     ```
-   Congratulations! You have added the candlestick chart control to your application.<br><br>
+
+Congratulations! You have added the candlestick chart control to your application.<br><br>
 ![Manage NuGet Packages](../images/screen_empty_chart.png)<br><br>
    But it is empty yet and contains no candles! The next step is to [populate it with candles](populating_candlestick_chart.md).

@@ -1,6 +1,8 @@
 # Populating CandleChart with candles
-You have already added to your project an empty CandleChart control and now you want to populate it with candles:
-1. Add to your project a new class that would realize the [ICandle](https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html) interface:
+
+After [the empty instance of the CandleChart control has been created](creating_candlestick_chart.md), you need to populate it with candles:
+
+1. The [CandleChart](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html) control requires the data source of its candle collection ([CandlesSource property](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource)) to be of type [ObservableCollection\<](https://docs.microsoft.com/ru-ru/dotnet/api/system.collections.objectmodel.observablecollection-1?view=netframework-4.8)[ICandle\>](https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html). Therefore, add to your project a new **class Candle** that implements the [ICandle](https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html) interface:
 
     ```cs
         public class Candle : FancyCandles.ICandle
@@ -23,54 +25,63 @@ You have already added to your project an empty CandleChart control and now you 
             }
         }
     ```
-1. Open MainWindow.xaml.cs file. In the MainWindow constructor, create an instance *ObservableCollection<ICandle>* and fill it with some data. Every item of this ObservableCollection will be visualized as a candle. In this example we will generate some meaningless set of candle data items to fill the aforementioned ObservableCollection:
+1. For convenience, add some *using* directives to **MainWindow.xaml.cs** of your project:
 
     ```cs
-        ObservableCollection<ICandle> Candles = new ObservableCollection<ICandle>();
+        using System.Collections.ObjectModel;
+        using FancyCandles;
+    ```
+1. In **MainWindow.xaml.cs** of your project, in the constructor of the **MainWindow class**:
 
+  - Create an instance of [ObservableCollection\<](https://docs.microsoft.com/ru-ru/dotnet/api/system.collections.objectmodel.observablecollection-1?view=netframework-4.8)[ICandle\>](https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html), which will be used as the data source for the [CandleChart](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html) control.
+
+    ```cs
+        ObservableCollection<ICandle> candles = new ObservableCollection<ICandle>();
+    ```
+  - Fill this collection with some data. To do it, we will generate the meaningless set of instances of **class Candle**:
+
+    ```cs
         DateTime t0 = new DateTime(2019, 6, 11, 23, 40, 0);
         for (int i = 0; i < 100; i++)
         {
             double p0 = Math.Round(Math.Sin(0.3*i) + 0.1*i, 3);
             double p1 = Math.Round(Math.Sin(0.3*i + 1) + 0.1*i, 3);
-            Candles.Add(new Candle(t0.AddMinutes(i * 5), 100 + p0, 101 + p0, 99 + p0, 100 + p1, i));
+            candles.Add(new Candle(t0.AddMinutes(i * 5), 100 + p0, 101 + p0, 99 + p0, 100 + p1, i));
         }
     ```
-1. In the MainWindow constructor, set the DataContext property to aforementioned ObservableCollection:
+  - Set the [DataContext](https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkelement.datacontext?view=netframework-4.8) property to this collection of candles:
 
     ```cs
-        DataContext = Candles;
+        DataContext = candles;
     ```
-    As a result your MainWindow constructor in the MainWindow.xaml.cs file may looks like this:
+
+  As a result, the constructor of your **MainWindow class** may looks like this:
 
     ```cs
-        // don't forget about references to namespaces:
-        using System.Collections.ObjectModel;
-        using FancyCandles;
-
-        ...
-
-        // Your MainWindow constructor:
         public MainWindow()
         {
             InitializeComponent();
+
             /// ... some code
-            ObservableCollection<ICandle> Candles = new ObservableCollection<ICandle>();
+
+            ObservableCollection<ICandle> candles = new ObservableCollection<ICandle>();
 
             DateTime t0 = new DateTime(2019, 6, 11, 23, 40, 0);
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 250; i++)
             {
                 double p0 = Math.Round(Math.Sin(0.3*i) + 0.1*i, 3);
                 double p1 = Math.Round(Math.Sin(0.3*i + 1) + 0.1*i, 3);
-                Candles.Add(new Candle(t0.AddMinutes(i * 5), 100 + p0, 101 + p0, 99 + p0, 100 + p1, i));
+                candles.Add(new Candle(t0.AddMinutes(i * 5), 100 + p0, 101 + p0, 99 + p0, 100 + p1, i));
             }
 
-            DataContext = Candles;
+            DataContext = candles;
         }
     ```
-1. Open the MainWindow.xaml file. For the CandleChart element set the CandlesSource attribute:
+1. In **MainWindow.xaml** of your project, set the [CandlesSource](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource) attribute for the [CandleChart](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html) element:
 
     ```cs
         <fc:CandleChart CandlesSource="{Binding Path=.}"/>
     ```
-    Congratulations! Now a set of candles should appear in your CandleChart control.
+
+Finally, a set of candles should appear in your CandleChart control.<br><br>
+    ![Manage NuGet Packages](../images/screen_populated_with_candles_price_chart.png)

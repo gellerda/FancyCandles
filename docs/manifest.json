@@ -81,10 +81,10 @@
       "output": {
         ".html": {
           "relative_path": "articles/adding_fancycandles_to_project.html",
-          "hash": "uznfYl3XofMwUKnDNuVkGg=="
+          "hash": "f1t2OA8isPYDODzxuf4TJQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -93,10 +93,10 @@
       "output": {
         ".html": {
           "relative_path": "articles/creating_candlestick_chart.html",
-          "hash": "7kodHpQ6CbaDLI7wAYQowA=="
+          "hash": "fBKY7Zycvzjx+pxQ3VcGQA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -120,10 +120,10 @@
       "output": {
         ".html": {
           "relative_path": "articles/populating_candlestick_chart.html",
-          "hash": "0kzkhqxAQEhVu7CIV+EMdA=="
+          "hash": "LPJ/ZeOaxrIeEIxKFR8XMA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -201,6 +201,17 @@
       "output": {
         "resource": {
           "relative_path": "images/img3.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/mouse.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/mouse.png"
         }
       },
       "is_incremental": false,
@@ -295,6 +306,17 @@
       "version": ""
     },
     {
+      "type": "Resource",
+      "source_relative_path": "images/screen_populated_with_candles_price_chart.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/screen_populated_with_candles_price_chart.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "index.md",
       "output": {
@@ -342,17 +364,17 @@
           "total_file_count": 0,
           "skipped_file_count": 0
         },
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 7,
+          "skipped_file_count": 4
+        },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 4,
           "skipped_file_count": 4
-        },
-        "ConceptualDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 7,
-          "skipped_file_count": 7
         }
       }
     },
