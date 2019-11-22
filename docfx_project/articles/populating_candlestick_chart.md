@@ -33,30 +33,26 @@ After [the empty instance of the CandleChart control has been created](creating_
     ```
 1. In **MainWindow.xaml.cs** of your project, in the constructor of the **MainWindow class**:
 
-  - Create an instance of [ObservableCollection\<](https://docs.microsoft.com/ru-ru/dotnet/api/system.collections.objectmodel.observablecollection-1?view=netframework-4.8)[ICandle\>](https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html), which will be used as the data source for the [CandleChart](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html) control.
-
-    ```cs
-        ObservableCollection<ICandle> candles = new ObservableCollection<ICandle>();
-    ```
-  - Fill this collection with some data. To do it, we will generate the meaningless set of instances of **class Candle**:
-
-    ```cs
-        DateTime t0 = new DateTime(2019, 6, 11, 23, 40, 0);
-        for (int i = 0; i < 100; i++)
-        {
-            double p0 = Math.Round(Math.Sin(0.3*i) + 0.1*i, 3);
-            double p1 = Math.Round(Math.Sin(0.3*i + 1) + 0.1*i, 3);
-            candles.Add(new Candle(t0.AddMinutes(i * 5), 100 + p0, 101 + p0, 99 + p0, 100 + p1, i));
-        }
-    ```
-  - Set the [DataContext](https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkelement.datacontext?view=netframework-4.8) property to this collection of candles:
-
-    ```cs
-        DataContext = candles;
-    ```
-
-  As a result, the constructor of your **MainWindow class** may looks like this:
-
+    - Create an instance of [ObservableCollection\<](https://docs.microsoft.com/ru-ru/dotnet/api/system.collections.objectmodel.observablecollection-1?view=netframework-4.8)[ICandle\>](https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html), which will be used as the data source for the [CandleChart](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html) control.
+      ```cs
+          ObservableCollection<ICandle> candles = new ObservableCollection<ICandle>();
+      ```
+    - Fill this collection with some data. To do it, we will generate the meaningless set of instances of **class Candle**:
+      ```cs
+          DateTime t0 = new DateTime(2019, 6, 11, 23, 40, 0);
+          for (int i = 0; i < 100; i++)
+          {
+              double p0 = Math.Round(Math.Sin(0.3*i) + 0.1*i, 3);
+              double p1 = Math.Round(Math.Sin(0.3*i + 1) + 0.1*i, 3);
+              candles.Add(new Candle(t0.AddMinutes(i * 5),
+                          100 + p0, 101 + p0, 99 + p0, 100 + p1, i));
+          }
+      ```
+    - Set the [DataContext](https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkelement.datacontext?view=netframework-4.8) property to this collection of candles:
+      ```cs
+          DataContext = candles;
+      ```
+    As a result, the constructor of your **MainWindow class** may looks like this:
     ```cs
         public MainWindow()
         {
@@ -71,7 +67,8 @@ After [the empty instance of the CandleChart control has been created](creating_
             {
                 double p0 = Math.Round(Math.Sin(0.3*i) + 0.1*i, 3);
                 double p1 = Math.Round(Math.Sin(0.3*i + 1) + 0.1*i, 3);
-                candles.Add(new Candle(t0.AddMinutes(i * 5), 100 + p0, 101 + p0, 99 + p0, 100 + p1, i));
+                candles.Add(new Candle(t0.AddMinutes(i * 5),
+                            100 + p0, 101 + p0, 99 + p0, 100 + p1, i));
             }
 
             DataContext = candles;
