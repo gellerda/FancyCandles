@@ -1,8 +1,8 @@
 # Creating empty CandleChart
 
-The [CandleChart class](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html), which derives from the [UserControl class](https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.usercontrol?view=netframework-4.8), provides you a simple way to create a candlestick chart control. The [CandleChart class](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html) is declared inside the [FancyCandles namespace](https://gellerda.github.io/FancyCandles/api/FancyCandles.html), which is within the *FancyCandles assembly*.
+The [CandleChart class](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html), which derives from the [UserControl class](https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.usercontrol?view=netframework-4.8), provides you a simple way to create a candlestick chart control. [CandleChart](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html) is declared inside the [FancyCandles namespace](https://gellerda.github.io/FancyCandles/api/FancyCandles.html), which is within the *FancyCandles assembly*.
 
-After the FancyCandles project has been added to your solution or the FancyCandles NuGet package has been installed in your project, you can go on and create an instance of the [CandleChart control](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html) in your project:
+After the [FancyCandles project](https://github.com/gellerda/FancyCandles) has been added to your solution or the [FancyCandles NuGet package](https://www.nuget.org/packages/FancyCandles/) has been installed in your project, you can go on and create an instance of the [CandleChart control](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html) in your project:
 
 1. In the root tag of the **MainWindow.xaml** file of your project, declare the [FancyCandles namespace](https://gellerda.github.io/FancyCandles/api/FancyCandles.html). In this example we map this namespace to the *fc:* prefix:
 
@@ -12,7 +12,7 @@ After the FancyCandles project has been added to your solution or the FancyCandl
         xmlns:fc="clr-namespace:FancyCandles;assembly=FancyCandles"
         ... >
     ```
-1. Inside the **MainWindow.xaml**, add the *CandleChart* control element:
+1. Inside **MainWindow.xaml**, add the [CandleChart](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html) control element:
 
     ```xml
         <fc:CandleChart />

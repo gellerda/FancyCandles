@@ -37,7 +37,7 @@ After [the empty instance of the CandleChart control has been created](creating_
       ```cs
           ObservableCollection<ICandle> candles = new ObservableCollection<ICandle>();
       ```
-    - Fill this collection with some data. To do it, we will generate the meaningless set of instances of **class Candle**:
+    - Fill this collection with some data. To do it for this example, we will generate the meaningless set of instances of **class Candle**:
       ```cs
           DateTime t0 = new DateTime(2019, 6, 11, 23, 40, 0);
           for (int i = 0; i < 100; i++)
