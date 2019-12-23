@@ -3,13 +3,22 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
   
     <introduction>
+    	<mediaLink> <image xlink:href="icon64x64"/> </mediaLink>
+    	<para>FancyCandles WPF library lets you add professional candlestick charts to your applications. A wide variety of settings are available for fine tuning. Traditionally candlesticks are used for visualizing a price history of any financial instruments - stocks, currency pairs or futures. But you can utilize candlestick charts for plotting any time series that contain OHLC (t) components: {t - time, O - Open, H - High, L - Low, C - Close}.</para>
+    	
+    	<para>
+    		See also:<lineBreak/>
+	    	<externalLink> <linkText>FancyCandles project</linkText> <linkUri>https://github.com/gellerda/FancyCandles</linkUri> </externalLink><lineBreak/>
+	    	<externalLink> <linkText>FancyCandles online documentation</linkText> <linkUri>https://gellerda.github.io/FancyCandles/articles/overview.html</linkUri> </externalLink><lineBreak/>
+	    	<externalLink> <linkText>FancyCandles NuGet package</linkText> <linkUri>https://www.nuget.org/packages/FancyCandles/</linkUri> </externalLink>
+	    </para>
     </introduction>
     <!-- ============================================================================================== -->
     <section address="MainBlocks">
       <title>Main constituents</title>
       
       <content>
-	      <para>The CandleChart control consists of the following main components:</para>
+	      <para>The <codeEntityReference>T:FancyCandles.CandleChart</codeEntityReference> control consists of the following main components:</para>
 	      <mediaLink> <image xlink:href="img0"/> </mediaLink>
       </content>
       
@@ -17,17 +26,17 @@
 	        <section address="PriceChart">
 	          <title>Price chart</title>
 	          <content>
-	            <para>The price chart is a central component of the CandleChart control.</para>
+	            <para>The price chart is a central component of the <codeEntityReference>T:FancyCandles.CandleChart</codeEntityReference> control.</para>
 	            <para>Some related properties:
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.ChartAreaBackground</codeEntityReference>, 
-					<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.PriceChartBottomMargin</codeEntityReference>, 
-					<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.PriceChartTopMargin</codeEntityReference>, 
-					<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.BullishCandleBrush</codeEntityReference>, 
-					<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.BearishCandleBrush</codeEntityReference>, 
-					<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.CandleWidth</codeEntityReference>, 
-					<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.InitialCandleWidth</codeEntityReference>, 
-					<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.GapBetweenCandles</codeEntityReference>, 
-					<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.InitialGapBetweenCandles</codeEntityReference>
+	            	<codeEntityReference>P:FancyCandles.CandleChart.ChartAreaBackground</codeEntityReference>, 
+					<codeEntityReference>P:FancyCandles.CandleChart.PriceChartBottomMargin</codeEntityReference>, 
+					<codeEntityReference>P:FancyCandles.CandleChart.PriceChartTopMargin</codeEntityReference>, 
+					<codeEntityReference>P:FancyCandles.CandleChart.BullishCandleBrush</codeEntityReference>, 
+					<codeEntityReference>P:FancyCandles.CandleChart.BearishCandleBrush</codeEntityReference>, 
+					<codeEntityReference>P:FancyCandles.CandleChart.CandleWidth</codeEntityReference>, 
+					<codeEntityReference>P:FancyCandles.CandleChart.InitialCandleWidth</codeEntityReference>, 
+					<codeEntityReference>P:FancyCandles.CandleChart.GapBetweenCandles</codeEntityReference>, 
+					<codeEntityReference>P:FancyCandles.CandleChart.InitialGapBetweenCandles</codeEntityReference>
 	           	</para>
 	          </content>
 	        </section>
@@ -37,13 +46,13 @@
 	          <content>
 	            <para>The volume histogram is optional and could be hidden.</para>
 	            <para>Some related properties:
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.ChartAreaBackground</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.IsVolumePanelVisible</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.VolumeBarWidthToCandleWidthRatio</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.VolumeHistogramBottomMargin</codeEntityReference>,  
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.VolumeHistogramTopMargin</codeEntityReference>,
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.BullishVolumeBarBrush</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.BearishVolumeBarBrush</codeEntityReference>
+	            	<codeEntityReference>P:FancyCandles.CandleChart.ChartAreaBackground</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.IsVolumePanelVisible</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.VolumeBarWidthToCandleWidthRatio</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.VolumeHistogramBottomMargin</codeEntityReference>,  
+	            	<codeEntityReference>P:FancyCandles.CandleChart.VolumeHistogramTopMargin</codeEntityReference>,
+	            	<codeEntityReference>P:FancyCandles.CandleChart.BullishVolumeBarBrush</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.BearishVolumeBarBrush</codeEntityReference>
 	           	</para>
 	          </content>
 	        </section>
@@ -53,8 +62,8 @@
 	          <content>
 			      <para>The time axis contain ticks and its labels for time and date values. Starting from daily timeframe (and higher), the time axis contains only the ticks of date, and no of time.</para>
 				  <para>Some related properties:
-						<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.TimeTickFontSize</codeEntityReference>, 
-						<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.TimeAxisHeight</codeEntityReference>
+						<codeEntityReference>P:FancyCandles.CandleChart.TimeTickFontSize</codeEntityReference>, 
+						<codeEntityReference>P:FancyCandles.CandleChart.TimeAxisHeight</codeEntityReference>
 	           	  </para>
 	          </content>
 	        </section>
@@ -62,10 +71,12 @@
 	        <section address="PriceAxis">
 	          <title>Price axis</title>
 	          <content>
-			      <para>The price axis contain ticks and its labels for price and volume (if the volume histogram is visible) values. Since the volume labels locate inside the price axis area, their appearance is defined by the same properties as for the price labels. You can regulate the density of the labels by setting the GapBetweenPriceTickLabels property.</para>
+			      <para>The price axis contain ticks and its labels for price and volume (if the volume histogram is visible) values. Since the volume labels locate inside the price axis area, their appearance is defined by the same properties as for the price labels. You can regulate the density of the labels by setting the 
+			      		<codeEntityReference>P:FancyCandles.CandleChart.GapBetweenPriceTickLabels</codeEntityReference> 
+			      		property.</para>
 				  <para>Some related properties:
-				  		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.PriceTickFontSize</codeEntityReference>, 
-				  		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.PriceAxisWidth</codeEntityReference>
+				  		<codeEntityReference>P:FancyCandles.CandleChart.PriceTickFontSize</codeEntityReference>, 
+				  		<codeEntityReference>P:FancyCandles.CandleChart.PriceAxisWidth</codeEntityReference>
 	           	  </para>
 	          </content>
 	        </section>
@@ -74,13 +85,13 @@
 	          <title>Scrollbar</title>
 	          <content>
 			      <para>The scrollbar is bound to the 
-			      		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.VisibleCandlesRange</codeEntityReference> 
+			      		<codeEntityReference>P:FancyCandles.CandleChart.VisibleCandlesRange</codeEntityReference> 
 			      		property and chages its 
-			      		<codeEntityReference qualifyHint="false">F:FancyCandles.IntRange.Start_i</codeEntityReference> 
+			      		<codeEntityReference>F:FancyCandles.IntRange.Start_i</codeEntityReference> 
 			      		field. You can tune an appearance of the scrollbar.</para>
 				  <para>Some related properties:
-				  		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.ScrollBarHeight</codeEntityReference>, 
-				  		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.ScrollBarBackground</codeEntityReference>
+				  		<codeEntityReference>P:FancyCandles.CandleChart.ScrollBarHeight</codeEntityReference>, 
+				  		<codeEntityReference>P:FancyCandles.CandleChart.ScrollBarBackground</codeEntityReference>
 	           	  </para>
 	          </content>
 	        </section>
@@ -89,21 +100,18 @@
     </section>
     <!-- ============================================================================================== -->
     <section address="GridlinesMain">
-      <content>
-	      <mediaLink> <image xlink:href="img3"/> </mediaLink>
-      </content>
-      
       <sections>
 	        <section address="Gridlines">
-	          <title>Gridlines</title>
+	        	<title>Gridlines</title>
 	          <content>
+ 	      		  <mediaLink> <image xlink:href="img3"/> </mediaLink>
 			      <para>The horizontal and vertical gridlines are bound to the ticks of the price axis and of the time axis respectively. You can hide the gridlines and tune their appearance.</para>
 				  <para>Some related properties:
-				  		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.IsHorizontalGridlinesEnabled</codeEntityReference>, 
-				  		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.IsVerticalGridlinesEnabled</codeEntityReference>, 
-				  		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.HideMinorVerticalGridlines</codeEntityReference>, 
-				  		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.HorizontalGridlinesPen</codeEntityReference>, 
-				  		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.VerticalGridlinesPen</codeEntityReference>
+				  		<codeEntityReference>P:FancyCandles.CandleChart.IsHorizontalGridlinesEnabled</codeEntityReference>, 
+				  		<codeEntityReference>P:FancyCandles.CandleChart.IsVerticalGridlinesEnabled</codeEntityReference>, 
+				  		<codeEntityReference>P:FancyCandles.CandleChart.HideMinorVerticalGridlines</codeEntityReference>, 
+				  		<codeEntityReference>P:FancyCandles.CandleChart.HorizontalGridlinesPen</codeEntityReference>, 
+				  		<codeEntityReference>P:FancyCandles.CandleChart.VerticalGridlinesPen</codeEntityReference>
 	           	  </para>
 	          </content>
 	        </section>
@@ -112,28 +120,20 @@
     </section>
     <!-- ============================================================================================== -->
     <section address="LegendAndCross">
-      <!--<title>Optional section title</title>-->
-      
-      <content>
-	      <mediaLink> <image xlink:href="img1"/> </mediaLink>
-	      <!--<mediaLink> <image xlink:href="img2"/> </mediaLink>
-		  <link xlink:href="cd2ffb76-50e1-40f2-bce0-53d5ad2ac713">ИИИИBack to Intro</link>
-		  <codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.LegendFontWeight</codeEntityReference>-->
-      </content>
-      
       <sections>
 	        <section address="Legend">
 	          <title>Legend</title>
 	          <content>
-	            <para>The Legend contains any text, describing this chart. You set it by your own, but usually it contains a ticker symbol (a name of the security) and a timeframe. For example: <quoteInline>"AAPL"</quoteInline>, <quoteInline>"GOOGL, M5"</quoteInline>, <quoteInline>"BTC/USD, D"</quoteInline> etc. The legend locates in the price chart area and could be horizontally and vertically aligned.</para>
+			    <mediaLink> <image xlink:href="img1"/> </mediaLink>
+	            <para>The legend contains any text, describing this chart. You set it by your own, but usually it contains a ticker symbol (a name of the security) and a timeframe. For example: <quoteInline>"AAPL"</quoteInline>, <quoteInline>"GOOGL, M5"</quoteInline>, <quoteInline>"BTC/USD, D"</quoteInline> etc. The legend locates in the price chart area and could be horizontally and vertically aligned.</para>
 	            <para>Some related properties:
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.LegendText</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.LegendFontSize</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.LegendFontWeight</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.LegendForeground</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.LegendHorizontalAlignment</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.LegendVerticalAlignment</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.LegendMargin</codeEntityReference>
+	            	<codeEntityReference>P:FancyCandles.CandleChart.LegendText</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.LegendFontSize</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.LegendFontWeight</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.LegendForeground</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.LegendHorizontalAlignment</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.LegendVerticalAlignment</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.LegendMargin</codeEntityReference>
 	           	</para>
 	          </content>
 	        </section>
@@ -143,11 +143,11 @@
 	          <content>
 	            <para>The cross helps you visualize the current position of the mouse pointer, the correspondent time and price levels. You can separately disable or enable the cross lines and the cross price label on the price axis.</para>
 	            <para>Some related properties:
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.CrossLinesBrush</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.CrossPriceBackground</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.CrossPriceForeground</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.IsCrossLinesVisible</codeEntityReference>, 
-	            	<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.IsCrossPriceVisible</codeEntityReference>
+	            	<codeEntityReference>P:FancyCandles.CandleChart.CrossLinesBrush</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.CrossPriceBackground</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.CrossPriceForeground</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.IsCrossLinesVisible</codeEntityReference>, 
+	            	<codeEntityReference>P:FancyCandles.CandleChart.IsCrossPriceVisible</codeEntityReference>
 	           	</para>
 	          </content>
 	        </section>
@@ -160,14 +160,16 @@
       
       <content>
 	      <mediaLink> <image xlink:href="img2"/> </mediaLink>
-	      <para>The CandlesSource property defines the candles data source of your chart. In most cases a chart window accomodates only a part of all candles. The VisibleCandlesRange property defines the range of indexes of the candles that are currently shown in the chart window. This property is changed every time you scroll through the candles via the scrollbar, resize the chart window or change the number of visible candles via mouse wheel. But you can set it up directly via the property setter or via some special methods - 
-	      <codeEntityReference qualifyHint="false" autoUpgrade="true">M:FancyCandles.CandleChart.SetVisibleCandlesRangeCenter(System.DateTime)</codeEntityReference> or 
-	      <codeEntityReference qualifyHint="false" autoUpgrade="true">M:FancyCandles.CandleChart.SetVisibleCandlesRangeBounds(System.DateTime,System.DateTime)</codeEntityReference> .</para>
+	      <para>The 
+	      		<codeEntityReference>P:FancyCandles.CandleChart.CandlesSource</codeEntityReference> property defines the candles data source of your chart. In most cases a chart window accomodates only a part of all candles. The
+	      		<codeEntityReference>P:FancyCandles.CandleChart.VisibleCandlesRange</codeEntityReference> property defines the range of indexes of the candles that are currently shown in the chart window. This property is changed every time you scroll through the candles via the scrollbar, resize the chart window or change the number of visible candles via mouse wheel. But you can set it up directly via the property setter or via some special methods -
+	      		<codeEntityReference autoUpgrade="true">M:FancyCandles.CandleChart.SetVisibleCandlesRangeCenter(System.DateTime)</codeEntityReference> or 
+	      		<codeEntityReference autoUpgrade="true">M:FancyCandles.CandleChart.SetVisibleCandlesRangeBounds(System.DateTime,System.DateTime)</codeEntityReference> .</para>
 	      
 	      <para>Besides scrollbar, you can use mouse wheel in conjunction with certain modifier key (defined by the 
-	      		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.MouseWheelModifierKeyForScrollingThroughCandles</codeEntityReference> 
+	      		<codeEntityReference>P:FancyCandles.CandleChart.MouseWheelModifierKeyForScrollingThroughCandles</codeEntityReference> 
 	      		property) to scroll through the collection of candles. And you can use mouse wheel in conjunction with another modifier key (defined by the 
-	      		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.MouseWheelModifierKeyForCandleWidthChanging</codeEntityReference> 
+	      		<codeEntityReference>P:FancyCandles.CandleChart.MouseWheelModifierKeyForCandleWidthChanging</codeEntityReference> 
 	      		property) to change the amount of candles currently visible in the chart window. The default values for this properties are
 	      		<externalLink> <linkText>ModifierKeys.Control</linkText> <linkUri>https://docs.microsoft.com/ru-ru/dotnet/api/system.windows.input.modifierkeys?view=netframework-4.8</linkUri> </externalLink>
 	      		and
@@ -176,12 +178,9 @@
 	       </para>
 	       
 	      <para>See also: 
-	      		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.CandlesSource</codeEntityReference>, 
-	      		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.VisibleCandlesRange</codeEntityReference>,
+	      		<codeEntityReference>P:FancyCandles.CandleChart.CandlesSource</codeEntityReference>, 
+	      		<codeEntityReference>P:FancyCandles.CandleChart.VisibleCandlesRange</codeEntityReference>,
 	      </para>
-	      <!--<mediaLink> <image xlink:href="img2"/> </mediaLink>
-		  <link xlink:href="cd2ffb76-50e1-40f2-bce0-53d5ad2ac713">ИИИИBack to Intro</link>
-		  <codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.LegendFontWeight</codeEntityReference>-->
       </content>
     </section>
     <!-- ============================================================================================== -->
@@ -189,53 +188,15 @@
       <title>Disabled mode</title>
       
       <content>
-	      <para>Disabling (the isEnabled property is set to false) is essential for situations when your chart is waiting for some lengthy asynchronous operation, eg loading a new candles data collection from the internet, and you need to visualize this process by shading the chart and showing up some external busy indicator. You can set up the color and transparency of the covering shading layer for the whole control for the disabled mode.</para>
+	      <para>Disabling (the 
+	      		<externalLink> <linkText>IsEnabled</linkText> <linkUri>https://docs.microsoft.com/en-us/dotnet/api/system.windows.uielement.isenabled?view=netframework-4.8</linkUri> </externalLink> 
+	      		property is set to false) is essential for situations when your chart is waiting for some lengthy asynchronous operation, eg loading a new candles data collection from the internet, and you need to visualize this process by shading the chart and showing up some external busy indicator. You can set up the color and transparency of the covering shading layer for the whole control for the disabled mode.</para>
 	      <para>See also: 
-	      		<codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.DisabledFill</codeEntityReference>
+	      		<codeEntityReference>P:FancyCandles.CandleChart.DisabledFill</codeEntityReference>
 	      </para>
-	      <!--<mediaLink> <image xlink:href="img2"/> </mediaLink>
-		  <link xlink:href="cd2ffb76-50e1-40f2-bce0-53d5ad2ac713">ИИИИBack to Intro</link>
-		  <codeEntityReference qualifyHint="false">P:FancyCandles.CandleChart.LegendFontWeight</codeEntityReference>-->
       </content>
     </section>
     <!-- ============================================================================================== -->
-    <relatedTopics>
-      <!-- One or more of the following:
-           - A local link
-           - An external link
-           - A code entity reference
-
-      <link xlink:href="Other Topic's ID"/>
-      <link xlink:href="Other Topic's ID">Link inner text</link>
-
-      <externalLink>
-          <linkText>Link text</linkText>
-          <linkAlternateText>Optional alternate link text</linkAlternateText>
-          <linkUri>URI</linkUri>
-      </externalLink>
-
-      <codeEntityReference>API member ID</codeEntityReference>
-
-      Examples:
-
-      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8270" />
-      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
-
-      <externalLink>
-          <linkText>SHFB on GitHub</linkText>
-          <linkAlternateText>Go to GitHub</linkAlternateText>
-          <linkUri>https://GitHub.com/EWSoftware/SHFB</linkUri>
-      </externalLink>
-
-      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
-      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
-      -->
-    </relatedTopics>
     
   </developerConceptualDocument>
 </topic>

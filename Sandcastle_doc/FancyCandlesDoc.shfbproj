@@ -30,7 +30,7 @@
     <IndentHtml>False</IndentHtml>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
-    <HelpTitle>A Sandcastle Documented Class Library</HelpTitle>
+    <HelpTitle>FancyCandles Documentation</HelpTitle>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>
     <NamingMethod>MemberName</NamingMethod>
     <RootNamespaceContainer>False</RootNamespaceContainer>
@@ -43,6 +43,10 @@
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
     <PlugInConfigurations>
     </PlugInConfigurations>
+    <CopyrightHref>https://github.com/gellerda/FancyCandles</CopyrightHref>
+    <CopyrightText>Copyright Ⓒ Dennis Geller 2019.</CopyrightText>
+    <FeedbackEMailAddress>dennisgeller%40gmail.com</FeedbackEMailAddress>
+    <FeedbackEMailLinkText>Dennis Geller</FeedbackEMailLinkText>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
@@ -77,11 +81,15 @@
     <ContentLayout Include="Content Layout.content" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ggg.aml" />
-    <None Include="License Agreement.aml" />
     <None Include="Overview.aml" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="icon64x64.png">
+      <ImageId>icon64x64</ImageId>
+      <AlternateText>icon 64x 64</AlternateText>
+      <ImageId>icon64x64</ImageId>
+      <AlternateText>FancyCandles icon</AlternateText>
+    </Image>
     <Image Include="img3.png">
       <ImageId>img3</ImageId>
       <AlternateText>img 3</AlternateText>

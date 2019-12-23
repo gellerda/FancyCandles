@@ -1,4 +1,7 @@
 # Overview
+FancyCandles WPF library lets you add professional candlestick charts to your applications. A wide variety of settings are available for fine tuning. Traditionally candlesticks are used for visualizing a price history of any financial instruments - stocks, currency pairs or futures. But you can utilize candlestick charts for plotting any time series that contain OHLC (t) components: {t - time, O - Open, H - High, L - Low, C - Close}.
+
+## Main constituents
 The [CandleChart](xref:FancyCandles.CandleChart) control consists of the following main components:
 
 ![Candlestick chart main components](../images/img0.png)
