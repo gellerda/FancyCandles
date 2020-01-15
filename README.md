@@ -6,6 +6,9 @@ FancyCandles is a WPF library that lets you add professional candlestick charts 
 
 FancyCandles is an open source library under the GPLv3 license. That lets you use FancyCandles candlestick charts in your internal trading/analytical software applications or another open source projects absolutely free. A licensing under permissive licenses is available for a commercial usage in a proprietary software projects.
 
+# Demo app in Microsoft Store
+Look at [FancyCandles Demo](https://www.microsoft.com/store/apps/9NQ2C465CS0C) app to see the FancyCandles candlestick chart control in action. Moreover, you can use this app as a simplistic interactive documentation - change class properties from the list, and see how they affect the appearance and behavior of the control. The easiest and most effective way to learn about the features and functionality of our product!
+
 # Documentation and Quick start
 You can read the [documentation online](https://gellerda.github.io/FancyCandles/) or [download a local version](https://gellerda.github.io/FancyCandles/download/download_doc.html).
 
