@@ -54,6 +54,9 @@ namespace FancyCandles
             metadata = new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.Inherits, new PropertyChangedCallback(OnTimeTickFontSizeChanged)) { AffectsRender = true, AffectsMeasure = true };
             TimeTickFontSizeProperty = CandleChart.TimeTickFontSizeProperty.AddOwner(typeof(TimeTicksElement), metadata);
 
+            metadata = new FrameworkPropertyMetadata(CandleChart.DefaultAxisTickColor, FrameworkPropertyMetadataOptions.Inherits) { AffectsRender = true};
+            AxisTickColorProperty = CandleChart.AxisTickColorProperty.AddOwner(typeof(TimeTicksElement), metadata);
+
             metadata = new FrameworkPropertyMetadata(0.0) { AffectsRender = true };
             TimePanelHeightProperty = DependencyProperty.Register("TimeAxisHeight", typeof(double), typeof(TimeTicksElement), metadata);
 
@@ -98,6 +101,13 @@ namespace FancyCandles
             set { SetValue(TimeFrameProperty, value); }
         }
         public static readonly DependencyProperty TimeFrameProperty;
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        public Brush AxisTickColor
+        {
+            get { return (Brush)GetValue(AxisTickColorProperty); }
+            set { SetValue(AxisTickColorProperty, value); }
+        }
+        public static readonly DependencyProperty AxisTickColorProperty;
         //---------------------------------------------------------------------------------------------------------------------------------------
         public double TimeTickFontSize
         {
@@ -206,7 +216,7 @@ namespace FancyCandles
         {
             if (CandlesSource == null || VisibleCandlesRange == IntRange.Undefined || TimeFrame == 0 || TimeTicksTimeFrame == 0) return;
 
-            Pen pen = new Pen(Brushes.Black, 1);
+            Pen pen = new Pen(AxisTickColor, 1);
             double halfTimePanelHeight = TimeAxisHeight / 2.0;
             double topTimePanelY = RenderSize.Height - TimeAxisHeight;
             double centerTimePanelY = RenderSize.Height - TimeAxisHeight / 2.0;
@@ -238,7 +248,7 @@ namespace FancyCandles
             {
                 //double timeTickRightMargin = CandleWidth/2.0 +  (day_csi - VisibleCandlesRange.Start_i) * (CandleWidth + GapBetweenCandles);
                 string timeTickText = TimeTick.ConvertDateTimeToTimeTickText(isHourStart, CandlesSource[time_csi].t);
-                FormattedText timeTickFormattedText = new FormattedText(timeTickText, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                FormattedText timeTickFormattedText = new FormattedText(timeTickText, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double x = CandleWidth / 2.0 + (time_csi - VisibleCandlesRange.Start_i) * (CandleWidth + GapBetweenCandles);
                 drawingContext.DrawText(timeTickFormattedText, new Point(x + 2, topTimePanelY));
                 drawingContext.DrawLine(pen, new Point(x, topTimePanelY), new Point(x, isHourStart ? centerTimePanelY : smallMarkLineY));
@@ -250,7 +260,7 @@ namespace FancyCandles
             void DrawDateTick()
             {
                 string dateTickText = TimeTick.ConvertDateTimeToDateTickText(isYearStart, isMonthStart, CandlesSource[date_csi].t);
-                FormattedText dateTickFormattedText = new FormattedText(dateTickText, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                FormattedText dateTickFormattedText = new FormattedText(dateTickText, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double x = CandleWidth / 2.0 + (date_csi - VisibleCandlesRange.Start_i) * (CandleWidth + GapBetweenCandles);
                 drawingContext.DrawText(dateTickFormattedText, new Point(x + 2, centerTimePanelY));
                 drawingContext.DrawLine(pen, new Point(x, centerTimePanelY), new Point(x, RenderSize.Height));
@@ -353,7 +363,7 @@ namespace FancyCandles
 
             void DrawDayTick()
             {
-                FormattedText dayTickFormattedText = new FormattedText(CandlesSource[day_csi].t.Day.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                FormattedText dayTickFormattedText = new FormattedText(CandlesSource[day_csi].t.Day.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double x = CandleWidth / 2.0 + (day_csi - VisibleCandlesRange.Start_i) * (CandleWidth + GapBetweenCandles);
                 drawingContext.DrawText(dayTickFormattedText, new Point(x + 2, topTimePanelY));
                 drawingContext.DrawLine(pen, new Point(x, topTimePanelY), new Point(x, isMonthStart ? centerTimePanelY : smallMarkLineY));
@@ -377,7 +387,7 @@ namespace FancyCandles
             void DrawMonthTick()
             {
                 string monthTickText = TimeTick.ConvertDateTimeToMonthTickText(isYearStart, CandlesSource[month_csi].t);
-                FormattedText monthTickFormattedText = new FormattedText(monthTickText, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                FormattedText monthTickFormattedText = new FormattedText(monthTickText, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double x = CandleWidth / 2.0 + (month_csi - VisibleCandlesRange.Start_i) * (CandleWidth + GapBetweenCandles);
                 drawingContext.DrawText(monthTickFormattedText, new Point(x + 2, centerTimePanelY));
                 drawingContext.DrawLine(pen, new Point(x, centerTimePanelY), new Point(x, RenderSize.Height));

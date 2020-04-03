@@ -71,7 +71,7 @@
         <Border Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                 Style="{StaticResource rowSpanPriceChartIfVolumeDisabled}"
                 Background="{Binding Path=ChartAreaBackground, Mode=OneWay}"
-                BorderBrush="Black"
+                BorderBrush="{Binding Path=AxisTickColor}"
                 BorderThickness="1"
                 RenderOptions.EdgeMode="Aliased"/>
 
@@ -169,7 +169,7 @@
         <!-- Подложка для диаграммы объемов, чтобы можно было ее подкрасить и нарисовать рамочку -->
         <Border Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                 Background="{Binding Path=ChartAreaBackground, Mode=OneWay}"
-                BorderBrush="Black"
+                BorderBrush="{Binding Path=AxisTickColor}"
                 BorderThickness="1"
                 RenderOptions.EdgeMode="Aliased"
                 Visibility="{Binding Path=IsVolumePanelVisible, Converter={StaticResource boolToVisibilityConverter}}" />

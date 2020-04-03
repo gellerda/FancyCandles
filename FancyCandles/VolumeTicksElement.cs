@@ -33,6 +33,9 @@ namespace FancyCandles
             FrameworkPropertyMetadata metadata = new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.Inherits, new PropertyChangedCallback(OnPriceTickFontSizeChanged)) { AffectsRender = true };
             PriceTickFontSizeProperty = CandleChart.PriceTickFontSizeProperty.AddOwner(typeof(VolumeTicksElement), metadata);
 
+            metadata = new FrameworkPropertyMetadata(CandleChart.DefaultAxisTickColor, FrameworkPropertyMetadataOptions.Inherits) { AffectsRender = true };
+            AxisTickColorProperty = CandleChart.AxisTickColorProperty.AddOwner(typeof(VolumeTicksElement), metadata);
+
             metadata = new FrameworkPropertyMetadata(0.0) { AffectsRender = true };
             PricePanelWidthProperty = DependencyProperty.Register("PriceAxisWidth", typeof(double), typeof(VolumeTicksElement), metadata);
 
@@ -110,6 +113,13 @@ namespace FancyCandles
             //thisElement.InvalidateMeasure();
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
+        public Brush AxisTickColor
+        {
+            get { return (Brush)GetValue(AxisTickColorProperty); }
+            set { SetValue(AxisTickColorProperty, value); }
+        }
+        public static readonly DependencyProperty AxisTickColorProperty;
+        //---------------------------------------------------------------------------------------------------------------------------------------
         public double PriceAxisWidth
         {
             get { return (double)GetValue(PricePanelWidthProperty); }
@@ -121,7 +131,7 @@ namespace FancyCandles
         {
             if (CandlesMaxVolume == long.MinValue) return;
 
-            Pen pen = new Pen(Brushes.Black, 1);
+            Pen pen = new Pen(AxisTickColor, 1);
             double textHeight = (new FormattedText("123", CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
             double halfTextHeight = textHeight / 2.0;
             double volumeHistogramPanelWidth = ActualWidth - PriceAxisWidth;
@@ -138,7 +148,7 @@ namespace FancyCandles
 
             void DrawPriceTick(long volume)
             {
-                FormattedText priceTickFormattedText = new FormattedText(volume.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                FormattedText priceTickFormattedText = new FormattedText(volume.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double y = ChartTopMargin + (CandlesMaxVolume - volume) * chartHeight_candlesLHRange_Ratio;
                 drawingContext.DrawText(priceTickFormattedText, new Point(tick_text_X, y - halfTextHeight));
                 drawingContext.DrawLine(pen, new Point(volumeHistogramPanelWidth, y), new Point(tick_line_endX, y));

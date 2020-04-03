@@ -649,6 +649,29 @@ namespace FancyCandles
 
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
+        #region COMMON PROPERTIES FOR THE PRICE AXIS AND THE TIME AXIS*******************************************************************************************
+        ///<summary>Gets or sets a color of lines, ticks and its labels for the time axis, the price axis and the volume axis.</summary>
+        ///<value>The color of lines, ticks and its labels for the time axis, the price axis and the volume axis. The default is determined by the <see cref="DefaultAxisTickColor"/> value.</value>
+        ///<h3>Dependency Property Information</h3>
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="AxisTickColorProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///</remarks>
+        public Brush AxisTickColor
+        {
+            get { return (Brush)GetValue(AxisTickColorProperty); }
+            set { SetValue(AxisTickColorProperty, value); }
+        }
+        /// <summary>Identifies the <see cref="AxisTickColor">AxisTickColor</see> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty AxisTickColorProperty =
+            DependencyProperty.RegisterAttached("AxisTickColor", typeof(Brush), typeof(CandleChart), new FrameworkPropertyMetadata(DefaultAxisTickColor, FrameworkPropertyMetadataOptions.Inherits));
+
+        ///<summary>Gets the default value for the <see cref="AxisTickColor">AxisTickColor</see> property.</summary>
+        ///<value>The default value for the <see cref="AxisTickColor"/> property: <c>Brushes.Black</c>.</value>
+        public static Brush DefaultAxisTickColor { get { return Brushes.Black; } }
+        #endregion **********************************************************************************************************************************************
+        //----------------------------------------------------------------------------------------------------------------------------------
         #region PROPERTIES OF THE PRICE AXIS (AND OF THE VOLUME AXIS, WHICH DOESN'T HAVE ITS OWN PROPERTIES) ****************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
         ///<summary>Gets or sets the font size of the tick labels for the price and volume axis.</summary>
