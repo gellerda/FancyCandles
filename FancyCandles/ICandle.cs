@@ -20,27 +20,31 @@ using System;
 
 namespace FancyCandles
 {
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ICandle'
+    ///<summary>Represents the most widely used candlestick parameters.</summary>
     public interface ICandle
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ICandle'
     {
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ICandle.t'
+        ///<summary>The time of the candlestick.</summary>
+        ///<value>The time of the candlestick.</value>
         DateTime t { get; } // Момент времени включая дату и время
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ICandle.t'
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ICandle.O'
+
+        ///<summary>The Open of the candlestick (opening price).</summary>
+        ///<value>The Open of the candlestick (opening price).</value>
         double O { get;}
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ICandle.O'
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ICandle.H'
+
+        ///<summary>The High of the candlestick (price maximum).</summary>
+        ///<value>The High of the candlestick (price maximum).</value>
         double H { get;}
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ICandle.H'
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ICandle.L'
+
+        ///<summary>The Low of the candlestick (price minimum).</summary>
+        ///<value>The Low of the candlestick (price minimum).</value>
         double L { get;}
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ICandle.L'
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ICandle.C'
+
+        ///<summary>The Close of the candlestick (closing price).</summary>
+        ///<value>The Close of the candlestick (closing price).</value>
         double C { get;}
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ICandle.C'
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ICandle.V'
+
+        ///<summary>The Volume of the candlestick.</summary>
+        ///<value>The Volume of the candlestick.</value>
         long V { get;}
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ICandle.V'
     }
 }

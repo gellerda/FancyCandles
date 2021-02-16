@@ -29,6 +29,13 @@ namespace FancyCandles
         public TimeTicksElement()
         {
             Loaded += new RoutedEventHandler(OnTimeTicksElementLoaded);
+
+            if (axisTickPen == null)
+            {
+                axisTickPen = new Pen(CandleChart.DefaultAxisTickColor, 1.0);
+                if (!axisTickPen.IsFrozen)
+                    axisTickPen.Freeze();
+            }
         }
 
         void OnTimeTicksElementLoaded(object sender, RoutedEventArgs e)
@@ -39,39 +46,10 @@ namespace FancyCandles
         //---------------------------------------------------------------------------------------------------------------------------------------
         static TimeTicksElement()
         {
-            FrameworkPropertyMetadata metadata = new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnCandlesSourceChanged)) { AffectsRender = true };
-            CandlesSourceProperty = DependencyProperty.Register("CandlesSource", typeof(IList<ICandle>), typeof(TimeTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(0.0, new PropertyChangedCallback(OnCandleWidthChanged)) { AffectsRender = true };
-            CandleWidthProperty = DependencyProperty.Register("CandleWidth", typeof(double), typeof(TimeTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(0.0, new PropertyChangedCallback(OnGapBetweenCandlesChanged)) { AffectsRender = true };
-            GapBetweenCandlesProperty = DependencyProperty.Register("GapBetweenCandles", typeof(double), typeof(TimeTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(IntRange.Undefined) { AffectsRender = true };
-            VisibleCandlesRangeProperty = DependencyProperty.Register("VisibleCandlesRange", typeof(IntRange), typeof(TimeTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.Inherits, new PropertyChangedCallback(OnTimeTickFontSizeChanged)) { AffectsRender = true, AffectsMeasure = true };
-            TimeTickFontSizeProperty = CandleChart.TimeTickFontSizeProperty.AddOwner(typeof(TimeTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(CandleChart.DefaultAxisTickColor, FrameworkPropertyMetadataOptions.Inherits) { AffectsRender = true};
-            AxisTickColorProperty = CandleChart.AxisTickColorProperty.AddOwner(typeof(TimeTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(0.0) { AffectsRender = true };
-            TimePanelHeightProperty = DependencyProperty.Register("TimeAxisHeight", typeof(double), typeof(TimeTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(0) { AffectsRender = true };
-            TimeFrameProperty = DependencyProperty.Register("TimeFrame", typeof(int), typeof(TimeTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(true) { AffectsRender = true };
-            IsGridlinesEnabledProperty = DependencyProperty.Register("IsGridlinesEnabled", typeof(bool), typeof(TimeTicksElement), metadata);
-
-            Pen defaultPen = new Pen(new SolidColorBrush(Color.FromArgb(30, 0, 0, 0)), 1); // { DashStyle = new DashStyle(new double[] { 2, 3 }, 0) };
-            metadata = new FrameworkPropertyMetadata(defaultPen) { AffectsRender = true };
-            GridlinesPenProperty = DependencyProperty.Register("GridlinesPen", typeof(Pen), typeof(TimeTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(true) { AffectsRender = true };
-            HideMinorGridlinesProperty = DependencyProperty.Register("HideMinorGridlines", typeof(bool), typeof(TimeTicksElement), metadata);
+            Pen defaultPen = new Pen(CandleChart.DefaultVerticalGridlinesBrush, CandleChart.DefaultVerticalGridlinesThickness); // { DashStyle = new DashStyle(new double[] { 2, 3 }, 0) };
+            defaultPen.Freeze();
+            GridlinesPenProperty = DependencyProperty.Register("GridlinesPen", typeof(Pen), typeof(TimeTicksElement),
+                new FrameworkPropertyMetadata(defaultPen, null, CoerceGridlinesPen) { AffectsRender = true });
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
         public bool HideMinorGridlines
@@ -79,7 +57,8 @@ namespace FancyCandles
             get { return (bool)GetValue(HideMinorGridlinesProperty); }
             set { SetValue(HideMinorGridlinesProperty, value); }
         }
-        public static readonly DependencyProperty HideMinorGridlinesProperty;
+        public static readonly DependencyProperty HideMinorGridlinesProperty 
+            = DependencyProperty.Register("HideMinorGridlines", typeof(bool), typeof(TimeTicksElement), new FrameworkPropertyMetadata(true) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         public Pen GridlinesPen
         {
@@ -87,34 +66,72 @@ namespace FancyCandles
             set { SetValue(GridlinesPenProperty, value); }
         }
         public static readonly DependencyProperty GridlinesPenProperty;
+
+        private static object CoerceGridlinesPen(DependencyObject objWithOldDP, object newDPValue)
+        {
+            Pen newPenValue = (Pen)newDPValue;
+            return newPenValue.IsFrozen ? newDPValue : newPenValue.GetCurrentValueAsFrozen();
+        }
         //---------------------------------------------------------------------------------------------------------------------------------------
         public bool IsGridlinesEnabled
         {
             get { return (bool)GetValue(IsGridlinesEnabledProperty); }
             set { SetValue(IsGridlinesEnabledProperty, value); }
         }
-        public static readonly DependencyProperty IsGridlinesEnabledProperty;
+        public static readonly DependencyProperty IsGridlinesEnabledProperty
+            = DependencyProperty.Register("IsGridlinesEnabled", typeof(bool), typeof(TimeTicksElement),
+                new FrameworkPropertyMetadata(true) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         public int TimeFrame
         {
             get { return (int)GetValue(TimeFrameProperty); }
             set { SetValue(TimeFrameProperty, value); }
         }
-        public static readonly DependencyProperty TimeFrameProperty;
+        public static readonly DependencyProperty TimeFrameProperty
+            = DependencyProperty.Register("TimeFrame", typeof(int), typeof(TimeTicksElement),
+                new FrameworkPropertyMetadata(0) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
+        private Pen axisTickPen;
+
         public Brush AxisTickColor
         {
             get { return (Brush)GetValue(AxisTickColorProperty); }
             set { SetValue(AxisTickColorProperty, value); }
         }
-        public static readonly DependencyProperty AxisTickColorProperty;
+        public static readonly DependencyProperty AxisTickColorProperty
+            = DependencyProperty.Register("AxisTickColor", typeof(Brush), typeof(TimeTicksElement),
+                new FrameworkPropertyMetadata(CandleChart.DefaultAxisTickColor, null, CoerceAxisTickColor) { AffectsRender = true });
+
+        private static object CoerceAxisTickColor(DependencyObject objWithOldDP, object newDPValue)
+        {
+            TimeTicksElement thisElement = (TimeTicksElement)objWithOldDP;
+            Brush newBrushValue = (Brush)newDPValue;
+
+            if (newBrushValue.IsFrozen)
+            {
+                Pen p = new Pen(newBrushValue, 1.0);
+                p.Freeze();
+                thisElement.axisTickPen = p;
+                return newDPValue;
+            }
+            else
+            {
+                Brush b = (Brush)newBrushValue.GetCurrentValueAsFrozen();
+                Pen p = new Pen(b, 1.0);
+                p.Freeze();
+                thisElement.axisTickPen = p;
+                return b;
+            }
+        }
         //---------------------------------------------------------------------------------------------------------------------------------------
         public double TimeTickFontSize
         {
             get { return (double)GetValue(TimeTickFontSizeProperty); }
             set { SetValue(TimeTickFontSizeProperty, value); }
         }
-        public static readonly DependencyProperty TimeTickFontSizeProperty;
+        public static readonly DependencyProperty TimeTickFontSizeProperty 
+            = CandleChart.TimeTickFontSizeProperty.AddOwner(typeof(TimeTicksElement),
+                new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.Inherits, new PropertyChangedCallback(OnTimeTickFontSizeChanged)) { AffectsRender = true, AffectsMeasure = true });
 
         private static void OnTimeTickFontSizeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
@@ -130,7 +147,9 @@ namespace FancyCandles
             get { return (double)GetValue(TimePanelHeightProperty); }
             set { SetValue(TimePanelHeightProperty, value); }
         }
-        public static readonly DependencyProperty TimePanelHeightProperty;
+        public static readonly DependencyProperty TimePanelHeightProperty 
+            = DependencyProperty.Register("TimeAxisHeight", typeof(double), typeof(TimeTicksElement),
+                new FrameworkPropertyMetadata(0.0) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         static double TicksWidthWithGapFactor = 2.0; // = (Tick width + Gap width between ticks) / Tick width
 
@@ -157,29 +176,20 @@ namespace FancyCandles
             get { return (IntRange)GetValue(VisibleCandlesRangeProperty); }
             set { SetValue(VisibleCandlesRangeProperty, value); }
         }
-        public static readonly DependencyProperty VisibleCandlesRangeProperty;
+        public static readonly DependencyProperty VisibleCandlesRangeProperty 
+            = DependencyProperty.Register("VisibleCandlesRange", typeof(IntRange), typeof(TimeTicksElement),
+                new FrameworkPropertyMetadata(IntRange.Undefined) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
-        public double CandleWidth
+        public static readonly DependencyProperty CandleWidthAndGapProperty 
+            = DependencyProperty.Register("CandleWidthAndGap", typeof(CandleDrawingParameters), typeof(TimeTicksElement),
+                  new FrameworkPropertyMetadata(new CandleDrawingParameters(), new PropertyChangedCallback(OnCandleWidthAndGapChanged)) { AffectsRender = true });
+        public CandleDrawingParameters CandleWidthAndGap
         {
-            get { return (double)GetValue(CandleWidthProperty); }
-            set { SetValue(CandleWidthProperty, value); }
+            get { return (CandleDrawingParameters)GetValue(CandleWidthAndGapProperty); }
+            set { SetValue(CandleWidthAndGapProperty, value); }
         }
-        public static readonly DependencyProperty CandleWidthProperty;
 
-        private static void OnCandleWidthChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
-        {
-            TimeTicksElement thisElement = (TimeTicksElement)obj;
-            thisElement.ReCalc_TimeTicksTimeFrame();
-        }
-        //---------------------------------------------------------------------------------------------------------------------------------------
-        public double GapBetweenCandles
-        {
-            get { return (double)GetValue(GapBetweenCandlesProperty); }
-            set { SetValue(GapBetweenCandlesProperty, value); }
-        }
-        public static readonly DependencyProperty GapBetweenCandlesProperty;
-
-        private static void OnGapBetweenCandlesChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        private static void OnCandleWidthAndGapChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             TimeTicksElement thisElement = (TimeTicksElement)obj;
             thisElement.ReCalc_TimeTicksTimeFrame();
@@ -190,7 +200,8 @@ namespace FancyCandles
             get { return (IList<ICandle>)GetValue(CandlesSourceProperty); }
             set { SetValue(CandlesSourceProperty, value); }
         }
-        public static readonly DependencyProperty CandlesSourceProperty;
+        public static readonly DependencyProperty CandlesSourceProperty = DependencyProperty.Register("CandlesSource", typeof(IList<ICandle>), typeof(TimeTicksElement), 
+                                                                            new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnCandlesSourceChanged)) { AffectsRender = true });
 
         private static void OnCandlesSourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
@@ -204,9 +215,9 @@ namespace FancyCandles
 
         bool ReCalc_TimeTicksTimeFrame()
         {
-            if (TimeFrame == 0 || CandleWidth == 0.0 || TimeTickFontSize == 0.0) return false;
+            if (TimeFrame == 0 || CandleWidthAndGap.Width == 0.0 || TimeTickFontSize == 0.0) return false;
 
-            double minutesCoveredByOneTimeTickLabel = Math.Ceiling(Time_TickWidth / (CandleWidth + GapBetweenCandles)) * TimeFrame;
+            double minutesCoveredByOneTimeTickLabel = Math.Ceiling(Time_TickWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap)) * TimeFrame;
             int old_TimeTicksTimeFrame = TimeTicksTimeFrame;
             TimeTicksTimeFrame = MyDateAndTime.CeilMinutesToConventionalTimeFrame(minutesCoveredByOneTimeTickLabel);
             return TimeTicksTimeFrame != old_TimeTicksTimeFrame;
@@ -216,20 +227,19 @@ namespace FancyCandles
         {
             if (CandlesSource == null || VisibleCandlesRange == IntRange.Undefined || TimeFrame == 0 || TimeTicksTimeFrame == 0) return;
 
-            Pen pen = new Pen(AxisTickColor, 1);
             double halfTimePanelHeight = TimeAxisHeight / 2.0;
             double topTimePanelY = RenderSize.Height - TimeAxisHeight;
             double centerTimePanelY = RenderSize.Height - TimeAxisHeight / 2.0;
 
             if (TimeFrame < 60)
-                OnRender_TimeAndDay(drawingContext, pen);
+                OnRender_TimeAndDay(drawingContext, axisTickPen);
             else
-                OnRender_DayAndMonth(drawingContext, pen);
+                OnRender_DayAndMonth(drawingContext, axisTickPen);
 
             // Горизонтальные линии на всю ширину разделяющая и окаймляющая панели времени и даты:
-            drawingContext.DrawLine(pen, new Point(0, topTimePanelY), new Point(RenderSize.Width, topTimePanelY));
-            drawingContext.DrawLine(pen, new Point(0, centerTimePanelY), new Point(RenderSize.Width, centerTimePanelY));
-            drawingContext.DrawLine(pen, new Point(0, RenderSize.Height), new Point(RenderSize.Width, RenderSize.Height));
+            drawingContext.DrawLine(axisTickPen, new Point(0, topTimePanelY), new Point(RenderSize.Width, topTimePanelY));
+            drawingContext.DrawLine(axisTickPen, new Point(0, centerTimePanelY), new Point(RenderSize.Width, centerTimePanelY));
+            drawingContext.DrawLine(axisTickPen, new Point(0, RenderSize.Height), new Point(RenderSize.Width, RenderSize.Height));
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
         void OnRender_TimeAndDay(DrawingContext drawingContext, Pen pen)
@@ -246,10 +256,10 @@ namespace FancyCandles
 
             void DrawTimeTick()
             {
-                //double timeTickRightMargin = CandleWidth/2.0 +  (day_csi - VisibleCandlesRange.Start_i) * (CandleWidth + GapBetweenCandles);
+                //double timeTickRightMargin = CandleWidth/2.0 +  (day_csi - VisibleCandlesRange.Start_i) * (CandleWidth + CandleGap);
                 string timeTickText = TimeTick.ConvertDateTimeToTimeTickText(isHourStart, CandlesSource[time_csi].t);
                 FormattedText timeTickFormattedText = new FormattedText(timeTickText, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
-                double x = CandleWidth / 2.0 + (time_csi - VisibleCandlesRange.Start_i) * (CandleWidth + GapBetweenCandles);
+                double x = CandleWidthAndGap.Width / 2.0 + (time_csi - VisibleCandlesRange.Start_i) * (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
                 drawingContext.DrawText(timeTickFormattedText, new Point(x + 2, topTimePanelY));
                 drawingContext.DrawLine(pen, new Point(x, topTimePanelY), new Point(x, isHourStart ? centerTimePanelY : smallMarkLineY));
 
@@ -261,14 +271,14 @@ namespace FancyCandles
             {
                 string dateTickText = TimeTick.ConvertDateTimeToDateTickText(isYearStart, isMonthStart, CandlesSource[date_csi].t);
                 FormattedText dateTickFormattedText = new FormattedText(dateTickText, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
-                double x = CandleWidth / 2.0 + (date_csi - VisibleCandlesRange.Start_i) * (CandleWidth + GapBetweenCandles);
+                double x = CandleWidthAndGap.Width / 2.0 + (date_csi - VisibleCandlesRange.Start_i) * (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
                 drawingContext.DrawText(dateTickFormattedText, new Point(x + 2, centerTimePanelY));
                 drawingContext.DrawLine(pen, new Point(x, centerTimePanelY), new Point(x, RenderSize.Height));
             }
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            int time_LabelWidthInCandles = Convert.ToInt32(Math.Ceiling(Time_TickWidth / (CandleWidth + GapBetweenCandles)));
-            int date_LabelWidthInCandles = Convert.ToInt32(Math.Ceiling(DayOrMonthOrYear_TickWidth / (CandleWidth + GapBetweenCandles)));
+            int time_LabelWidthInCandles = Convert.ToInt32(Math.Ceiling(Time_TickWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap)));
+            int date_LabelWidthInCandles = Convert.ToInt32(Math.Ceiling(DayOrMonthOrYear_TickWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap)));
             for (int i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - 1; i >= VisibleCandlesRange.Start_i; i--)
             {
                 ICandle cndl = CandlesSource[i];
@@ -364,7 +374,7 @@ namespace FancyCandles
             void DrawDayTick()
             {
                 FormattedText dayTickFormattedText = new FormattedText(CandlesSource[day_csi].t.Day.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
-                double x = CandleWidth / 2.0 + (day_csi - VisibleCandlesRange.Start_i) * (CandleWidth + GapBetweenCandles);
+                double x = CandleWidthAndGap.Width / 2.0 + (day_csi - VisibleCandlesRange.Start_i) * (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
                 drawingContext.DrawText(dayTickFormattedText, new Point(x + 2, topTimePanelY));
                 drawingContext.DrawLine(pen, new Point(x, topTimePanelY), new Point(x, isMonthStart ? centerTimePanelY : smallMarkLineY));
 
@@ -388,14 +398,14 @@ namespace FancyCandles
             {
                 string monthTickText = TimeTick.ConvertDateTimeToMonthTickText(isYearStart, CandlesSource[month_csi].t);
                 FormattedText monthTickFormattedText = new FormattedText(monthTickText, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
-                double x = CandleWidth / 2.0 + (month_csi - VisibleCandlesRange.Start_i) * (CandleWidth + GapBetweenCandles);
+                double x = CandleWidthAndGap.Width / 2.0 + (month_csi - VisibleCandlesRange.Start_i) * (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
                 drawingContext.DrawText(monthTickFormattedText, new Point(x + 2, centerTimePanelY));
                 drawingContext.DrawLine(pen, new Point(x, centerTimePanelY), new Point(x, RenderSize.Height));
             }
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            int day_LabelWidthInCandles = Convert.ToInt32(Math.Ceiling(Day_TickWidth / (CandleWidth + GapBetweenCandles)));
-            int month_LabelWidthInCandles = Convert.ToInt32(Math.Ceiling(DayOrMonthOrYear_TickWidth / (CandleWidth + GapBetweenCandles)));
+            int day_LabelWidthInCandles = Convert.ToInt32(Math.Ceiling(Day_TickWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap)));
+            int month_LabelWidthInCandles = Convert.ToInt32(Math.Ceiling(DayOrMonthOrYear_TickWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap)));
             for (int i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - 1; i >= VisibleCandlesRange.Start_i; i--)
             {
                 ICandle cndl = CandlesSource[i];

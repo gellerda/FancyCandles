@@ -42,6 +42,11 @@
         <local:NotBoolToVisibilityConverter x:Key="notBoolToVisibilityConverter"/>
         <local:SquareBoolToVisibilityConverter x:Key="squareBoolToVisibilityConverter"/>
         <local:VerticalCrossLineVisibilityConverter x:Key="verticalCrossLineVisibilityConverter"/>
+        <local:IntRangeToPointConverter x:Key="intRangeToPointConverter"/>
+        <local:CandleExtremumsToPriceExtremumsPointConverter x:Key="candleExtremumsToPriceExtremumsPointConverter"/>
+        <local:CandleDrawingParametersToPointConverter x:Key="candleDrawingParametersToPointConverter"/>
+        <local:BrushToColorConverter x:Key="brushToColorConverter"/>
+        <local:CandleDrawingParametersConverter x:Key="candleDrawingParametersConverter"/>
 
         <Style x:Key="rowSpanPriceChartIfVolumeDisabled">
             <Style.Triggers>
@@ -83,38 +88,30 @@
             <!-- Нужно заполнить весь контейнер прозрачным содержимым, а иначе перекрестие не работает: -->
             <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent"/>
 
-            <ItemsControl Name="candlesItemsControl" ItemsSource="{Binding VisibleCandles}">
-
-                <ItemsControl.Margin>
+            <local:PriceChartElement x:Name="priceChart" 
+                CandlesSource="{Binding ElementName=thisUserControl, Path=CandlesSource, Mode=OneWay}"
+                VisibleCandlesRange="{Binding ElementName=thisUserControl, Path=VisibleCandlesRange, Mode=OneWay}"
+                VisibleCandlesExtremums="{Binding ElementName=thisUserControl, Path=VisibleCandlesExtremums, Mode=OneWay}"
+                BullishCandleFill="{Binding ElementName=thisUserControl, Path=BullishCandleFill, Mode=OneWay}"
+                BearishCandleFill="{Binding ElementName=thisUserControl, Path=BearishCandleFill, Mode=OneWay}" 
+                BullishCandleStroke="{Binding ElementName=thisUserControl, Path=BullishCandleStroke, Mode=OneWay}"
+                BearishCandleStroke="{Binding ElementName=thisUserControl, Path=BearishCandleStroke, Mode=OneWay}" 
+                ToolTipService.PlacementTarget="{Binding ElementName=priceChartContainer, Path=., Mode=OneWay}"
+                ToolTipService.Placement="Relative"
+                RenderOptions.EdgeMode="Aliased" RenderOptions.BitmapScalingMode="NearestNeighbor">
+                <local:PriceChartElement.CandleWidthAndGap>
+                    <MultiBinding Converter="{StaticResource candleDrawingParametersConverter}">
+                        <Binding ElementName="thisUserControl" Path="CandleWidth" Mode="OneWay"/>
+                        <Binding ElementName="thisUserControl" Path="CandleGap" Mode="OneWay"/>
+                    </MultiBinding>
+                </local:PriceChartElement.CandleWidthAndGap>
+                <local:PriceChartElement.Margin>
                     <MultiBinding Converter="{StaticResource topBottomMarginConverter}">
                         <Binding ElementName="thisUserControl" Path="PriceChartTopMargin" Mode="OneWay"/>
                         <Binding ElementName="thisUserControl" Path="PriceChartBottomMargin" Mode="OneWay"/>
                     </MultiBinding>
-                </ItemsControl.Margin>
-
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas Width="{Binding ElementName=priceChartContainer, Path=ActualWidth, Mode=OneWay}"  HorizontalAlignment="Right"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <ItemsControl.ItemContainerStyle>
-                    <Style>
-                        <Setter Property="Canvas.Bottom" Value="0"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <local:WholeContainerCandleElement CandleData="{Binding Path=.,Mode=OneWay}" 
-                                             BullishCandleBrush="{Binding ElementName=thisUserControl, Path=BullishCandleBrush, Mode=OneWay}"              
-                                             BearishCandleBrush="{Binding ElementName=thisUserControl, Path=BearishCandleBrush, Mode=OneWay}"              
-                                             Height="{Binding ElementName=candlesItemsControl, Path=ActualHeight}" Width="{Binding ElementName=candlesItemsControl, Path=ActualWidth}"
-                                             ToolTipService.PlacementTarget="{Binding ElementName=priceChartContainer, Path=., Mode=OneWay}"
-                                             ToolTipService.Placement="Relative" RenderOptions.EdgeMode="Aliased"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                </local:PriceChartElement.Margin>
+            </local:PriceChartElement>
 
             <!-- Легенда -->
             <TextBlock TextAlignment="Center" IsHitTestVisible="False"
@@ -182,41 +179,28 @@
             <!-- Нужно заполнить весь контейнер прозрачным содержимым, а иначе перекрестие не работает: -->
             <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent"/>
 
-            <ItemsControl Name="volumesHistogramItemsControl" ItemsSource="{Binding VisibleCandles}">
-
-                <ItemsControl.Margin>
-                    <MultiBinding Converter="{StaticResource topBottomMarginConverter}">
-                        <Binding ElementName="thisUserControl" Path="VolumeHistogramTopMargin" Mode="OneWay"/>
-                        <Binding ElementName="thisUserControl" Path="VolumeHistogramBottomMargin" Mode="OneWay"/>
+            <local:VolumeChartElement 
+                CandlesSource="{Binding ElementName=thisUserControl, Path=CandlesSource, Mode=OneWay}"
+                VisibleCandlesRange="{Binding ElementName=thisUserControl, Path=VisibleCandlesRange, Mode=OneWay}"
+                VisibleCandlesExtremums="{Binding ElementName=thisUserControl, Path=VisibleCandlesExtremums, Mode=OneWay}"
+                BullishBarFill="{Binding ElementName=thisUserControl, Path=BullishVolumeBarFill, Mode=OneWay}"
+                BearishBarFill="{Binding ElementName=thisUserControl, Path=BearishVolumeBarFill, Mode=OneWay}" 
+                ToolTipService.PlacementTarget="{Binding ElementName=volumeHistogramContainer, Path=., Mode=OneWay}"
+                ToolTipService.Placement="Relative"
+                RenderOptions.EdgeMode="Aliased">
+                <local:VolumeChartElement.CandleWidthAndGap>
+                    <MultiBinding Converter="{StaticResource candleDrawingParametersConverter}">
+                        <Binding ElementName="thisUserControl" Path="CandleWidth" Mode="OneWay"/>
+                        <Binding ElementName="thisUserControl" Path="CandleGap" Mode="OneWay"/>
                     </MultiBinding>
-                </ItemsControl.Margin>
-
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas Width="{Binding ElementName=volumeHistogramContainer, Path=ActualWidth, Mode=OneWay}"  HorizontalAlignment="Right"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <ItemsControl.ItemContainerStyle>
-                    <Style>
-                        <Setter Property="Canvas.Bottom" Value="0"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <local:WholeContainerHistogramBarElement CandleData="{Binding Path=.,Mode=OneWay}" 
-                                                                BullishVolumeBarBrush="{Binding ElementName=thisUserControl, Path=BullishVolumeBarBrush, Mode=OneWay}"              
-                                                                BearishVolumeBarBrush="{Binding ElementName=thisUserControl, Path=BearishVolumeBarBrush, Mode=OneWay}"              
-                                                                Height="{Binding ElementName=volumesHistogramItemsControl, Path=ActualHeight}" 
-                                                                Width="{Binding ElementName=volumesHistogramItemsControl, Path=ActualWidth}"
-                                                                VolumeBarWidthToCandleWidthRatio="{Binding ElementName=thisUserControl, Path=VolumeBarWidthToCandleWidthRatio}"
-                                                                ToolTipService.PlacementTarget="{Binding ElementName=volumeHistogramContainer, Path=., Mode=OneWay}"
-                                                                ToolTipService.Placement="Relative"
-                                                                RenderOptions.EdgeMode="Aliased"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                </local:VolumeChartElement.CandleWidthAndGap>
+                <local:VolumeChartElement.Margin>
+                    <MultiBinding Converter="{StaticResource topBottomMarginConverter}">
+                        <Binding ElementName="thisUserControl" Path="PriceChartTopMargin" Mode="OneWay"/>
+                        <Binding ElementName="thisUserControl" Path="PriceChartBottomMargin" Mode="OneWay"/>
+                    </MultiBinding>
+                </local:VolumeChartElement.Margin>
+            </local:VolumeChartElement>
 
             <!-- Горизонтальная линия перекрестия: -->
             <Line Stroke="{Binding Path=CrossLinesBrush, Mode=OneWay}" StrokeThickness="1"
@@ -254,11 +238,12 @@
         <!-- Вертикальная шкала с метками цены: -->
         <local:PriceTicksElement Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch"
                                  Style="{StaticResource rowSpanPriceChartIfVolumeDisabled}"
+                                 AxisTickColor="{Binding Path=AxisTickColor, Mode=OneWay}"
                                  GapBetweenTickLabels="{Binding Path=GapBetweenPriceTickLabels, Mode=OneWay}"
                                  ChartBottomMargin="{Binding Path=PriceChartBottomMargin, Mode=OneWay}"
                                  ChartTopMargin="{Binding Path=PriceChartTopMargin, Mode=OneWay}"
                                  PriceAxisWidth="{Binding Path=PriceAxisWidth, Mode=OneWay}"
-                                 CandlesLH="{Binding Path=CandlesLH, Mode=OneWay}"
+                                 VisibleCandlesExtremums="{Binding Path=VisibleCandlesExtremums, Mode=OneWay}"
                                  IsGridlinesEnabled="{Binding Path=IsHorizontalGridlinesEnabled, Mode=OneWay}"
                                  GridlinesPen="{Binding Path=HorizontalGridlinesPen, Mode=OneWay}"
                                  RenderOptions.EdgeMode="Aliased"/>
@@ -269,7 +254,7 @@
                                   ChartBottomMargin="{Binding Path=VolumeHistogramBottomMargin, Mode=OneWay}"
                                   ChartTopMargin="{Binding Path=VolumeHistogramTopMargin, Mode=OneWay}"
                                   PriceAxisWidth="{Binding Path=PriceAxisWidth, Mode=OneWay}"
-                                  CandlesMaxVolume="{Binding Path=CandlesMaxVolume, Mode=OneWay}"
+                                  VisibleCandlesExtremums="{Binding Path=VisibleCandlesExtremums, Mode=OneWay}"
                                   IsGridlinesEnabled="{Binding Path=IsHorizontalGridlinesEnabled, Mode=OneWay}"
                                   GridlinesPen="{Binding Path=HorizontalGridlinesPen, Mode=OneWay}"
                                   RenderOptions.EdgeMode="Aliased"
@@ -279,14 +264,19 @@
         <local:TimeTicksElement Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"
                                 TimeAxisHeight="{Binding Path=TimeAxisHeight, Mode=OneWay}"
                                 CandlesSource="{Binding Path=CandlesSource, Mode=OneWay}"
-                                CandleWidth="{Binding Path=CandleWidth, Mode=OneWay}"
-                                GapBetweenCandles="{Binding Path=GapBetweenCandles, Mode=OneWay}"
                                 TimeFrame="{Binding Path=TimeFrame, Mode=OneWay}"
                                 VisibleCandlesRange="{Binding Path=VisibleCandlesRange, Mode=OneWay}"
                                 IsGridlinesEnabled="{Binding Path=IsVerticalGridlinesEnabled, Mode=OneWay}"
                                 GridlinesPen="{Binding Path=VerticalGridlinesPen, Mode=OneWay}"
                                 HideMinorGridlines="{Binding Path=HideMinorVerticalGridlines, Mode=OneWay}"
-                                RenderOptions.EdgeMode="Aliased"/>
+                                RenderOptions.EdgeMode="Aliased">
+                                <local:TimeTicksElement.CandleWidthAndGap>
+                                    <MultiBinding Converter="{StaticResource candleDrawingParametersConverter}">
+                                        <Binding ElementName="thisUserControl" Path="CandleWidth" Mode="OneWay"/>
+                                        <Binding ElementName="thisUserControl" Path="CandleGap" Mode="OneWay"/>
+                                    </MultiBinding>
+                                </local:TimeTicksElement.CandleWidthAndGap>
+        </local:TimeTicksElement>
 
         <!-- Совпадает с расположением шкалы меток времени. Нужно для корректной работы колесика мыши в этой области. + Курсор перестает реагировать на текстовые метки времени. -->
         <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" MouseWheel="OnMouseWheel"/>
@@ -315,7 +305,7 @@
                     <MultiBinding Converter="{StaticResource crossPriceValueConverter}">
                         <Binding Path="CurrentMousePosition" Mode="OneWay"/>
                         <Binding ElementName="priceChartContainer" Path="ActualHeight" Mode="OneWay"/>
-                        <Binding Path="CandlesLH" Mode="OneWay"/>
+                        <Binding Path="VisibleCandlesExtremums" Mode="OneWay"/>
                         <Binding Path="PriceChartTopMargin" Mode="OneWay"/>
                         <Binding Path="PriceChartBottomMargin" Mode="OneWay"/>
                         <Binding Path="MaxNumberOfDigitsAfterPointInPrice" Mode="OneWay"/>
@@ -347,7 +337,7 @@
                     <MultiBinding Converter="{StaticResource crossVolumeConverter}">
                         <Binding Path="CurrentMousePosition" Mode="OneWay"/>
                         <Binding ElementName="volumeHistogramContainer" Path="ActualHeight" Mode="OneWay"/>
-                        <Binding Path="CandlesMaxVolume" Mode="OneWay"/>
+                        <Binding Path="VisibleCandlesExtremums" Mode="OneWay"/>
                         <Binding Path="VolumeHistogramTopMargin" Mode="OneWay"/>
                         <Binding Path="VolumeHistogramBottomMargin" Mode="OneWay"/>
                     </MultiBinding>

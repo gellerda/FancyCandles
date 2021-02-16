@@ -1,6 +1,6 @@
 {
   "homepages": [],
-  "source_base_path": "E:/mydocs/CS/FancyCandles/docfx_project",
+  "source_base_path": "D:/mydocs/WPF/FancyCandles/docfx_project",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -9,10 +9,22 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.CandleChart.html",
-          "hash": "EbAFCFMUr/z5szOZK9WuQg=="
+          "hash": "i/ylVpwTCyiFPyYwHVZznQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/FancyCandles.CandleExtremums.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/FancyCandles.CandleExtremums.html",
+          "hash": "qIQNkp8VSKICMzvE3Tet7A=="
+        }
+      },
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -21,10 +33,10 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.ICandle.html",
-          "hash": "o0iMDaM1qhrmh7JDtGe+Tw=="
+          "hash": "02ZgafgTd138DGepJ9wigw=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -33,10 +45,10 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.IntRange.html",
-          "hash": "s7wtYWpFmfX1IwmRlKKWlw=="
+          "hash": "FePEUM7rb3b3UugHagi0yg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -45,10 +57,10 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.html",
-          "hash": "oTPqpA2mhZHn/+omViNVAQ=="
+          "hash": "Y1rZsB+gFENaFUnm95/w6g=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -57,10 +69,10 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "N5d1HqV+9YmUyfzRmpVxEQ=="
+          "hash": "xlPH2QA//thQ2PKrX/nWfg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -69,7 +81,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "qsJ/MXwN2HpuG4BGJvdKvw=="
+          "hash": "kkfoMqSz6x1lAfaJp+J+cA=="
         }
       },
       "is_incremental": false,
@@ -81,10 +93,10 @@
       "output": {
         ".html": {
           "relative_path": "articles/adding_fancycandles_to_project.html",
-          "hash": "f1t2OA8isPYDODzxuf4TJQ=="
+          "hash": "tCrMgjnImAGyxptDyXfhVA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -93,10 +105,10 @@
       "output": {
         ".html": {
           "relative_path": "articles/creating_candlestick_chart.html",
-          "hash": "aFVL3eJJMR6jcDUijUHvhw=="
+          "hash": "ocm2WUhRCJarjqeUjey9Rg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -108,10 +120,10 @@
       "output": {
         ".html": {
           "relative_path": "articles/overview.html",
-          "hash": "BtfPGlnyrpyg3G58anXPrA=="
+          "hash": "JWKFQAh1jnND1Z1VaIIW1w=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -120,10 +132,10 @@
       "output": {
         ".html": {
           "relative_path": "articles/populating_candlestick_chart.html",
-          "hash": "GPsdIc6ztTQTN67B8XxiDg=="
+          "hash": "qrDEbwKYCF2SjP0CNP6ZQg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -144,10 +156,10 @@
       "output": {
         ".html": {
           "relative_path": "download/download_doc.html",
-          "hash": "8gfv/YqxorjQ27HST+S5LQ=="
+          "hash": "OS5VmxSXDfRZTjfAUxBYZg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -322,10 +334,10 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "XEwVv2fo13phjcIAySDbDQ=="
+          "hash": "GjTsN1WcjscC+OmcbGpktA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -334,7 +346,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "LdlrGl4zrdT+a6FvsXOX6g=="
+          "hash": "5G2kl4HJjo/KPgOCicBLMw=="
         }
       },
       "is_incremental": false,
@@ -350,12 +362,17 @@
         "skipped_file_count": 0
       },
       "processors": {
-        "TocDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
+          "total_file_count": 7,
+          "skipped_file_count": 7
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 5,
+          "skipped_file_count": 5
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
@@ -364,17 +381,12 @@
           "total_file_count": 0,
           "skipped_file_count": 0
         },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": true,
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
-          "total_file_count": 4,
-          "skipped_file_count": 4
-        },
-        "ConceptualDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 7,
-          "skipped_file_count": 7
+          "total_file_count": 0,
+          "skipped_file_count": 0
         }
       }
     },

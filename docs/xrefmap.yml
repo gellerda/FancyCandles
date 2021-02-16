@@ -26,108 +26,152 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.CandleChart
   nameWithType: CandleChart.CandleChart
-- uid: FancyCandles.CandleChart.BearishCandleBrush
-  name: BearishCandleBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishCandleBrush
-  commentId: P:FancyCandles.CandleChart.BearishCandleBrush
-  fullName: FancyCandles.CandleChart.BearishCandleBrush
-  nameWithType: CandleChart.BearishCandleBrush
-- uid: FancyCandles.CandleChart.BearishCandleBrush*
-  name: BearishCandleBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishCandleBrush_
-  commentId: Overload:FancyCandles.CandleChart.BearishCandleBrush
+- uid: FancyCandles.CandleChart.AxisTickColor
+  name: AxisTickColor
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_AxisTickColor
+  commentId: P:FancyCandles.CandleChart.AxisTickColor
+  fullName: FancyCandles.CandleChart.AxisTickColor
+  nameWithType: CandleChart.AxisTickColor
+- uid: FancyCandles.CandleChart.AxisTickColor*
+  name: AxisTickColor
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_AxisTickColor_
+  commentId: Overload:FancyCandles.CandleChart.AxisTickColor
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.BearishCandleBrush
-  nameWithType: CandleChart.BearishCandleBrush
-- uid: FancyCandles.CandleChart.BearishCandleBrushProperty
-  name: BearishCandleBrushProperty
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishCandleBrushProperty
-  commentId: F:FancyCandles.CandleChart.BearishCandleBrushProperty
-  fullName: FancyCandles.CandleChart.BearishCandleBrushProperty
-  nameWithType: CandleChart.BearishCandleBrushProperty
-- uid: FancyCandles.CandleChart.BearishVolumeBarBrush
-  name: BearishVolumeBarBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishVolumeBarBrush
-  commentId: P:FancyCandles.CandleChart.BearishVolumeBarBrush
-  fullName: FancyCandles.CandleChart.BearishVolumeBarBrush
-  nameWithType: CandleChart.BearishVolumeBarBrush
-- uid: FancyCandles.CandleChart.BearishVolumeBarBrush*
-  name: BearishVolumeBarBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishVolumeBarBrush_
-  commentId: Overload:FancyCandles.CandleChart.BearishVolumeBarBrush
+  fullName: FancyCandles.CandleChart.AxisTickColor
+  nameWithType: CandleChart.AxisTickColor
+- uid: FancyCandles.CandleChart.AxisTickColorProperty
+  name: AxisTickColorProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_AxisTickColorProperty
+  commentId: F:FancyCandles.CandleChart.AxisTickColorProperty
+  fullName: FancyCandles.CandleChart.AxisTickColorProperty
+  nameWithType: CandleChart.AxisTickColorProperty
+- uid: FancyCandles.CandleChart.BearishCandleFill
+  name: BearishCandleFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishCandleFill
+  commentId: P:FancyCandles.CandleChart.BearishCandleFill
+  fullName: FancyCandles.CandleChart.BearishCandleFill
+  nameWithType: CandleChart.BearishCandleFill
+- uid: FancyCandles.CandleChart.BearishCandleFill*
+  name: BearishCandleFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishCandleFill_
+  commentId: Overload:FancyCandles.CandleChart.BearishCandleFill
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.BearishVolumeBarBrush
-  nameWithType: CandleChart.BearishVolumeBarBrush
-- uid: FancyCandles.CandleChart.BearishVolumeBarBrushProperty
-  name: BearishVolumeBarBrushProperty
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishVolumeBarBrushProperty
-  commentId: F:FancyCandles.CandleChart.BearishVolumeBarBrushProperty
-  fullName: FancyCandles.CandleChart.BearishVolumeBarBrushProperty
-  nameWithType: CandleChart.BearishVolumeBarBrushProperty
-- uid: FancyCandles.CandleChart.BullishCandleBrush
-  name: BullishCandleBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishCandleBrush
-  commentId: P:FancyCandles.CandleChart.BullishCandleBrush
-  fullName: FancyCandles.CandleChart.BullishCandleBrush
-  nameWithType: CandleChart.BullishCandleBrush
-- uid: FancyCandles.CandleChart.BullishCandleBrush*
-  name: BullishCandleBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishCandleBrush_
-  commentId: Overload:FancyCandles.CandleChart.BullishCandleBrush
+  fullName: FancyCandles.CandleChart.BearishCandleFill
+  nameWithType: CandleChart.BearishCandleFill
+- uid: FancyCandles.CandleChart.BearishCandleFillProperty
+  name: BearishCandleFillProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishCandleFillProperty
+  commentId: F:FancyCandles.CandleChart.BearishCandleFillProperty
+  fullName: FancyCandles.CandleChart.BearishCandleFillProperty
+  nameWithType: CandleChart.BearishCandleFillProperty
+- uid: FancyCandles.CandleChart.BearishCandleStroke
+  name: BearishCandleStroke
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishCandleStroke
+  commentId: P:FancyCandles.CandleChart.BearishCandleStroke
+  fullName: FancyCandles.CandleChart.BearishCandleStroke
+  nameWithType: CandleChart.BearishCandleStroke
+- uid: FancyCandles.CandleChart.BearishCandleStroke*
+  name: BearishCandleStroke
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishCandleStroke_
+  commentId: Overload:FancyCandles.CandleChart.BearishCandleStroke
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.BullishCandleBrush
-  nameWithType: CandleChart.BullishCandleBrush
-- uid: FancyCandles.CandleChart.BullishCandleBrushProperty
-  name: BullishCandleBrushProperty
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishCandleBrushProperty
-  commentId: F:FancyCandles.CandleChart.BullishCandleBrushProperty
-  fullName: FancyCandles.CandleChart.BullishCandleBrushProperty
-  nameWithType: CandleChart.BullishCandleBrushProperty
-- uid: FancyCandles.CandleChart.BullishVolumeBarBrush
-  name: BullishVolumeBarBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishVolumeBarBrush
-  commentId: P:FancyCandles.CandleChart.BullishVolumeBarBrush
-  fullName: FancyCandles.CandleChart.BullishVolumeBarBrush
-  nameWithType: CandleChart.BullishVolumeBarBrush
-- uid: FancyCandles.CandleChart.BullishVolumeBarBrush*
-  name: BullishVolumeBarBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishVolumeBarBrush_
-  commentId: Overload:FancyCandles.CandleChart.BullishVolumeBarBrush
+  fullName: FancyCandles.CandleChart.BearishCandleStroke
+  nameWithType: CandleChart.BearishCandleStroke
+- uid: FancyCandles.CandleChart.BearishCandleStrokeProperty
+  name: BearishCandleStrokeProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishCandleStrokeProperty
+  commentId: F:FancyCandles.CandleChart.BearishCandleStrokeProperty
+  fullName: FancyCandles.CandleChart.BearishCandleStrokeProperty
+  nameWithType: CandleChart.BearishCandleStrokeProperty
+- uid: FancyCandles.CandleChart.BearishVolumeBarFill
+  name: BearishVolumeBarFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishVolumeBarFill
+  commentId: P:FancyCandles.CandleChart.BearishVolumeBarFill
+  fullName: FancyCandles.CandleChart.BearishVolumeBarFill
+  nameWithType: CandleChart.BearishVolumeBarFill
+- uid: FancyCandles.CandleChart.BearishVolumeBarFill*
+  name: BearishVolumeBarFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishVolumeBarFill_
+  commentId: Overload:FancyCandles.CandleChart.BearishVolumeBarFill
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.BullishVolumeBarBrush
-  nameWithType: CandleChart.BullishVolumeBarBrush
-- uid: FancyCandles.CandleChart.BullishVolumeBarBrushProperty
-  name: BullishVolumeBarBrushProperty
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishVolumeBarBrushProperty
-  commentId: F:FancyCandles.CandleChart.BullishVolumeBarBrushProperty
-  fullName: FancyCandles.CandleChart.BullishVolumeBarBrushProperty
-  nameWithType: CandleChart.BullishVolumeBarBrushProperty
-- uid: FancyCandles.CandleChart.CandlesLH
-  name: CandlesLH
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesLH
-  commentId: P:FancyCandles.CandleChart.CandlesLH
-  fullName: FancyCandles.CandleChart.CandlesLH
-  nameWithType: CandleChart.CandlesLH
-- uid: FancyCandles.CandleChart.CandlesLH*
-  name: CandlesLH
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesLH_
-  commentId: Overload:FancyCandles.CandleChart.CandlesLH
+  fullName: FancyCandles.CandleChart.BearishVolumeBarFill
+  nameWithType: CandleChart.BearishVolumeBarFill
+- uid: FancyCandles.CandleChart.BearishVolumeBarFillProperty
+  name: BearishVolumeBarFillProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishVolumeBarFillProperty
+  commentId: F:FancyCandles.CandleChart.BearishVolumeBarFillProperty
+  fullName: FancyCandles.CandleChart.BearishVolumeBarFillProperty
+  nameWithType: CandleChart.BearishVolumeBarFillProperty
+- uid: FancyCandles.CandleChart.BullishCandleFill
+  name: BullishCandleFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishCandleFill
+  commentId: P:FancyCandles.CandleChart.BullishCandleFill
+  fullName: FancyCandles.CandleChart.BullishCandleFill
+  nameWithType: CandleChart.BullishCandleFill
+- uid: FancyCandles.CandleChart.BullishCandleFill*
+  name: BullishCandleFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishCandleFill_
+  commentId: Overload:FancyCandles.CandleChart.BullishCandleFill
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.CandlesLH
-  nameWithType: CandleChart.CandlesLH
-- uid: FancyCandles.CandleChart.CandlesMaxVolume
-  name: CandlesMaxVolume
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesMaxVolume
-  commentId: P:FancyCandles.CandleChart.CandlesMaxVolume
-  fullName: FancyCandles.CandleChart.CandlesMaxVolume
-  nameWithType: CandleChart.CandlesMaxVolume
-- uid: FancyCandles.CandleChart.CandlesMaxVolume*
-  name: CandlesMaxVolume
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesMaxVolume_
-  commentId: Overload:FancyCandles.CandleChart.CandlesMaxVolume
+  fullName: FancyCandles.CandleChart.BullishCandleFill
+  nameWithType: CandleChart.BullishCandleFill
+- uid: FancyCandles.CandleChart.BullishCandleFillProperty
+  name: BullishCandleFillProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishCandleFillProperty
+  commentId: F:FancyCandles.CandleChart.BullishCandleFillProperty
+  fullName: FancyCandles.CandleChart.BullishCandleFillProperty
+  nameWithType: CandleChart.BullishCandleFillProperty
+- uid: FancyCandles.CandleChart.BullishCandleStroke
+  name: BullishCandleStroke
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishCandleStroke
+  commentId: P:FancyCandles.CandleChart.BullishCandleStroke
+  fullName: FancyCandles.CandleChart.BullishCandleStroke
+  nameWithType: CandleChart.BullishCandleStroke
+- uid: FancyCandles.CandleChart.BullishCandleStroke*
+  name: BullishCandleStroke
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishCandleStroke_
+  commentId: Overload:FancyCandles.CandleChart.BullishCandleStroke
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.CandlesMaxVolume
-  nameWithType: CandleChart.CandlesMaxVolume
+  fullName: FancyCandles.CandleChart.BullishCandleStroke
+  nameWithType: CandleChart.BullishCandleStroke
+- uid: FancyCandles.CandleChart.BullishCandleStrokeProperty
+  name: BullishCandleStrokeProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishCandleStrokeProperty
+  commentId: F:FancyCandles.CandleChart.BullishCandleStrokeProperty
+  fullName: FancyCandles.CandleChart.BullishCandleStrokeProperty
+  nameWithType: CandleChart.BullishCandleStrokeProperty
+- uid: FancyCandles.CandleChart.BullishVolumeBarFill
+  name: BullishVolumeBarFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishVolumeBarFill
+  commentId: P:FancyCandles.CandleChart.BullishVolumeBarFill
+  fullName: FancyCandles.CandleChart.BullishVolumeBarFill
+  nameWithType: CandleChart.BullishVolumeBarFill
+- uid: FancyCandles.CandleChart.BullishVolumeBarFill*
+  name: BullishVolumeBarFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishVolumeBarFill_
+  commentId: Overload:FancyCandles.CandleChart.BullishVolumeBarFill
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.BullishVolumeBarFill
+  nameWithType: CandleChart.BullishVolumeBarFill
+- uid: FancyCandles.CandleChart.BullishVolumeBarFillProperty
+  name: BullishVolumeBarFillProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BullishVolumeBarFillProperty
+  commentId: F:FancyCandles.CandleChart.BullishVolumeBarFillProperty
+  fullName: FancyCandles.CandleChart.BullishVolumeBarFillProperty
+  nameWithType: CandleChart.BullishVolumeBarFillProperty
+- uid: FancyCandles.CandleChart.CandleGap
+  name: CandleGap
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandleGap
+  commentId: P:FancyCandles.CandleChart.CandleGap
+  fullName: FancyCandles.CandleChart.CandleGap
+  nameWithType: CandleChart.CandleGap
+- uid: FancyCandles.CandleChart.CandleGap*
+  name: CandleGap
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandleGap_
+  commentId: Overload:FancyCandles.CandleChart.CandleGap
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.CandleGap
+  nameWithType: CandleChart.CandleGap
 - uid: FancyCandles.CandleChart.CandlesSource
   name: CandlesSource
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource
@@ -147,12 +191,6 @@ references:
   commentId: F:FancyCandles.CandleChart.CandlesSourceProperty
   fullName: FancyCandles.CandleChart.CandlesSourceProperty
   nameWithType: CandleChart.CandlesSourceProperty
-- uid: FancyCandles.CandleChart.candleToolTipFontSize
-  name: candleToolTipFontSize
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_candleToolTipFontSize
-  commentId: F:FancyCandles.CandleChart.candleToolTipFontSize
-  fullName: FancyCandles.CandleChart.candleToolTipFontSize
-  nameWithType: CandleChart.candleToolTipFontSize
 - uid: FancyCandles.CandleChart.CandleWidth
   name: CandleWidth
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandleWidth
@@ -255,58 +293,97 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.CurrentMousePosition
   nameWithType: CandleChart.CurrentMousePosition
-- uid: FancyCandles.CandleChart.DefaultBearishCandleBrush
-  name: DefaultBearishCandleBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBearishCandleBrush
-  commentId: P:FancyCandles.CandleChart.DefaultBearishCandleBrush
-  fullName: FancyCandles.CandleChart.DefaultBearishCandleBrush
-  nameWithType: CandleChart.DefaultBearishCandleBrush
-- uid: FancyCandles.CandleChart.DefaultBearishCandleBrush*
-  name: DefaultBearishCandleBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBearishCandleBrush_
-  commentId: Overload:FancyCandles.CandleChart.DefaultBearishCandleBrush
+- uid: FancyCandles.CandleChart.DefaultAxisTickColor
+  name: DefaultAxisTickColor
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultAxisTickColor
+  commentId: P:FancyCandles.CandleChart.DefaultAxisTickColor
+  fullName: FancyCandles.CandleChart.DefaultAxisTickColor
+  nameWithType: CandleChart.DefaultAxisTickColor
+- uid: FancyCandles.CandleChart.DefaultAxisTickColor*
+  name: DefaultAxisTickColor
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultAxisTickColor_
+  commentId: Overload:FancyCandles.CandleChart.DefaultAxisTickColor
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.DefaultBearishCandleBrush
-  nameWithType: CandleChart.DefaultBearishCandleBrush
-- uid: FancyCandles.CandleChart.DefaultBearishVolumeBarBrush
-  name: DefaultBearishVolumeBarBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBearishVolumeBarBrush
-  commentId: P:FancyCandles.CandleChart.DefaultBearishVolumeBarBrush
-  fullName: FancyCandles.CandleChart.DefaultBearishVolumeBarBrush
-  nameWithType: CandleChart.DefaultBearishVolumeBarBrush
-- uid: FancyCandles.CandleChart.DefaultBearishVolumeBarBrush*
-  name: DefaultBearishVolumeBarBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBearishVolumeBarBrush_
-  commentId: Overload:FancyCandles.CandleChart.DefaultBearishVolumeBarBrush
+  fullName: FancyCandles.CandleChart.DefaultAxisTickColor
+  nameWithType: CandleChart.DefaultAxisTickColor
+- uid: FancyCandles.CandleChart.DefaultBearishCandleFill
+  name: DefaultBearishCandleFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBearishCandleFill
+  commentId: P:FancyCandles.CandleChart.DefaultBearishCandleFill
+  fullName: FancyCandles.CandleChart.DefaultBearishCandleFill
+  nameWithType: CandleChart.DefaultBearishCandleFill
+- uid: FancyCandles.CandleChart.DefaultBearishCandleFill*
+  name: DefaultBearishCandleFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBearishCandleFill_
+  commentId: Overload:FancyCandles.CandleChart.DefaultBearishCandleFill
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.DefaultBearishVolumeBarBrush
-  nameWithType: CandleChart.DefaultBearishVolumeBarBrush
-- uid: FancyCandles.CandleChart.DefaultBullishCandleBrush
-  name: DefaultBullishCandleBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBullishCandleBrush
-  commentId: P:FancyCandles.CandleChart.DefaultBullishCandleBrush
-  fullName: FancyCandles.CandleChart.DefaultBullishCandleBrush
-  nameWithType: CandleChart.DefaultBullishCandleBrush
-- uid: FancyCandles.CandleChart.DefaultBullishCandleBrush*
-  name: DefaultBullishCandleBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBullishCandleBrush_
-  commentId: Overload:FancyCandles.CandleChart.DefaultBullishCandleBrush
+  fullName: FancyCandles.CandleChart.DefaultBearishCandleFill
+  nameWithType: CandleChart.DefaultBearishCandleFill
+- uid: FancyCandles.CandleChart.DefaultBearishCandleStroke
+  name: DefaultBearishCandleStroke
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBearishCandleStroke
+  commentId: P:FancyCandles.CandleChart.DefaultBearishCandleStroke
+  fullName: FancyCandles.CandleChart.DefaultBearishCandleStroke
+  nameWithType: CandleChart.DefaultBearishCandleStroke
+- uid: FancyCandles.CandleChart.DefaultBearishCandleStroke*
+  name: DefaultBearishCandleStroke
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBearishCandleStroke_
+  commentId: Overload:FancyCandles.CandleChart.DefaultBearishCandleStroke
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.DefaultBullishCandleBrush
-  nameWithType: CandleChart.DefaultBullishCandleBrush
-- uid: FancyCandles.CandleChart.DefaultBullishVolumeBarBrush
-  name: DefaultBullishVolumeBarBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBullishVolumeBarBrush
-  commentId: P:FancyCandles.CandleChart.DefaultBullishVolumeBarBrush
-  fullName: FancyCandles.CandleChart.DefaultBullishVolumeBarBrush
-  nameWithType: CandleChart.DefaultBullishVolumeBarBrush
-- uid: FancyCandles.CandleChart.DefaultBullishVolumeBarBrush*
-  name: DefaultBullishVolumeBarBrush
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBullishVolumeBarBrush_
-  commentId: Overload:FancyCandles.CandleChart.DefaultBullishVolumeBarBrush
+  fullName: FancyCandles.CandleChart.DefaultBearishCandleStroke
+  nameWithType: CandleChart.DefaultBearishCandleStroke
+- uid: FancyCandles.CandleChart.DefaultBearishVolumeBarFill
+  name: DefaultBearishVolumeBarFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBearishVolumeBarFill
+  commentId: P:FancyCandles.CandleChart.DefaultBearishVolumeBarFill
+  fullName: FancyCandles.CandleChart.DefaultBearishVolumeBarFill
+  nameWithType: CandleChart.DefaultBearishVolumeBarFill
+- uid: FancyCandles.CandleChart.DefaultBearishVolumeBarFill*
+  name: DefaultBearishVolumeBarFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBearishVolumeBarFill_
+  commentId: Overload:FancyCandles.CandleChart.DefaultBearishVolumeBarFill
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.DefaultBullishVolumeBarBrush
-  nameWithType: CandleChart.DefaultBullishVolumeBarBrush
+  fullName: FancyCandles.CandleChart.DefaultBearishVolumeBarFill
+  nameWithType: CandleChart.DefaultBearishVolumeBarFill
+- uid: FancyCandles.CandleChart.DefaultBullishCandleFill
+  name: DefaultBullishCandleFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBullishCandleFill
+  commentId: P:FancyCandles.CandleChart.DefaultBullishCandleFill
+  fullName: FancyCandles.CandleChart.DefaultBullishCandleFill
+  nameWithType: CandleChart.DefaultBullishCandleFill
+- uid: FancyCandles.CandleChart.DefaultBullishCandleFill*
+  name: DefaultBullishCandleFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBullishCandleFill_
+  commentId: Overload:FancyCandles.CandleChart.DefaultBullishCandleFill
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.DefaultBullishCandleFill
+  nameWithType: CandleChart.DefaultBullishCandleFill
+- uid: FancyCandles.CandleChart.DefaultBullishCandleStroke
+  name: DefaultBullishCandleStroke
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBullishCandleStroke
+  commentId: P:FancyCandles.CandleChart.DefaultBullishCandleStroke
+  fullName: FancyCandles.CandleChart.DefaultBullishCandleStroke
+  nameWithType: CandleChart.DefaultBullishCandleStroke
+- uid: FancyCandles.CandleChart.DefaultBullishCandleStroke*
+  name: DefaultBullishCandleStroke
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBullishCandleStroke_
+  commentId: Overload:FancyCandles.CandleChart.DefaultBullishCandleStroke
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.DefaultBullishCandleStroke
+  nameWithType: CandleChart.DefaultBullishCandleStroke
+- uid: FancyCandles.CandleChart.DefaultBullishVolumeBarFill
+  name: DefaultBullishVolumeBarFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBullishVolumeBarFill
+  commentId: P:FancyCandles.CandleChart.DefaultBullishVolumeBarFill
+  fullName: FancyCandles.CandleChart.DefaultBullishVolumeBarFill
+  nameWithType: CandleChart.DefaultBullishVolumeBarFill
+- uid: FancyCandles.CandleChart.DefaultBullishVolumeBarFill*
+  name: DefaultBullishVolumeBarFill
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultBullishVolumeBarFill_
+  commentId: Overload:FancyCandles.CandleChart.DefaultBullishVolumeBarFill
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.DefaultBullishVolumeBarFill
+  nameWithType: CandleChart.DefaultBullishVolumeBarFill
 - uid: FancyCandles.CandleChart.DefaultChartAreaBackground
   name: DefaultChartAreaBackground
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultChartAreaBackground
@@ -424,32 +501,18 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.DefaultHorizontalGridlinesThickness
   nameWithType: CandleChart.DefaultHorizontalGridlinesThickness
+- uid: FancyCandles.CandleChart.DefaultInitialCandleGap
+  name: DefaultInitialCandleGap
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultInitialCandleGap
+  commentId: F:FancyCandles.CandleChart.DefaultInitialCandleGap
+  fullName: FancyCandles.CandleChart.DefaultInitialCandleGap
+  nameWithType: CandleChart.DefaultInitialCandleGap
 - uid: FancyCandles.CandleChart.DefaultInitialCandleWidth
   name: DefaultInitialCandleWidth
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultInitialCandleWidth
-  commentId: P:FancyCandles.CandleChart.DefaultInitialCandleWidth
+  commentId: F:FancyCandles.CandleChart.DefaultInitialCandleWidth
   fullName: FancyCandles.CandleChart.DefaultInitialCandleWidth
   nameWithType: CandleChart.DefaultInitialCandleWidth
-- uid: FancyCandles.CandleChart.DefaultInitialCandleWidth*
-  name: DefaultInitialCandleWidth
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultInitialCandleWidth_
-  commentId: Overload:FancyCandles.CandleChart.DefaultInitialCandleWidth
-  isSpec: "True"
-  fullName: FancyCandles.CandleChart.DefaultInitialCandleWidth
-  nameWithType: CandleChart.DefaultInitialCandleWidth
-- uid: FancyCandles.CandleChart.DefaultInitialGapBetweenCandles
-  name: DefaultInitialGapBetweenCandles
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultInitialGapBetweenCandles
-  commentId: P:FancyCandles.CandleChart.DefaultInitialGapBetweenCandles
-  fullName: FancyCandles.CandleChart.DefaultInitialGapBetweenCandles
-  nameWithType: CandleChart.DefaultInitialGapBetweenCandles
-- uid: FancyCandles.CandleChart.DefaultInitialGapBetweenCandles*
-  name: DefaultInitialGapBetweenCandles
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultInitialGapBetweenCandles_
-  commentId: Overload:FancyCandles.CandleChart.DefaultInitialGapBetweenCandles
-  isSpec: "True"
-  fullName: FancyCandles.CandleChart.DefaultInitialGapBetweenCandles
-  nameWithType: CandleChart.DefaultInitialGapBetweenCandles
 - uid: FancyCandles.CandleChart.DefaultIsCrossLinesVisible
   name: DefaultIsCrossLinesVisible
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultIsCrossLinesVisible
@@ -781,19 +844,6 @@ references:
   commentId: F:FancyCandles.CandleChart.DisabledFillProperty
   fullName: FancyCandles.CandleChart.DisabledFillProperty
   nameWithType: CandleChart.DisabledFillProperty
-- uid: FancyCandles.CandleChart.GapBetweenCandles
-  name: GapBetweenCandles
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_GapBetweenCandles
-  commentId: P:FancyCandles.CandleChart.GapBetweenCandles
-  fullName: FancyCandles.CandleChart.GapBetweenCandles
-  nameWithType: CandleChart.GapBetweenCandles
-- uid: FancyCandles.CandleChart.GapBetweenCandles*
-  name: GapBetweenCandles
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_GapBetweenCandles_
-  commentId: Overload:FancyCandles.CandleChart.GapBetweenCandles
-  isSpec: "True"
-  fullName: FancyCandles.CandleChart.GapBetweenCandles
-  nameWithType: CandleChart.GapBetweenCandles
 - uid: FancyCandles.CandleChart.GapBetweenPriceTickLabels
   name: GapBetweenPriceTickLabels
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_GapBetweenPriceTickLabels
@@ -851,6 +901,19 @@ references:
   commentId: F:FancyCandles.CandleChart.HorizontalGridlinesPenProperty
   fullName: FancyCandles.CandleChart.HorizontalGridlinesPenProperty
   nameWithType: CandleChart.HorizontalGridlinesPenProperty
+- uid: FancyCandles.CandleChart.InitialCandleGap
+  name: InitialCandleGap
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_InitialCandleGap
+  commentId: P:FancyCandles.CandleChart.InitialCandleGap
+  fullName: FancyCandles.CandleChart.InitialCandleGap
+  nameWithType: CandleChart.InitialCandleGap
+- uid: FancyCandles.CandleChart.InitialCandleGap*
+  name: InitialCandleGap
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_InitialCandleGap_
+  commentId: Overload:FancyCandles.CandleChart.InitialCandleGap
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.InitialCandleGap
+  nameWithType: CandleChart.InitialCandleGap
 - uid: FancyCandles.CandleChart.InitialCandleWidth
   name: InitialCandleWidth
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_InitialCandleWidth
@@ -864,19 +927,6 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.InitialCandleWidth
   nameWithType: CandleChart.InitialCandleWidth
-- uid: FancyCandles.CandleChart.InitialGapBetweenCandles
-  name: InitialGapBetweenCandles
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_InitialGapBetweenCandles
-  commentId: P:FancyCandles.CandleChart.InitialGapBetweenCandles
-  fullName: FancyCandles.CandleChart.InitialGapBetweenCandles
-  nameWithType: CandleChart.InitialGapBetweenCandles
-- uid: FancyCandles.CandleChart.InitialGapBetweenCandles*
-  name: InitialGapBetweenCandles
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_InitialGapBetweenCandles_
-  commentId: Overload:FancyCandles.CandleChart.InitialGapBetweenCandles
-  isSpec: "True"
-  fullName: FancyCandles.CandleChart.InitialGapBetweenCandles
-  nameWithType: CandleChart.InitialGapBetweenCandles
 - uid: FancyCandles.CandleChart.IsCrossLinesVisible
   name: IsCrossLinesVisible
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_IsCrossLinesVisible
@@ -1418,6 +1468,12 @@ references:
   commentId: F:FancyCandles.CandleChart.TimeTickFontSizeProperty
   fullName: FancyCandles.CandleChart.TimeTickFontSizeProperty
   nameWithType: CandleChart.TimeTickFontSizeProperty
+- uid: FancyCandles.CandleChart.ToolTipFontSize
+  name: ToolTipFontSize
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_ToolTipFontSize
+  commentId: F:FancyCandles.CandleChart.ToolTipFontSize
+  fullName: FancyCandles.CandleChart.ToolTipFontSize
+  nameWithType: CandleChart.ToolTipFontSize
 - uid: FancyCandles.CandleChart.VerticalGridlinesPen
   name: VerticalGridlinesPen
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_VerticalGridlinesPen
@@ -1437,12 +1493,19 @@ references:
   commentId: F:FancyCandles.CandleChart.VerticalGridlinesPenProperty
   fullName: FancyCandles.CandleChart.VerticalGridlinesPenProperty
   nameWithType: CandleChart.VerticalGridlinesPenProperty
-- uid: FancyCandles.CandleChart.VisibleCandlesProperty
-  name: VisibleCandlesProperty
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_VisibleCandlesProperty
-  commentId: F:FancyCandles.CandleChart.VisibleCandlesProperty
-  fullName: FancyCandles.CandleChart.VisibleCandlesProperty
-  nameWithType: CandleChart.VisibleCandlesProperty
+- uid: FancyCandles.CandleChart.VisibleCandlesExtremums
+  name: VisibleCandlesExtremums
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_VisibleCandlesExtremums
+  commentId: P:FancyCandles.CandleChart.VisibleCandlesExtremums
+  fullName: FancyCandles.CandleChart.VisibleCandlesExtremums
+  nameWithType: CandleChart.VisibleCandlesExtremums
+- uid: FancyCandles.CandleChart.VisibleCandlesExtremums*
+  name: VisibleCandlesExtremums
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_VisibleCandlesExtremums_
+  commentId: Overload:FancyCandles.CandleChart.VisibleCandlesExtremums
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.VisibleCandlesExtremums
+  nameWithType: CandleChart.VisibleCandlesExtremums
 - uid: FancyCandles.CandleChart.VisibleCandlesRange
   name: VisibleCandlesRange
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_VisibleCandlesRange
@@ -1519,6 +1582,62 @@ references:
   commentId: F:FancyCandles.CandleChart.VolumeHistogramTopMarginProperty
   fullName: FancyCandles.CandleChart.VolumeHistogramTopMarginProperty
   nameWithType: CandleChart.VolumeHistogramTopMarginProperty
+- uid: FancyCandles.CandleExtremums
+  name: CandleExtremums
+  href: api/FancyCandles.CandleExtremums.html
+  commentId: T:FancyCandles.CandleExtremums
+  fullName: FancyCandles.CandleExtremums
+  nameWithType: CandleExtremums
+- uid: FancyCandles.CandleExtremums.#ctor(System.Double,System.Double,System.Int64,System.Int64)
+  name: CandleExtremums(Double, Double, Int64, Int64)
+  href: api/FancyCandles.CandleExtremums.html#FancyCandles_CandleExtremums__ctor_System_Double_System_Double_System_Int64_System_Int64_
+  commentId: M:FancyCandles.CandleExtremums.#ctor(System.Double,System.Double,System.Int64,System.Int64)
+  fullName: FancyCandles.CandleExtremums.CandleExtremums(System.Double, System.Double, System.Int64, System.Int64)
+  nameWithType: CandleExtremums.CandleExtremums(Double, Double, Int64, Int64)
+- uid: FancyCandles.CandleExtremums.#ctor*
+  name: CandleExtremums
+  href: api/FancyCandles.CandleExtremums.html#FancyCandles_CandleExtremums__ctor_
+  commentId: Overload:FancyCandles.CandleExtremums.#ctor
+  isSpec: "True"
+  fullName: FancyCandles.CandleExtremums.CandleExtremums
+  nameWithType: CandleExtremums.CandleExtremums
+- uid: FancyCandles.CandleExtremums.Equals(System.Object)
+  name: Equals(Object)
+  href: api/FancyCandles.CandleExtremums.html#FancyCandles_CandleExtremums_Equals_System_Object_
+  commentId: M:FancyCandles.CandleExtremums.Equals(System.Object)
+  fullName: FancyCandles.CandleExtremums.Equals(System.Object)
+  nameWithType: CandleExtremums.Equals(Object)
+- uid: FancyCandles.CandleExtremums.Equals*
+  name: Equals
+  href: api/FancyCandles.CandleExtremums.html#FancyCandles_CandleExtremums_Equals_
+  commentId: Overload:FancyCandles.CandleExtremums.Equals
+  isSpec: "True"
+  fullName: FancyCandles.CandleExtremums.Equals
+  nameWithType: CandleExtremums.Equals
+- uid: FancyCandles.CandleExtremums.PriceHigh
+  name: PriceHigh
+  href: api/FancyCandles.CandleExtremums.html#FancyCandles_CandleExtremums_PriceHigh
+  commentId: F:FancyCandles.CandleExtremums.PriceHigh
+  fullName: FancyCandles.CandleExtremums.PriceHigh
+  nameWithType: CandleExtremums.PriceHigh
+- uid: FancyCandles.CandleExtremums.PriceLow
+  name: PriceLow
+  href: api/FancyCandles.CandleExtremums.html#FancyCandles_CandleExtremums_PriceLow
+  commentId: F:FancyCandles.CandleExtremums.PriceLow
+  fullName: FancyCandles.CandleExtremums.PriceLow
+  nameWithType: CandleExtremums.PriceLow
+- uid: FancyCandles.CandleExtremums.VolumeHigh
+  name: VolumeHigh
+  href: api/FancyCandles.CandleExtremums.html#FancyCandles_CandleExtremums_VolumeHigh
+  commentId: F:FancyCandles.CandleExtremums.VolumeHigh
+  fullName: FancyCandles.CandleExtremums.VolumeHigh
+  nameWithType: CandleExtremums.VolumeHigh
+- uid: FancyCandles.CandleExtremums.VolumeLow
+  name: VolumeLow
+  href: api/FancyCandles.CandleExtremums.html#FancyCandles_CandleExtremums_VolumeLow
+  commentId: F:FancyCandles.CandleExtremums.VolumeLow
+  fullName: FancyCandles.CandleExtremums.VolumeLow
+  nameWithType: CandleExtremums.VolumeLow
 - uid: FancyCandles.ICandle
   name: ICandle
   href: api/FancyCandles.ICandle.html
@@ -1628,19 +1747,6 @@ references:
   commentId: F:FancyCandles.IntRange.Count
   fullName: FancyCandles.IntRange.Count
   nameWithType: IntRange.Count
-- uid: FancyCandles.IntRange.CreateContainingOnlyCount(System.Int32)
-  name: CreateContainingOnlyCount(Int32)
-  href: api/FancyCandles.IntRange.html#FancyCandles_IntRange_CreateContainingOnlyCount_System_Int32_
-  commentId: M:FancyCandles.IntRange.CreateContainingOnlyCount(System.Int32)
-  fullName: FancyCandles.IntRange.CreateContainingOnlyCount(System.Int32)
-  nameWithType: IntRange.CreateContainingOnlyCount(Int32)
-- uid: FancyCandles.IntRange.CreateContainingOnlyCount*
-  name: CreateContainingOnlyCount
-  href: api/FancyCandles.IntRange.html#FancyCandles_IntRange_CreateContainingOnlyCount_
-  commentId: Overload:FancyCandles.IntRange.CreateContainingOnlyCount
-  isSpec: "True"
-  fullName: FancyCandles.IntRange.CreateContainingOnlyCount
-  nameWithType: IntRange.CreateContainingOnlyCount
 - uid: FancyCandles.IntRange.CreateContainingOnlyStart_i(System.Int32)
   name: CreateContainingOnlyStart_i(Int32)
   href: api/FancyCandles.IntRange.html#FancyCandles_IntRange_CreateContainingOnlyStart_i_System_Int32_
@@ -1680,19 +1786,6 @@ references:
   isSpec: "True"
   fullName: FancyCandles.IntRange.GetHashCode
   nameWithType: IntRange.GetHashCode
-- uid: FancyCandles.IntRange.IsContainsOnlyCount(FancyCandles.IntRange)
-  name: IsContainsOnlyCount(IntRange)
-  href: api/FancyCandles.IntRange.html#FancyCandles_IntRange_IsContainsOnlyCount_FancyCandles_IntRange_
-  commentId: M:FancyCandles.IntRange.IsContainsOnlyCount(FancyCandles.IntRange)
-  fullName: FancyCandles.IntRange.IsContainsOnlyCount(FancyCandles.IntRange)
-  nameWithType: IntRange.IsContainsOnlyCount(IntRange)
-- uid: FancyCandles.IntRange.IsContainsOnlyCount*
-  name: IsContainsOnlyCount
-  href: api/FancyCandles.IntRange.html#FancyCandles_IntRange_IsContainsOnlyCount_
-  commentId: Overload:FancyCandles.IntRange.IsContainsOnlyCount
-  isSpec: "True"
-  fullName: FancyCandles.IntRange.IsContainsOnlyCount
-  nameWithType: IntRange.IsContainsOnlyCount
 - uid: FancyCandles.IntRange.IsContainsOnlyStart_i(FancyCandles.IntRange)
   name: IsContainsOnlyStart_i(IntRange)
   href: api/FancyCandles.IntRange.html#FancyCandles_IntRange_IsContainsOnlyStart_i_FancyCandles_IntRange_

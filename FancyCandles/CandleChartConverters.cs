@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Data;
 using System.Globalization;
+using System.Windows.Media;
 
 namespace FancyCandles
 {
@@ -48,24 +49,24 @@ namespace FancyCandles
     {
         // values[0] - Point CurrentMousePosition
         // values[1] - double ChartAreaHeight
-        // values[2] - Vector=(totalLow, totalHigh) 
+        // values[2] - CandleExtremums visibleCandlesExtremums
         // values[3] - double PriceChartTopMargin
         // values[4] - double PriceChartBottomMargin
         // values[5] - int MaxNumberOfDigitsAfterPointInPrice
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if ( values == null || values.Length < 6 || (values[0]).GetType() != typeof(Point) || (values[1]).GetType() != typeof(double) || (values[2]).GetType() != typeof(Vector)
+            if ( values == null || values.Length < 6 || (values[0]).GetType() != typeof(Point) || (values[1]).GetType() != typeof(double) || (values[2]).GetType() != typeof(CandleExtremums)
                  || (values[3]).GetType() != typeof(double) || (values[4]).GetType() != typeof(double) || (values[5]).GetType() != typeof(int))
                 return true;
 
             Point currentMousePosition = (Point)values[0];
             double ChartAreaHeight = (double)values[1];
-            double totalL = ((Vector)values[2]).X;
-            double totalH = ((Vector)values[2]).Y;
+            double priceLow = ((CandleExtremums)values[2]).PriceLow;
+            double priceHigh = ((CandleExtremums)values[2]).PriceHigh;
             double chartTopMargin = (double)values[3];
             double chartBottomMargin = (double)values[4];
             int maxNumberOfDigitsAfterPointInPrice = (int)values[5];
-            return Math.Round((totalH - (currentMousePosition.Y - chartTopMargin) / (ChartAreaHeight - chartTopMargin - chartBottomMargin) * (totalH - totalL)), maxNumberOfDigitsAfterPointInPrice).ToString();
+            return Math.Round((priceHigh - (currentMousePosition.Y - chartTopMargin) / (ChartAreaHeight - chartTopMargin - chartBottomMargin) * (priceHigh - priceLow)), maxNumberOfDigitsAfterPointInPrice).ToString();
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -77,21 +78,21 @@ namespace FancyCandles
     {
         // values[0] - Point CurrentMousePosition
         // values[1] - double VolumeHistogramHeight
-        // values[2] - long CandlesMaxVolume
+        // values[2] - CandleExtremums visibleCandlesExtremums
         // values[3] - double VolumeHistogramTopMargin
         // values[4] - double VolumeHistogramBottomMargin
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values == null || values.Length < 5 || (values[0]).GetType() != typeof(Point) || (values[1]).GetType() != typeof(double) || (values[2]).GetType() != typeof(long)
+            if (values == null || values.Length < 5 || (values[0]).GetType() != typeof(Point) || (values[1]).GetType() != typeof(double) || (values[2]).GetType() != typeof(CandleExtremums)
                  || (values[3]).GetType() != typeof(double) || (values[4]).GetType() != typeof(double) )
                 return (long)0;
 
             Point currentMousePosition = (Point)values[0];
             double volumeHistogramHeight = (double)values[1];
-            long candlesMaxVolume = (long)values[2];
+            CandleExtremums visibleCandlesExtremums = (CandleExtremums)values[2];
             double volumeHistogramTopMargin = (double)values[3];
             double volumeHistogramBottomMargin = (double)values[4];
-            return ((long)((candlesMaxVolume - (currentMousePosition.Y - volumeHistogramTopMargin) / (volumeHistogramHeight - volumeHistogramTopMargin - volumeHistogramBottomMargin) * candlesMaxVolume))).ToString();
+            return ((long)((visibleCandlesExtremums.VolumeHigh - (currentMousePosition.Y - volumeHistogramTopMargin) / (volumeHistogramHeight - volumeHistogramTopMargin - volumeHistogramBottomMargin) * visibleCandlesExtremums.VolumeHigh))).ToString();
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -118,6 +119,78 @@ namespace FancyCandles
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         { throw new NotImplementedException(); }
 
+    }
+    //*******************************************************************************************************************************************************************
+    class CandleDrawingParametersConverter : IMultiValueConverter
+    {
+        // values[0] - double CandleWidth
+        // values[1] - double CandleGap
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            double candleW = (double)values[0];
+            double candleG = (double)values[1];
+            return new CandleDrawingParameters(candleW, candleG);
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        { throw new NotImplementedException(); }
+
+    }
+    //*******************************************************************************************************************************************************************
+    class IntRangeToPointConverter : IValueConverter
+    {
+        public object Convert(object intRange_value, Type targetType, object parameter, CultureInfo culture)
+        {
+            IntRange ir = (IntRange)intRange_value;
+            return new Point(ir.Start_i, ir.Count);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    //*******************************************************************************************************************************************************************
+    class CandleExtremumsToPriceExtremumsPointConverter : IValueConverter
+    {
+        public object Convert(object candleExtremums_value, Type targetType, object parameter, CultureInfo culture)
+        {
+            CandleExtremums cndlExtr = (CandleExtremums)candleExtremums_value;
+            return new Point(cndlExtr.PriceLow, cndlExtr.PriceHigh);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    //*******************************************************************************************************************************************************************
+    class CandleDrawingParametersToPointConverter : IValueConverter
+    {
+        public object Convert(object CandleDrawingParameters_value, Type targetType, object parameter, CultureInfo culture)
+        {
+            CandleDrawingParameters drawingParams = (CandleDrawingParameters)CandleDrawingParameters_value;
+            return new Point(drawingParams.Width, drawingParams.Gap);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    //*******************************************************************************************************************************************************************
+    class BrushToColorConverter : IValueConverter
+    {
+        public object Convert(object SolidColorBrush_value, Type targetType, object parameter, CultureInfo culture)
+        {
+            SolidColorBrush brush = (SolidColorBrush)SolidColorBrush_value;
+            return brush.Color;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
     //*******************************************************************************************************************************************************************
     class SquareBoolToVisibilityConverter : IMultiValueConverter

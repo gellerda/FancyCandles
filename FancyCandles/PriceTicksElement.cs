@@ -31,43 +31,21 @@ namespace FancyCandles
         //---------------------------------------------------------------------------------------------------------------------------------------
         static PriceTicksElement()
         {
-            FrameworkPropertyMetadata metadata = new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.Inherits, new PropertyChangedCallback(OnPriceTickFontSizeChanged)) { AffectsRender = true };
-            PriceTickFontSizeProperty = CandleChart.PriceTickFontSizeProperty.AddOwner(typeof(PriceTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(CandleChart.DefaultAxisTickColor, FrameworkPropertyMetadataOptions.Inherits) { AffectsRender = true };
-            AxisTickColorProperty = CandleChart.AxisTickColorProperty.AddOwner(typeof(PriceTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(0.0) { AffectsRender = true };
-            PricePanelWidthProperty = DependencyProperty.Register("PriceAxisWidth", typeof(double), typeof(PriceTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(new Vector(1, 1)) { AffectsRender = true };
-            CandlesLHProperty = DependencyProperty.Register("CandlesLH", typeof(Vector), typeof(PriceTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(15.0) { AffectsRender = true };
-            ChartBottomMarginProperty = DependencyProperty.Register("ChartBottomMargin", typeof(double), typeof(PriceTicksElement), metadata);
-            //MyCandleChart3.ChartBottomMarginProperty.AddOwner(typeof(PriceTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(15.0) { AffectsRender = true };
-            ChartTopMarginProperty = DependencyProperty.Register("ChartTopMargin", typeof(double), typeof(PriceTicksElement), metadata);
-            //MyCandleChart3.ChartTopMarginProperty.AddOwner(typeof(PriceTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(0.0) { AffectsRender = true };
-            GapBetweenTickLabelsProperty = DependencyProperty.Register("GapBetweenTickLabels", typeof(double), typeof(PriceTicksElement), metadata);
-
-            metadata = new FrameworkPropertyMetadata(true) { AffectsRender = true };
-            IsGridlinesEnabledProperty = DependencyProperty.Register("IsGridlinesEnabled", typeof(bool), typeof(PriceTicksElement), metadata);
-
-            Pen defaultPen = new Pen(new SolidColorBrush(Color.FromArgb(50, 105, 42, 0)), 1); // { DashStyle = new DashStyle(new double[] { 2, 3 }, 0) };
-            metadata = new FrameworkPropertyMetadata(defaultPen) { AffectsRender = true };
-            GridlinesPenProperty = DependencyProperty.Register("GridlinesPen", typeof(Pen), typeof(PriceTicksElement), metadata);
+            Pen defaultPen = new Pen(CandleChart.DefaultHorizontalGridlinesBrush, CandleChart.DefaultHorizontalGridlinesThickness);
+            defaultPen.Freeze();
+            GridlinesPenProperty = DependencyProperty.Register("GridlinesPen", typeof(Pen), typeof(PriceTicksElement), 
+                new FrameworkPropertyMetadata(defaultPen, null, CoerceGridlinesPen) { AffectsRender = true });
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
-        public bool IsGridlinesEnabled
+        public PriceTicksElement()
         {
-            get { return (bool)GetValue(IsGridlinesEnabledProperty); }
-            set { SetValue(IsGridlinesEnabledProperty, value); }
+            if (axisTickPen == null)
+            {
+                axisTickPen = new Pen(CandleChart.DefaultAxisTickColor, 1.0);
+                if (!axisTickPen.IsFrozen)
+                    axisTickPen.Freeze();
+            }
         }
-        public static readonly DependencyProperty IsGridlinesEnabledProperty;
         //---------------------------------------------------------------------------------------------------------------------------------------
         public Pen GridlinesPen
         {
@@ -75,64 +53,104 @@ namespace FancyCandles
             set { SetValue(GridlinesPenProperty, value); }
         }
         public static readonly DependencyProperty GridlinesPenProperty;
-        //---------------------------------------------------------------------------------------------------------------------------------------
-        public Vector CandlesLH
+
+        private static object CoerceGridlinesPen(DependencyObject objWithOldDP, object newDPValue)
         {
-            get { return (Vector)GetValue(CandlesLHProperty); }
-            set { SetValue(CandlesLHProperty, value); }
+            Pen newPenValue = (Pen)newDPValue;
+            return newPenValue.IsFrozen ? newDPValue : newPenValue.GetCurrentValueAsFrozen();
         }
-        public static readonly DependencyProperty CandlesLHProperty;
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        public bool IsGridlinesEnabled
+        {
+            get { return (bool)GetValue(IsGridlinesEnabledProperty); }
+            set { SetValue(IsGridlinesEnabledProperty, value); }
+        }
+        public static readonly DependencyProperty IsGridlinesEnabledProperty
+            = DependencyProperty.Register("IsGridlinesEnabled", typeof(bool), typeof(PriceTicksElement), new FrameworkPropertyMetadata(true) { AffectsRender = true });
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        public CandleExtremums VisibleCandlesExtremums
+        {
+            get { return (CandleExtremums)GetValue(VisibleCandlesExtremumsProperty); }
+            set { SetValue(VisibleCandlesExtremumsProperty, value); }
+        }
+        public static readonly DependencyProperty VisibleCandlesExtremumsProperty
+            = DependencyProperty.Register("VisibleCandlesExtremums", typeof(CandleExtremums), typeof(PriceTicksElement), new FrameworkPropertyMetadata(new CandleExtremums(1.0, 1.0, 0L, 0L)) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         public double GapBetweenTickLabels
         {
             get { return (double)GetValue(GapBetweenTickLabelsProperty); }
             set { SetValue(GapBetweenTickLabelsProperty, value); }
         }
-        public static readonly DependencyProperty GapBetweenTickLabelsProperty;
+        public static readonly DependencyProperty GapBetweenTickLabelsProperty
+            = DependencyProperty.Register("GapBetweenTickLabels", typeof(double), typeof(PriceTicksElement), new FrameworkPropertyMetadata(0.0) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         public double ChartBottomMargin
         {
             get { return (double)GetValue(ChartBottomMarginProperty); }
             set { SetValue(ChartBottomMarginProperty, value); }
         }
-        public static readonly DependencyProperty ChartBottomMarginProperty;
+        public static readonly DependencyProperty ChartBottomMarginProperty
+            = DependencyProperty.Register("ChartBottomMargin", typeof(double), typeof(PriceTicksElement), new FrameworkPropertyMetadata(15.0) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         public double ChartTopMargin
         {
             get { return (double)GetValue(ChartTopMarginProperty); }
             set { SetValue(ChartTopMarginProperty, value); }
         }
-        public static readonly DependencyProperty ChartTopMarginProperty;
+        public static readonly DependencyProperty ChartTopMarginProperty
+            = DependencyProperty.Register("ChartTopMargin", typeof(double), typeof(PriceTicksElement), new FrameworkPropertyMetadata(15.0) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         public double PriceTickFontSize
         {
             get { return (double)GetValue(PriceTickFontSizeProperty); }
             set { SetValue(PriceTickFontSizeProperty, value); }
         }
-        public static readonly DependencyProperty PriceTickFontSizeProperty;
-        private static void OnPriceTickFontSizeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
-        {
-            //PriceTicksElement thisElement = (PriceTicksElement)obj;
-            //thisElement.InvalidateMeasure();
-        }
+        public static readonly DependencyProperty PriceTickFontSizeProperty
+            = CandleChart.PriceTickFontSizeProperty.AddOwner(typeof(PriceTicksElement), new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.Inherits) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
+        private Pen axisTickPen;
+
         public Brush AxisTickColor
         {
             get { return (Brush)GetValue(AxisTickColorProperty); }
             set { SetValue(AxisTickColorProperty, value); }
         }
-        public static readonly DependencyProperty AxisTickColorProperty;
+        public static readonly DependencyProperty AxisTickColorProperty
+            = DependencyProperty.Register("AxisTickColor", typeof(Brush), typeof(PriceTicksElement),
+                new FrameworkPropertyMetadata(CandleChart.DefaultAxisTickColor, null, CoerceAxisTickColor) { AffectsRender = true });
+
+        private static object CoerceAxisTickColor(DependencyObject objWithOldDP, object newDPValue)
+        {
+            PriceTicksElement thisElement = (PriceTicksElement)objWithOldDP;
+            Brush newBrushValue = (Brush)newDPValue;
+
+            if (newBrushValue.IsFrozen)
+            {
+                Pen p = new Pen(newBrushValue, 1.0);
+                p.Freeze();
+                thisElement.axisTickPen = p;
+                return newDPValue;
+            }
+            else
+            {
+                Brush b = (Brush)newBrushValue.GetCurrentValueAsFrozen();
+                Pen p = new Pen(b, 1.0);
+                p.Freeze();
+                thisElement.axisTickPen = p;
+                return b;
+            }
+        }
         //---------------------------------------------------------------------------------------------------------------------------------------
         public double PriceAxisWidth
         {
             get { return (double)GetValue(PricePanelWidthProperty); }
             set { SetValue(PricePanelWidthProperty, value); }
         }
-        public static readonly DependencyProperty PricePanelWidthProperty;
+        public static readonly DependencyProperty PricePanelWidthProperty
+            = DependencyProperty.Register("PriceAxisWidth", typeof(double), typeof(PriceTicksElement), new FrameworkPropertyMetadata(0.0) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnRender(DrawingContext drawingContext)
         {
-            Pen pen = new Pen(AxisTickColor, 1);
             double textHeight = (new FormattedText("123", CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
             double halfTextHeight = textHeight / 2.0;
             double candlePanelWidth = ActualWidth - PriceAxisWidth;
@@ -140,28 +158,28 @@ namespace FancyCandles
             double tick_line_endX = candlePanelWidth + TICK_LINE_WIDTH;
 
             double chartHeight = ActualHeight - ChartBottomMargin - ChartTopMargin;
-            double stepInRubles = (CandlesLH.Y - CandlesLH.X) / chartHeight * (textHeight + GapBetweenTickLabels);
+            double stepInRubles = (VisibleCandlesExtremums.PriceHigh - VisibleCandlesExtremums.PriceLow) / chartHeight * (textHeight + GapBetweenTickLabels);
             double stepInRubles_maxDigit = MyWpfMath.MaxDigit(stepInRubles);
             stepInRubles = Math.Ceiling(stepInRubles / stepInRubles_maxDigit) * stepInRubles_maxDigit;
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            double chartHeight_candlesLHRange_Ratio = chartHeight / (CandlesLH.Y - CandlesLH.X);
+            double chartHeight_candlesLHRange_Ratio = chartHeight / (VisibleCandlesExtremums.PriceHigh - VisibleCandlesExtremums.PriceLow);
 
             void DrawPriceTick(double price)
             {
                 FormattedText priceTickFormattedText = new FormattedText(price.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
-                double y = ChartTopMargin + (CandlesLH.Y - price) * chartHeight_candlesLHRange_Ratio;
+                double y = ChartTopMargin + (VisibleCandlesExtremums.PriceHigh - price) * chartHeight_candlesLHRange_Ratio;
                 drawingContext.DrawText(priceTickFormattedText, new Point(tick_text_X, y - halfTextHeight));
-                drawingContext.DrawLine(pen, new Point(candlePanelWidth, y), new Point(tick_line_endX, y));
+                drawingContext.DrawLine(axisTickPen, new Point(candlePanelWidth, y), new Point(tick_line_endX, y));
 
                 if (IsGridlinesEnabled && GridlinesPen != null)
                     drawingContext.DrawLine(GridlinesPen, new Point(0, y), new Point(candlePanelWidth, y));
             }
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            double theMostRoundPrice = MyWpfMath.TheMostRoundValueInsideRange(CandlesLH.X, CandlesLH.Y);
+            double theMostRoundPrice = MyWpfMath.TheMostRoundValueInsideRange(VisibleCandlesExtremums.PriceLow, VisibleCandlesExtremums.PriceHigh);
             DrawPriceTick(theMostRoundPrice);
 
-            double maxPriceThreshold = CandlesLH.Y + (ChartTopMargin - halfTextHeight) / chartHeight_candlesLHRange_Ratio;
-            double minPriceThreshold = CandlesLH.Y + (ChartTopMargin - ActualHeight + halfTextHeight) / chartHeight_candlesLHRange_Ratio;
+            double maxPriceThreshold = VisibleCandlesExtremums.PriceHigh + (ChartTopMargin - halfTextHeight) / chartHeight_candlesLHRange_Ratio;
+            double minPriceThreshold = VisibleCandlesExtremums.PriceHigh + (ChartTopMargin - ActualHeight + halfTextHeight) / chartHeight_candlesLHRange_Ratio;
 
             int step_i = 1;
             double next_tick = theMostRoundPrice + step_i * stepInRubles;

@@ -20,18 +20,21 @@ using System;
 
 namespace FancyCandles
 {
-    /// <summary>Defines the range of consequent integer numbers.</summary>
+    /// <summary>Represents the range of consequent integer numbers.</summary>
     public struct IntRange
     {
-        /// <summary>Defines the first integer number in the range.</summary>
+        /// <summary>The first integer number in the range.</summary>
+        ///<value>The first integer number in the range.</value>
         public int Start_i;
 
-        /// <summary>Defines the length the range.</summary>
+        /// <summary>The length of the range.</summary>
+        ///<value>The length of the range.</value>
         public int Count;
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'IntRange.IntRange(int, int)'
+        /// <summary>Initializes a new instance of the IntRange structure that has the specified Start_i and Count.</summary>
+        /// <param name="start_i">The Start_i of the IntRange</param>
+        /// <param name="count">The Count of the IntRange</param>
         public IntRange(int start_i, int count)
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'IntRange.IntRange(int, int)'
         {
             Start_i = start_i;
             Count = count;
@@ -65,43 +68,29 @@ namespace FancyCandles
             return (c1.Start_i != c2.Start_i || c1.Count != c2.Count);
         }
         //------------------------------------------------------------------------------------------------------------------------------------------
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'IntRange.Undefined'
+        /// <summary>Returns a specific IntRange instance which is denoted as Undefined.</summary>
+        ///<seealso cref = "IsUndefined">IsUndefined</seealso>
         public static IntRange Undefined { get { return new IntRange(int.MinValue, int.MinValue); } }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'IntRange.Undefined'
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'IntRange.IsUndefined(IntRange)'
+        ///<summary>Determines whether the specified parameter intRange is Undefined.</summary>
+        ///<seealso cref = "Undefined">Undefined</seealso>
         public static bool IsUndefined(IntRange intRange)
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'IntRange.IsUndefined(IntRange)'
         {
             return (intRange.Start_i == int.MinValue && intRange.Count == int.MinValue);
         }
         //------------------------------------------------------------------------------------------------------------------------------------------
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'IntRange.CreateContainingOnlyStart_i(int)'
+        /// <summary>Creates an IntRange instance with specified Start_i and undefined Count. We denote such instances as ContainingOnlyStart_i.</summary>
+        ///<seealso cref = "IsContainsOnlyStart_i">IsContainsOnlyStart_i</seealso>
         public static IntRange CreateContainingOnlyStart_i(int start_i)
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'IntRange.CreateContainingOnlyStart_i(int)'
         {
-            return new IntRange(start_i, -6666);
+            return new IntRange(start_i, int.MinValue);
         }
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'IntRange.IsContainsOnlyStart_i(IntRange)'
+        ///<summary>Determines whether the specified parameter intRange is ContainingOnlyStart_i.</summary>
+        ///<seealso cref = "CreateContainingOnlyStart_i">CreateContainingOnlyStart_i</seealso>
         public static bool IsContainsOnlyStart_i(IntRange intRange)
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'IntRange.IsContainsOnlyStart_i(IntRange)'
         {
-            return (intRange.Count == -6666);
-        }
-        //------------------------------------------------------------------------------------------------------------------------------------------
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'IntRange.CreateContainingOnlyCount(int)'
-        public static IntRange CreateContainingOnlyCount(int count)
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'IntRange.CreateContainingOnlyCount(int)'
-        {
-            return new IntRange(-6666, count);
-        }
-
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'IntRange.IsContainsOnlyCount(IntRange)'
-        public static bool IsContainsOnlyCount(IntRange intRange)
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'IntRange.IsContainsOnlyCount(IntRange)'
-        {
-            return (intRange.Start_i == -6666);
+            return (intRange.Count == int.MinValue && intRange.Start_i != int.MinValue);
         }
         //------------------------------------------------------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------------------------------------------------------

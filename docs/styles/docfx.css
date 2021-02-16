@@ -189,16 +189,62 @@ header .navbar {
   border-bottom: 1px solid #ccc;
 }
 
-article h1, article h2, article h3, article h4{
+
+article h1{
+  font-weight:600;		
   margin-top: 25px;
+  font-size:2.25rem;
+}
+article h2{
+  font-weight:600;		
+  margin-top: 25px;
+  font-size:30px;
+}
+article h3{
+  font-weight:600;		
+  margin-top: 70px;
+  margin-bottom: 20px;
+  font-size:2rem;
+}
+article h4{
+  font-weight:400;		
+  margin-top: 15px;
+  margin-bottom:5px;
+  font-size:1.2rem;
+}
+article h5, h3[id^="dependency-property-information"]{
+  font-weight:300;		
+  margin-top: 20px;
+  margin-bottom: 5px;
+  font-size:1.2rem;
+}
+div.class_constructors h4, div.class_fields h4, div.class_properties h4, div.class_methods h4, div.class_events h4{
+  font-weight:600;		
+  margin-top: 15px;
+  padding-top:30px;
+  margin-bottom:20px;
+  font-size:1.5rem;
+  border-top: 3px solid #337ab7;
 }
 
-article h4{
-  border-bottom: 1px solid #ccc;
+div.class_fields h4:after {
+	content: " Field";
 }
+div.class_properties h4:after {
+	content: " Property";
+}
+div.class_methods h4:after {
+	content: " Method";
+}
+div.class_events h4:after {
+	content: " Event";
+}
+
+
 
 article span.small.pull-right{
   margin-top: 20px;
+  padding-top:35px;
 }
 
 article section {
@@ -600,15 +646,30 @@ body .toc{
 .article img {
   max-width: 100%;
 }
+
+
 .sideaffix {
   margin-top: 50px;
   font-size: 12px;
   max-height: 100%;
   overflow: hidden;
-  top: 100px;
-  bottom: 10px;
+  top: 0;
+  bottom: 0;
   position: fixed;
+  background-color: #f0f8ff;
+  padding-top: 50px;
+  min-width:250px;
 }
+h1.sideaffix_title{
+  font-weight:500;		
+  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-left:5px;
+  font-size:0.9rem;
+  font-family: 'Segoe UI', Tahoma, Helvetica, sans-serif;
+}
+
+
 .sideaffix.shiftup {
   bottom: 70px;
 }
@@ -638,6 +699,7 @@ body .toc{
 }
 .affix > ul.level1 {
   overflow: hidden;
+  overflow-y: scroll;
   padding-bottom: 10px;
   height: calc(100% - 100px);
 }

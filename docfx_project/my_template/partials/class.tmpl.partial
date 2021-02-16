@@ -2,6 +2,11 @@
 
 {{>partials/class.header}}
 {{#children}}
+
+
+<div class="class_{{id}}">
+
+
 <h3 id="{{id}}">{{>partials/classSubtitle}}</h3>
 {{#children}}
 {{^_disableContribution}}
@@ -18,7 +23,11 @@
 {{#overload}}
 <a id="{{id}}" data-uid="{{uid}}"></a>
 {{/overload}}
+
+
 <h4 id="{{id}}" data-uid="{{uid}}">{{name.0.value}}</h4>
+
+
 <div class="markdown level1 summary">{{{summary}}}</div>
 <div class="markdown level1 conceptual">{{{conceptual}}}</div>
 <h5 class="decalaration">{{__global.declaration}}</h5>
@@ -190,6 +199,11 @@
 </div>
 {{/seealso.0}}
 {{/children}}
+
+
+</div>
+
+
 {{/children}}
 {{#implements.0}}
 <h3 id="implements">{{__global.implements}}</h3>

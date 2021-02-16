@@ -28,18 +28,66 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.ComponentModel;
 using System.Runtime.CompilerServices; // [CallerMemberName]
+using System.Diagnostics;
 
 namespace FancyCandles
 {
-    /// <summary>
-    /// Candle chart control derived from UserControl.
-    /// </summary>
+#pragma warning  disable CS1591
+    internal struct CandleDrawingParameters
+    {
+        public double Width;
+        public double Gap;
+        public CandleDrawingParameters(double width, double gapBetweenCandles)
+        {
+            Width = width;
+            Gap = gapBetweenCandles;
+        }
+    }
+#pragma warning restore CS1591
+
+    /// <summary>Represents the extreme values of Price and Volume for a set of candlesticks.</summary>
+    public struct CandleExtremums
+    {
+        /// <summary>The Price minimum.</summary>
+        /// <value>The Price minimum.</value>
+        public double PriceLow;
+
+        /// <summary>The Price maximum.</summary>
+        /// <value>The Price maximum.</value>
+        public double PriceHigh;
+
+        /// <summary>The Volume minimum.</summary>
+        /// <value>The Volume minimum.</value>
+        public long VolumeLow;
+
+        /// <summary>The Volume maximum.</summary>
+        /// <value>The Volume maximum.</value>
+        public long VolumeHigh;
+
+        /// <summary>Initializes a new instance of the CandleExtremums structure that has the specified PriceLow, PriceHigh, VolumeLow, and VolumeHigh.</summary>
+        /// <param name="priceLow">The PriceLow of the CandleExtremums.</param>
+        /// <param name="priceHigh">The PriceHigh of the CandleExtremums.</param>
+        /// <param name="volumeLow">The VolumeLow of the CandleExtremums.</param>
+        /// <param name="volumeHigh">The VolumeHigh of the CandleExtremums.</param>
+        public CandleExtremums(double priceLow, double priceHigh, long volumeLow, long volumeHigh)
+        {
+            PriceLow = priceLow;
+            PriceHigh = priceHigh;
+            VolumeLow = volumeLow;
+            VolumeHigh = volumeHigh;
+        }
+#pragma warning  disable CS1591
+        public override bool Equals(object obj) { return false; }
+#pragma warning restore CS1591
+    }
+
+    /// <summary>Candlestick chart control derived from UserControl.</summary>
     public partial class CandleChart : UserControl, INotifyPropertyChanged
     {
         //----------------------------------------------------------------------------------------------------------------------------------
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.candleToolTipFontSize'
-        public static double candleToolTipFontSize = 9.0;
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.candleToolTipFontSize'
+#pragma warning disable CS1591
+        public static readonly double ToolTipFontSize = 9.0;
+#pragma warning restore CS1591
         //----------------------------------------------------------------------------------------------------------------------------------
         void OnUserControlLoaded(object sender, RoutedEventArgs e)
         {
@@ -47,21 +95,21 @@ namespace FancyCandles
             ReCalc_TimeFrame();
             ReCalc_MaxNumberOfCharsInPrice();
             ReCalc_MaxNumberOfDigitsAfterPointInPrice();
+            CandleGap = InitialCandleGap;
             CandleWidth = InitialCandleWidth;
-            GapBetweenCandles = InitialGapBetweenCandles;
         }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Default constructor.</summary>
         public CandleChart()
         {
             InitialCandleWidth = DefaultInitialCandleWidth;
-            InitialGapBetweenCandles = DefaultInitialGapBetweenCandles;
+            InitialCandleGap = DefaultInitialCandleGap;
 
             InitializeComponent();
             //IsAlreadyLoaded = false;
 
             VisibleCandlesRange = IntRange.Undefined;
-            VisibleCandles = new ObservableCollection<WholeContainerCandle>();
+            VisibleCandlesExtremums = new CandleExtremums(0.0, 0.0, 0L, 0L);
             Loaded += new RoutedEventHandler(OnUserControlLoaded);
             //Dispatcher.Invoke(OnMyCandleChartLoaded, System.Windows.Threading.DispatcherPriority.Loaded);
             //Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
@@ -69,8 +117,8 @@ namespace FancyCandles
             //SizeChanged += OnSizeChanged;
         }
         //----------------------------------------------------------------------------------------------------------------------------------
-        /// <summary>Gets or sets the background for the price chart and volume diagram areas.</summary>
-        ///<value>The background for the price chart and volume diagram areas. The default is determined by the <see cref="DefaultChartAreaBackground"/>values.</value>
+        /// <summary>Gets or sets the background of the price chart and volume diagram areas.</summary>
+        ///<value>The background of the price chart and volume diagram areas. The default is determined by the <see cref="DefaultChartAreaBackground"/>values.</value>
         ///<remarks>
         ///This background is not applied to the horizontal and vertical axis areas, which contain tick marks and labels.
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
@@ -89,7 +137,7 @@ namespace FancyCandles
 
         ///<summary>Gets the default value for the ChartAreaBackground property.</summary>
         ///<value>The default value for the <see cref="ChartAreaBackground"/> property: <c>#FFFFFDE9</c>.</value>
-        public static Brush DefaultChartAreaBackground { get { return new SolidColorBrush(Color.FromArgb(255, 255, 253, 233)); } } // #FFFFFDE9
+        public static Brush DefaultChartAreaBackground { get { return (Brush)(new SolidColorBrush(Color.FromArgb(255, 255, 253, 233))).GetCurrentValueAsFrozen(); } } // #FFFFFDE9
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the fill brush for the rectangle, that covers this chart control if it has been disabled.</summary>
         ///<value>The fill brush for the rectangle, that covers this chart control if it has been disabled. The default is determined by the <see cref="DefaultDisabledFill"/>values.</value>
@@ -110,7 +158,7 @@ namespace FancyCandles
 
         ///<summary>Gets the default value for the DisabledFill property.</summary>
         ///<value>The default value for the <see cref="DisabledFill"/> property: <c>#CCAAAAAA</c>.</value>
-        public static Brush DefaultDisabledFill { get { return new SolidColorBrush(Color.FromArgb(204, 170, 170, 170)); } } // #CCAAAAAA
+        public static Brush DefaultDisabledFill { get { return (Brush)(new SolidColorBrush(Color.FromArgb(204, 170, 170, 170))).GetCurrentValueAsFrozen(); } } // #CCAAAAAA
         //----------------------------------------------------------------------------------------------------------------------------------
         #region LEGEND PROPERTIES *******************************************************************************************************************************
 
@@ -251,7 +299,7 @@ namespace FancyCandles
         ///<summary>Gets the default value for the LegendForeground property.</summary>
         ///<value>The default value for the LegendForeground property: <c>#3C000000</c>.</value>
         ///<seealso cref = "LegendForeground">LegendForeground</seealso>
-        public static Brush DefaultLegendForeground { get { return new SolidColorBrush(Color.FromArgb(60, 0, 0, 0)); } } // #3C000000
+        public static Brush DefaultLegendForeground { get { return (Brush)(new SolidColorBrush(Color.FromArgb(60, 0, 0, 0))).GetCurrentValueAsFrozen(); } } // #3C000000
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the horizontal alignment for the legend inside the price chart area.</summary>
         /// <value>The horizontal alignment of the legend. The default is determined by the <see cref="DefaultLegendHorizontalAlignment"/> value.</value>
@@ -386,112 +434,215 @@ namespace FancyCandles
         ///<seealso cref = "PriceChartBottomMargin">PriceChartBottomMargin</seealso>
         public static double DefaultPriceChartBottomMargin { get { return 15.0; } }
         //----------------------------------------------------------------------------------------------------------------------------------
-        /// <summary>Gets or sets the color of the bullish candle (when the Close is higher than the Open).</summary>
-        ///<value>The brush to draw and fill all bullish candles. The default is determined by the <see cref="DefaultBullishCandleBrush"/> value.</value>
+        ///<summary>Gets or sets the Brush that specifies how the body of the bullish candle is painted.</summary>
+        ///<value>The brush to paint the bodies of the bullish candles. The default value is determined by the <see cref="DefaultBullishCandleFill"/> property.</value>
         ///<remarks> 
-        /// We separate all candles into two types - bullish and bearish. The Bullish candle has its Close higher than its Open. The Bearish candle has its Close lower than its Open. To visualize that separation usually candles are painted into two different colors - 
-        /// <see cref="BullishCandleBrush"/> and <see cref="BearishCandleBrush"/> for bullish and bearish candles respectively.
+        /// Usually candles are separated into two types - Bullish and Bearish. The Bullish candle has its Close price higher than its Open price. All other candles are Bearish. 
+        /// To visualize such a separation usually the Bearish and Bullish candles are painted in different Fill and Stroke (outline) colors. 
+        /// To set the Brush for the candle outline (the tails and the body outline) use the <see cref="BullishCandleStroke"/> and <see cref="BearishCandleStroke"/> properties for the bullish and bearish candles respectively.
         ///<h3>Dependency Property Information</h3>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-        ///<tr><td>Identifier field</td><td><see cref="BullishCandleBrushProperty"/></td></tr> 
+        ///<tr><td>Identifier field</td><td><see cref="BullishCandleFillProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
-        public Brush BullishCandleBrush
+        ///<seealso cref = "BearishCandleFill">BearishCandleFill</seealso>
+        ///<seealso cref = "BearishCandleStroke">BearishCandleStroke</seealso>
+        ///<seealso cref = "BullishCandleStroke">BullishCandleStroke</seealso>
+        public Brush BullishCandleFill
         {
-            get { return (Brush)GetValue(BullishCandleBrushProperty); }
-            set { SetValue(BullishCandleBrushProperty, value); }
+            get { return (Brush)GetValue(BullishCandleFillProperty); }
+            set { SetValue(BullishCandleFillProperty, value); }
         }
-        /// <summary>Identifies the <see cref="BullishCandleBrush"/> dependency property.</summary>
+        /// <summary>Identifies the <see cref="BullishCandleFill"/> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty BullishCandleBrushProperty =
-            DependencyProperty.Register("BullishCandleBrush", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultBullishCandleBrush));
+        public static readonly DependencyProperty BullishCandleFillProperty =
+            DependencyProperty.Register("BullishCandleFill", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultBullishCandleFill));
 
-        ///<summary>Gets the default value for the BullishCandleBrush property.</summary>
-        ///<value>The default value for the BullishCandleBrush property: <c>Brushes.Green</c>.</value>
-        ///<seealso cref = "BullishCandleBrush">BullishCandleBrush</seealso>
-        public static Brush DefaultBullishCandleBrush { get { return Brushes.Green; } }
+        ///<summary>Gets the default value for the BullishCandleFill property.</summary>
+        ///<value>The default value for the BullishCandleFill property: <c>Brushes.Green</c>.</value>
+        ///<seealso cref = "BullishCandleFill">BullishCandleFill</seealso>
+        public static Brush DefaultBullishCandleFill { get { return (Brush)(new SolidColorBrush(Colors.Green)).GetCurrentValueAsFrozen(); } }
         //----------------------------------------------------------------------------------------------------------------------------------
-        /// <summary>Gets or sets the color of the bearish candle (when the Close is lower than the Open).</summary>
-        ///<value>The brush to draw and fill all bearish candles. The default is determined by the <see cref="DefaultBearishCandleBrush"/> value.</value>
+        ///<summary>Gets or sets the Brush that specifies how the body of the bearish candle is painted.</summary>
+        ///<value>The brush to paint the bodies of the bearish candles. The default value is determined by the <see cref="DefaultBearishCandleFill"/> property.</value>
         ///<remarks> 
-        /// We separate all candles into two types - bullish and bearish. The Bullish candle has its Close higher than its Open. The Bearish candle has its Close lower than its Open. To visualize that separation usually candles are painted into two different colors - 
-        /// <see cref="BullishCandleBrush"/> and <see cref="BearishCandleBrush"/> for bullish and bearish candles respectively.
+        /// Usually candles are separated into two types - Bullish and Bearish. The Bullish candle has its Close price higher than its Open price. All other candles are Bearish. 
+        /// To visualize such a separation usually the Bearish and Bullish candles are painted in different Fill and Stroke (outline) colors. 
+        /// To set the Brush for the candle outline (the tails and the body outline) use the <see cref="BullishCandleStroke"/> and <see cref="BearishCandleStroke"/> properties for the bullish and bearish candles respectively.
         ///<h3>Dependency Property Information</h3>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-        ///<tr><td>Identifier field</td><td><see cref="BearishCandleBrushProperty"/></td></tr> 
+        ///<tr><td>Identifier field</td><td><see cref="BearishCandleFillProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
-        public Brush BearishCandleBrush
+        ///<seealso cref = "BullishCandleFill">BearishCandleFill</seealso>
+        ///<seealso cref = "BullishCandleStroke">BearishCandleStroke</seealso>
+        ///<seealso cref = "BearishCandleStroke">BullishCandleStroke</seealso>
+        public Brush BearishCandleFill
         {
-            get { return (Brush)GetValue(BearishCandleBrushProperty); }
-            set { SetValue(BearishCandleBrushProperty, value); }
+            get { return (Brush)GetValue(BearishCandleFillProperty); }
+            set { SetValue(BearishCandleFillProperty, value); }
         }
-        /// <summary>Identifies the <see cref="BearishCandleBrush"/> dependency property.</summary>
+        /// <summary>Identifies the <see cref="BearishCandleFill"/> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty BearishCandleBrushProperty =
-            DependencyProperty.Register("BearishCandleBrush", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultBearishCandleBrush));
+        public static readonly DependencyProperty BearishCandleFillProperty =
+            DependencyProperty.Register("BearishCandleFill", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultBearishCandleFill));
 
-        ///<summary>Gets the default value for the BearishCandleBrush property.</summary>
-        ///<value>The default value for the BearishCandleBrush property: <c>Brushes.Red</c>.</value>
-        ///<seealso cref = "BearishCandleBrush">BearishCandleBrush</seealso>
-        public static Brush DefaultBearishCandleBrush { get { return Brushes.Red; } }
+        ///<summary>Gets the default value for the BearishCandleFill property.</summary>
+        ///<value>The default value for the BearishCandleFill property: <c>Brushes.Red</c>.</value>
+        ///<seealso cref = "BearishCandleFill">BearishCandleFill</seealso>
+        public static Brush DefaultBearishCandleFill { get { return (Brush)(new SolidColorBrush(Colors.Red)).GetCurrentValueAsFrozen(); } }
         //----------------------------------------------------------------------------------------------------------------------------------
-        ///<summary>Gets or sets the initial gap between adjacent candles.</summary>
-        ///<value>The initial width of the horizontal gap between adjacent candles, in device-independent units (1/96th inch per unit). 
-        ///The default is determined by the <see cref="DefaultInitialGapBetweenCandles"/> value.</value>
-        ///<remarks>Initially the gap between candles <see cref="GapBetweenCandles"/> is equal to this property value, but then the <see cref="GapBetweenCandles"/> property value changes due to user's manipulations.</remarks>
-        public double InitialGapBetweenCandles { get; set; }
-
-        ///<summary>Gets the default value for the InitialGapBetweenCandles property.</summary>
-        ///<value>The default value for the <see cref="InitialGapBetweenCandles"/> property, in device-independent units: <c>1.0</c>.</value>
-        ///<seealso cref = "GapBetweenCandles">GapBetweenCandles</seealso>
-        public static double DefaultInitialGapBetweenCandles { get { return 1.0; } }
-
-        double gapBetweenCandles;
-        /// <summary>Gets the horizontal gap width between adjacent candles.</summary>
-        ///<value>The width of the horizontal gap between adjacent candles, in device-independent units (1/96th inch per unit).</value>
-        ///<remarks>Initially after loading this property value is equal to the <see cref="InitialGapBetweenCandles"/>, but then it changes due to user's manipulations.</remarks>
-        ///<seealso cref = "InitialGapBetweenCandles">InitialGapBetweenCandles</seealso>
-        ///<seealso cref = "DefaultInitialGapBetweenCandles">DefaultInitialGapBetweenCandles</seealso>
-        public double GapBetweenCandles
+        ///<summary>Gets or sets the Brush that specifies how the outline of the bullish candle is painted.</summary>
+        ///<value>The Brush to paint the tails and the body outline of the bullish candles. The default value is determined by the <see cref="DefaultBullishCandleStroke"/> property.</value>
+        ///<remarks> 
+        /// Usually candles are separated into two types - Bullish and Bearish. The Bullish candle has its Close price higher than its Open price. All other candles are Bearish. 
+        /// To visualize such a separation usually the Bearish and Bullish candles are painted in different Fill and Stroke (outline) colors. 
+        /// To set the Brush for the candle body fill use the <see cref="BullishCandleFill"/> and <see cref="BearishCandleFill"/> properties for the bullish and bearish candles respectively.
+        ///<h3>Dependency Property Information</h3>
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="BullishCandleStrokeProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///</remarks>
+        ///<seealso cref = "BearishCandleStroke">BearishCandleStroke</seealso>
+        ///<seealso cref = "BearishCandleFill">BearishCandleFill</seealso>
+        ///<seealso cref = "BullishCandleFill">BullishCandleFill</seealso>
+        public Brush BullishCandleStroke
         {
-            get { return gapBetweenCandles; }
-            private set
-            {
-                if (value == gapBetweenCandles) return;
-                gapBetweenCandles = value;
-                OnPropertyChanged();
-            }
+            get { return (Brush)GetValue(BullishCandleStrokeProperty); }
+            set { SetValue(BullishCandleStrokeProperty, value); }
         }
+        /// <summary>Identifies the <see cref="BullishCandleStroke"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty BullishCandleStrokeProperty =
+            DependencyProperty.Register("BullishCandleStroke", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultBullishCandleStroke));
+
+        ///<summary>Gets the default value for the BullishCandleStroke property.</summary>
+        ///<value>The default value for the BullishCandleStroke property: <c>Brushes.Green</c>.</value>
+        ///<seealso cref = "BullishCandleStroke">BullishCandleStroke</seealso>
+        public static Brush DefaultBullishCandleStroke { get { return (Brush)(new SolidColorBrush(Colors.Green)).GetCurrentValueAsFrozen(); } }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        ///<summary>Gets or sets the Brush that specifies how the outline of the bearish candle is painted.</summary>
+        ///<value>The Brush to paint the tails and the body outline of the bearish candles. The default value is determined by the <see cref="DefaultBearishCandleStroke"/> property.</value>
+        ///<remarks> 
+        /// Usually candles are separated into two types - Bullish and Bearish. The Bullish candle has its Close price higher than its Open price. All other candles are Bearish. 
+        /// To visualize such a separation usually the Bearish and Bullish candles are painted in different Fill and Stroke (outline) colors. 
+        /// To set the Brush for the candle body fill use the <see cref="BullishCandleFill"/> and <see cref="BearishCandleFill"/> properties for the bullish and bearish candles respectively.
+        ///<h3>Dependency Property Information</h3>
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="BearishCandleStrokeProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///</remarks>
+        ///<seealso cref = "BullishCandleStroke">BullishCandleStroke</seealso>
+        ///<seealso cref = "BullishCandleFill">BullishCandleFill</seealso>
+        ///<seealso cref = "BearishCandleFill">BearishCandleFill</seealso>
+        public Brush BearishCandleStroke
+        {
+            get { return (Brush)GetValue(BearishCandleStrokeProperty); }
+            set { SetValue(BearishCandleStrokeProperty, value); }
+        }
+        /// <summary>Identifies the <see cref="BearishCandleStroke"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty BearishCandleStrokeProperty =
+            DependencyProperty.Register("BearishCandleStroke", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultBearishCandleStroke));
+
+        ///<summary>Gets the default value for the BearishCandleStroke property.</summary>
+        ///<value>The default value for the BearishCandleStroke property: <c>Brushes.Red</c>.</value>
+        ///<seealso cref = "BearishCandleStroke">BearishCandleStroke</seealso>
+        public static Brush DefaultBearishCandleStroke { get { return (Brush)(new SolidColorBrush(Colors.Red)).GetCurrentValueAsFrozen(); } }
         //----------------------------------------------------------------------------------------------------------------------------------
         ///<summary>Gets or sets the initial candle width.</summary>
         ///<value>The initial width of the candle, in device-independent units (1/96th inch per unit). 
         ///The default is determined by the <see cref="DefaultInitialCandleWidth"/> value.</value>
         ///<remarks>Initially the width of a candle <see cref="CandleWidth"/> is equal to this property value, but then the <see cref="CandleWidth"/> property value changes due to user's manipulations.</remarks>
+        ///<seealso cref = "DefaultInitialCandleWidth">DefaultInitialCandleWidth</seealso>
+        ///<seealso cref = "CandleWidth">CandleWidth</seealso>
         public double InitialCandleWidth { get; set; }
 
         ///<summary>Gets the default value for the InitialCandleWidth property.</summary>
         ///<value>The default value for the <see cref="InitialCandleWidth"/> property, in device-independent units: <c>3.0</c>.</value>
-        ///<seealso cref = "GapBetweenCandles">GapBetweenCandles</seealso>
-        public static double DefaultInitialCandleWidth { get { return 3.0; } }
+        ///<seealso cref = "InitialCandleWidth">InitialCandleWidth</seealso>
+        ///<seealso cref = "CandleWidth">CandleWidth</seealso>
+        public readonly double DefaultInitialCandleWidth = 5.0;
 
-        double candleWidth;
-        ///<summary>Gets the width of the candle.</summary>
-        ///<value>The width of the candle, in device-independent units (1/96th inch per unit).</value>
+
+        private double candleWidth;
+        /// <summary>Gets the width of the candle.</summary>
+        ///<value>The candle width, in device-independent units (1/96th inch per unit).</value>
         ///<remarks>Initially after loading this property value is equal to the <see cref="InitialCandleWidth"/>, but then it changes due to user's manipulations.</remarks>
         ///<seealso cref = "InitialCandleWidth">InitialCandleWidth</seealso>
         ///<seealso cref = "DefaultInitialCandleWidth">DefaultInitialCandleWidth</seealso>
+        ///<seealso cref = "CandleGap">CandleGap</seealso>
         public double CandleWidth
         {
             get { return candleWidth; }
             private set
             {
-                if (value == candleWidth) return;
+                if (candleWidth==value) return;
                 candleWidth = value;
                 OnPropertyChanged();
             }
         }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        ///<summary>Gets or sets the initial gap between adjacent candles.</summary>
+        ///<value>The initial gap between adjacent candles, in device-independent units (1/96th inch per unit). 
+        ///The default is determined by the <see cref="DefaultInitialCandleGap"/> value.</value>
+        ///<remarks>Initially the gap between candles <see cref="CandleGap"/> is equal to this property value, but then the <see cref="CandleGap"/> property value changes due to user's manipulations.</remarks>
+        ///<seealso cref = "DefaultInitialCandleGap">DefaultInitialCandleGap</seealso>
+        ///<seealso cref = "CandleGap">CandleGap</seealso>
+        public double InitialCandleGap { get; set; }
 
+        ///<summary>Gets the default value for the InitialCandleGap property.</summary>
+        ///<value>The default value for the <see cref="InitialCandleGap"/> property, in device-independent units: <c>1.0</c>.</value>
+        ///<seealso cref = "InitialCandleGap">InitialCandleGap</seealso>
+        ///<seealso cref = "CandleGap">CandleGap</seealso>
+        public readonly double DefaultInitialCandleGap = 1.0;
+
+        double candleGap;
+        /// <summary>Gets the horizontal gap between adjacent candles.</summary>
+        ///<value>The horizontal gap between adjacent candles, in device-independent units (1/96th inch per unit).</value>
+        ///<remarks>Initially after loading this property value is equal to the <see cref="InitialCandleGap"/>, but then it changes due to user's manipulations.</remarks>
+        ///<seealso cref = "DefaultInitialCandleGap">DefaultInitialCandleGap</seealso>
+        ///<seealso cref = "InitialCandleGap">InitialCandleGap</seealso>
+        ///<seealso cref = "CandleWidth">CandleWidth</seealso>
+        public double CandleGap
+        {
+            get { return candleGap; }
+            private set
+            {
+                if (candleGap==value) return;
+                candleGap = value;
+                OnPropertyChanged();
+            }
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        bool ReCalc_CandleWidthAndGap(int new_VisibleCandlesCount)
+        {
+            if (new_VisibleCandlesCount <= 0) return false;
+
+            double new_ActualWidth = priceChartContainer.ActualWidth;
+            if (new_ActualWidth == 0)
+            {
+                CandleGap = 0.0;
+                CandleWidth = 0.0;
+                return false;
+            }
+
+            double new_candleWidth = CandleWidth;
+            while (new_VisibleCandlesCount * (new_candleWidth + 1.0) + 1.0 > new_ActualWidth)
+            {
+                if (Math.Round(new_candleWidth) < 3.0)
+                    return false;
+                else
+                    new_candleWidth -= 2.0;
+            }
+
+            while (new_VisibleCandlesCount * (new_candleWidth + 3.0) + 1.0 < new_ActualWidth)
+                new_candleWidth += 2.0;
+
+            CandleGap = (new_ActualWidth - new_VisibleCandlesCount * new_candleWidth - 1.0) / new_VisibleCandlesCount;
+            CandleWidth = new_candleWidth;
+            return true;
+        }
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
         #region VOLUME HISTOGRAM PROPERTIES *********************************************************************************************************************
@@ -598,60 +749,61 @@ namespace FancyCandles
         public static double DefaultVolumeHistogramBottomMargin { get { return 5.0; } }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the color of the bullish volume bar.</summary>
-        ///<value>The brush to fill all bullish volume bars. The default is determined by the <see cref="DefaultBullishVolumeBarBrush"/> value.</value>
+        ///<value>The brush to fill all bullish volume bars. The default is determined by the <see cref="DefaultBullishVolumeBarFill"/> value.</value>
         ///<remarks> 
         /// We separate all volume bars to "bullish" or "bearish" according to whether the correspondent candle is bullish or bearish. A candle is bullish if its Close higher than its Open. A candle is Bearish if its Close lower than its Open. To visualize such a separation all bars are painted into two different colors - 
-        /// <see cref="BullishVolumeBarBrush"/> and <see cref="BearishVolumeBarBrush"/> for bullish and bearish bars respectively. Likewise you can set the <see cref="BullishCandleBrush"/> and <see cref="BearishCandleBrush"/> properties to change the appearance of bullish and bearish price candles.
+        /// <see cref="BullishVolumeBarFill"/> and <see cref="BearishVolumeBarFill"/> for bullish and bearish bars respectively. Likewise you can set the <see cref="BullishCandleFill"/> and <see cref="BearishCandleFill"/> properties to change the appearance of bullish and bearish price candles.
         ///<h3>Dependency Property Information</h3>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-        ///<tr><td>Identifier field</td><td><see cref="BullishVolumeBarBrushProperty"/></td></tr> 
+        ///<tr><td>Identifier field</td><td><see cref="BullishVolumeBarFillProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
-        public Brush BullishVolumeBarBrush
+        public Brush BullishVolumeBarFill
         {
-            get { return (Brush)GetValue(BullishVolumeBarBrushProperty); }
-            set { SetValue(BullishVolumeBarBrushProperty, value); }
+            get { return (Brush)GetValue(BullishVolumeBarFillProperty); }
+            set { SetValue(BullishVolumeBarFillProperty, value); }
         }
-        /// <summary>Identifies the <see cref="BullishVolumeBarBrush"/> dependency property.</summary>
+        /// <summary>Identifies the <see cref="BullishVolumeBarFill"/> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty BullishVolumeBarBrushProperty =
-            DependencyProperty.Register("BullishVolumeBarBrush", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultBullishVolumeBarBrush));
+        public static readonly DependencyProperty BullishVolumeBarFillProperty =
+            DependencyProperty.Register("BullishVolumeBarFill", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultBullishVolumeBarFill));
 
-        ///<summary>Gets the default value for the BullishVolumeBarBrush property.</summary>
-        ///<value>The default value for the BullishVolumeBarBrush property: <c>Brushes.Green</c>.</value>
-        ///<seealso cref = "BullishVolumeBarBrush">BullishVolumeBarBrush</seealso>
-        public static Brush DefaultBullishVolumeBarBrush { get { return Brushes.Green; } }
+        ///<summary>Gets the default value for the BullishVolumeBarFill property.</summary>
+        ///<value>The default value for the BullishVolumeBarFill property: <c>Brushes.Green</c>.</value>
+        ///<seealso cref = "BullishVolumeBarFill">BullishVolumeBarFill</seealso>
+        public static Brush DefaultBullishVolumeBarFill { get { return (Brush)(new SolidColorBrush(Colors.Green)).GetCurrentValueAsFrozen(); } }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the color of the bearish volume bar.</summary>
-        ///<value>The brush to fill all bearish volume bars. The default is determined by the <see cref="DefaultBearishVolumeBarBrush"/> value.</value>
+        ///<value>The brush to fill all bearish volume bars. The default is determined by the <see cref="DefaultBearishVolumeBarFill"/> value.</value>
         ///<remarks> 
         /// We separate all volume bars to "bullish" or "bearish" according to whether the correspondent candle is bullish or bearish. The Bullish candle has its Close higher than its Open. The Bearish candle has its Close lower than its Open. To visualize such a separation all bars are painted into two different colors - 
-        /// <see cref="BullishVolumeBarBrush"/> and <see cref="BearishVolumeBarBrush"/> for bullish and bearish bars respectively. Likewise you can set the <see cref="BullishCandleBrush"/> and <see cref="BearishCandleBrush"/> properties to change the appearance of bullish and bearish price candles.
+        /// <see cref="BullishVolumeBarFill"/> and <see cref="BearishVolumeBarFill"/> for bullish and bearish bars respectively. Likewise you can set the <see cref="BullishCandleFill"/> and <see cref="BearishCandleFill"/> properties to change the appearance of bullish and bearish price candles.
         ///<h3>Dependency Property Information</h3>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-        ///<tr><td>Identifier field</td><td><see cref="BearishVolumeBarBrushProperty"/></td></tr> 
+        ///<tr><td>Identifier field</td><td><see cref="BearishVolumeBarFillProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
-        public Brush BearishVolumeBarBrush
+        public Brush BearishVolumeBarFill
         {
-            get { return (Brush)GetValue(BearishVolumeBarBrushProperty); }
-            set { SetValue(BearishVolumeBarBrushProperty, value); }
+            get { return (Brush)GetValue(BearishVolumeBarFillProperty); }
+            set { SetValue(BearishVolumeBarFillProperty, value); }
         }
-        /// <summary>Identifies the <see cref="BearishVolumeBarBrush"/> dependency property.</summary>
+        /// <summary>Identifies the <see cref="BearishVolumeBarFill"/> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty BearishVolumeBarBrushProperty =
-            DependencyProperty.Register("BearishVolumeBarBrush", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultBearishVolumeBarBrush));
+        public static readonly DependencyProperty BearishVolumeBarFillProperty =
+            DependencyProperty.Register("BearishVolumeBarFill", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultBearishVolumeBarFill));
 
-        ///<summary>Gets the default value for the BearishVolumeBarBrush property.</summary>
-        ///<value>The default value for the BearishVolumeBarBrush property: <c>Brushes.Red</c>.</value>
-        ///<seealso cref = "BearishVolumeBarBrush">BearishVolumeBarBrush</seealso>
-        public static Brush DefaultBearishVolumeBarBrush { get { return Brushes.Red; } }
+        ///<summary>Gets the default value for the BearishVolumeBarFill property.</summary>
+        ///<value>The default value for the BearishVolumeBarFill property: <c>Brushes.Red</c>.</value>
+        ///<seealso cref = "BearishVolumeBarFill">BearishVolumeBarFill</seealso>
+        public static Brush DefaultBearishVolumeBarFill { get { return (Brush)(new SolidColorBrush(Colors.Red)).GetCurrentValueAsFrozen(); } }
 
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
         #region COMMON PROPERTIES FOR THE PRICE AXIS AND THE TIME AXIS*******************************************************************************************
         ///<summary>Gets or sets a color of lines, ticks and its labels for the time axis, the price axis and the volume axis.</summary>
         ///<value>The color of lines, ticks and its labels for the time axis, the price axis and the volume axis. The default is determined by the <see cref="DefaultAxisTickColor"/> value.</value>
+        ///<remarks> 
         ///<h3>Dependency Property Information</h3>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
         ///<tr><td>Identifier field</td><td><see cref="AxisTickColorProperty"/></td></tr> 
@@ -669,7 +821,7 @@ namespace FancyCandles
 
         ///<summary>Gets the default value for the <see cref="AxisTickColor">AxisTickColor</see> property.</summary>
         ///<value>The default value for the <see cref="AxisTickColor"/> property: <c>Brushes.Black</c>.</value>
-        public static Brush DefaultAxisTickColor { get { return Brushes.Black; } }
+        public static Brush DefaultAxisTickColor { get { return (Brush)(new SolidColorBrush(Colors.Black)).GetCurrentValueAsFrozen(); } }
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
         #region PROPERTIES OF THE PRICE AXIS (AND OF THE VOLUME AXIS, WHICH DOESN'T HAVE ITS OWN PROPERTIES) ****************************************************
@@ -843,17 +995,19 @@ namespace FancyCandles
         /// <summary>Identifies the <see cref="HorizontalGridlinesPen"/> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
         public static readonly DependencyProperty HorizontalGridlinesPenProperty =
-            DependencyProperty.Register("HorizontalGridlinesPen", typeof(Pen), typeof(CandleChart), new PropertyMetadata(new Pen(DefaultHorizontalGridlinesBrush, DefaultHorizontalGridlinesThickness)));
+            DependencyProperty.Register("HorizontalGridlinesPen", typeof(Pen), typeof(CandleChart), new PropertyMetadata(DefaultHorizontalGridlinesPen));
 
         ///<summary>Gets the default value for the Brush constituent of the HorizontalGridlinesPen property.</summary>
         ///<value>The default value for the <see cref="Brush"/> constituent of the <see cref="HorizontalGridlinesPen"/> property: <c>#1E000000</c>.</value>
         ///<seealso cref = "DefaultHorizontalGridlinesThickness">DefaultHorizontalGridlinesThickness</seealso>
-        public static Brush DefaultHorizontalGridlinesBrush { get { return new SolidColorBrush(Color.FromArgb(30, 0, 0, 0)); } } // #1E000000
+        public static Brush DefaultHorizontalGridlinesBrush { get { return (Brush)(new SolidColorBrush(Color.FromArgb(30, 0, 0, 0))).GetCurrentValueAsFrozen(); } } // #1E000000
 
         ///<summary>Gets the default value for Thickness constituent of the HorizontalGridlinesPen property.</summary>
         ///<value>The default value for the Thickness constituent of the <see cref="HorizontalGridlinesPen"/> property: <c>1.0</c>.</value>
         ///<seealso cref = "DefaultHorizontalGridlinesBrush">DefaultHorizontalGridlinesBrush</seealso>
         public static double DefaultHorizontalGridlinesThickness { get { return 1.0; } }
+
+        private static Pen DefaultHorizontalGridlinesPen { get { return (Pen)(new Pen(DefaultHorizontalGridlinesBrush, DefaultHorizontalGridlinesThickness)).GetCurrentValueAsFrozen(); } }
         //----------------------------------------------------------------------------------------------------------------------------------
         ///<summary>Gets or sets the pen for the vertical gridlines.</summary>
         ///<value>The pen for the vertical gridlines. The default is determined by the <see cref="DefaultVerticalGridlinesBrush"/> and <see cref="DefaultVerticalGridlinesThickness"/> values.</value>
@@ -872,17 +1026,19 @@ namespace FancyCandles
         /// <value><see cref="DependencyProperty"/></value>
         public static readonly DependencyProperty VerticalGridlinesPenProperty =
             DependencyProperty.Register("VerticalGridlinesPen", typeof(Pen), typeof(CandleChart),
-                new PropertyMetadata(new Pen(DefaultVerticalGridlinesBrush, DefaultVerticalGridlinesThickness)));
+                new PropertyMetadata(DefaultVerticalGridlinesPen));
 
         ///<summary>Gets the default value for the Brush constituent of the VerticalGridlinesPen property.</summary>
         ///<value>The default value for the <see cref="Brush"/> constituent of the <see cref="VerticalGridlinesPen"/> property: <c>#1E000000</c>.</value>
         ///<seealso cref = "DefaultVerticalGridlinesThickness">DefaultVerticalGridlinesThickness</seealso>
-        public static Brush DefaultVerticalGridlinesBrush { get { return new SolidColorBrush(Color.FromArgb(50, 105, 42, 0)); } } // #32692A00
+        public static Brush DefaultVerticalGridlinesBrush { get { return (Brush)(new SolidColorBrush(Color.FromArgb(50, 105, 42, 0))).GetCurrentValueAsFrozen(); } } // #32692A00
 
         ///<summary>Gets the default value for Thickness constituent of the VerticalGridlinesPen property.</summary>
         ///<value>The default value for the Thickness constituent of the <see cref="VerticalGridlinesPen"/> property: <c>1.0</c>.</value>
         ///<seealso cref = "DefaultVerticalGridlinesBrush">DefaultVerticalGridlinesBrush</seealso>
         public static double DefaultVerticalGridlinesThickness { get { return 1.0; } }
+
+        private static Pen DefaultVerticalGridlinesPen { get { return (Pen)(new Pen(DefaultVerticalGridlinesBrush, DefaultVerticalGridlinesThickness)).GetCurrentValueAsFrozen(); } }
         //----------------------------------------------------------------------------------------------------------------------------------
         ///<summary>Gets or sets the visibility of the horizontal gridlines.</summary>
         ///<value>The visibility of the horizontal gridlines: Visible if <c>True</c>; Hidden if <c>False</c>. The default is determined by the <see cref="DefaultIsHorizontalGridlinesEnabled"/> values.</value>
@@ -979,7 +1135,7 @@ namespace FancyCandles
 
         ///<summary>Gets the default value for the CrossLinesBrush property.</summary>
         ///<value>The default value for the <see cref="CrossLinesBrush"/> property: <c>#1E000A97</c>.</value>
-        public static Brush DefaultCrossLinesBrush { get { return new SolidColorBrush(Color.FromArgb(30, 0, 10, 151)); } } // #1E000A97
+        public static Brush DefaultCrossLinesBrush { get { return (Brush)(new SolidColorBrush(Color.FromArgb(30, 0, 10, 151))).GetCurrentValueAsFrozen(); } } // #1E000A97
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the visibility of the cross lines.</summary>
         ///<value>The visibility of the crosslines: Visible if <c>True</c>; Hidden if <c>False</c>. The default is determined by the <see cref="DefaultIsCrossLinesVisible"/> values.</value>
@@ -1049,7 +1205,7 @@ namespace FancyCandles
 
         ///<summary>Gets the default value for the CrossPriceForeground property.</summary>
         ///<value>The default value for the <see cref="CrossPriceForeground"/> property: <c>Brushes.Red</c>.</value>
-        public static Brush DefaultCrossPriceForeground { get { return Brushes.Red; } }
+        public static Brush DefaultCrossPriceForeground { get { return (Brush)(new SolidColorBrush(Colors.Red)).GetCurrentValueAsFrozen(); } }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the background for the price or volume label of the cross.</summary>
         ///<value>The background for the price or volume label of the cross. The default is determined by the <see cref="DefaultCrossPriceBackground"/>values.</value>
@@ -1071,7 +1227,7 @@ namespace FancyCandles
 
         ///<summary>Gets the default value for the CrossPriceBackground property.</summary>
         ///<value>The default <see cref="Brush"/> value for the <see cref="CrossPriceBackground"/> property: <c>#FFE8EDFF</c>.</value>
-        public static Brush DefaultCrossPriceBackground { get { return new SolidColorBrush(Color.FromArgb(255, 232, 237, 255)); } } // #FFE8EDFF
+        public static Brush DefaultCrossPriceBackground { get { return (Brush)(new SolidColorBrush(Color.FromArgb(255, 232, 237, 255))).GetCurrentValueAsFrozen(); } } // #FFE8EDFF
         //----------------------------------------------------------------------------------------------------------------------------------
         int maxNumberOfDigitsAfterPointInPrice = 0;
         /// <summary>Gets the maximum number of fractional digits in a price and volume for the current candle collection.</summary>
@@ -1132,7 +1288,7 @@ namespace FancyCandles
 
         ///<summary>Gets the default value for the ScrollBarBackground property.</summary>
         ///<value>The default value for the <see cref="ScrollBarBackground"/> property: <c>#FFF0F0F0</c>.</value>
-        public static Brush DefaultScrollBarBackground { get { return new SolidColorBrush(Color.FromArgb(255, 240, 240, 240)); } } // #FFF0F0F0
+        public static Brush DefaultScrollBarBackground { get { return (Brush)(new SolidColorBrush(Color.FromArgb(255, 240, 240, 240))).GetCurrentValueAsFrozen(); } } // #FFF0F0F0
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the height of the scrollbar.</summary>
         ///<value>The height of the scrollbar background. The default is determined by the <see cref="DefaultScrollBarHeight"/>values.</value>
@@ -1156,57 +1312,6 @@ namespace FancyCandles
         public static double DefaultScrollBarHeight { get { return 15.0; } }
 
         #endregion **********************************************************************************************************************************************
-        //----------------------------------------------------------------------------------------------------------------------------------
-        internal ObservableCollection<WholeContainerCandle> VisibleCandles
-        {
-            get { return (ObservableCollection<WholeContainerCandle>)GetValue(VisibleCandlesProperty); }
-            set { SetValue(VisibleCandlesProperty, value); }
-        }
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.VisibleCandlesProperty'
-        public static readonly DependencyProperty VisibleCandlesProperty =
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'CandleChart.VisibleCandlesProperty'
-            DependencyProperty.Register("VisibleCandles", typeof(ObservableCollection<WholeContainerCandle>), typeof(CandleChart), new PropertyMetadata(null));
-
-        void ReCalc_VisibleCandles()
-        {
-            if (VisibleCandles == null)
-                VisibleCandles = new ObservableCollection<WholeContainerCandle>();
-
-            if (CandlesSource == null)
-            {
-                VisibleCandles.Clear();
-                return;
-            }
-
-            double visibleCandlesRangeLH = CandlesLH.Y - CandlesLH.X;
-
-            int common_N = Math.Min(VisibleCandles.Count, VisibleCandlesRange.Count);
-            ICandle cndl, prev_cndl = VisibleCandlesRange.Start_i == 0 ? CandlesSource[0] : CandlesSource[VisibleCandlesRange.Start_i - 1];
-            for (int i = 0; i < common_N; i++)
-            {
-                cndl = CandlesSource[VisibleCandlesRange.Start_i + i];
-                VisibleCandles[i] = new WholeContainerCandle(cndl, i, visibleCandlesRangeLH, CandlesLH.X, CandleWidth, GapBetweenCandles, CandlesMaxVolume, DateTimeMilestonesHelper.GetMilestones(prev_cndl.t, cndl.t));
-                prev_cndl = cndl;
-            }
-
-            int dN = VisibleCandlesRange.Count - VisibleCandles.Count;
-            if (dN > 0)
-            {
-                int old_VisibleCandlesCount = VisibleCandles.Count;
-                prev_cndl = VisibleCandlesRange.Start_i == (-common_N) ? CandlesSource[0] : CandlesSource[VisibleCandlesRange.Start_i + common_N - 1];
-                for (int i = 0; i < dN; i++)
-                {
-                    cndl = CandlesSource[VisibleCandlesRange.Start_i + common_N + i];
-                    VisibleCandles.Add(new WholeContainerCandle(cndl, old_VisibleCandlesCount + i, visibleCandlesRangeLH, CandlesLH.X, CandleWidth, GapBetweenCandles, CandlesMaxVolume, DateTimeMilestonesHelper.GetMilestones(prev_cndl.t, cndl.t)));
-                    prev_cndl = cndl;
-                }
-            }
-            else if (dN < 0)
-            {
-                for (int i = 0; i < -dN; i++)
-                    VisibleCandles.RemoveAt(VisibleCandles.Count - 1);
-            }
-        }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the data source for the candles of this chart.</summary>
         ///<value>The data source for the candles of this chart. The default value is null.</value>
@@ -1276,9 +1381,9 @@ namespace FancyCandles
                     thisCandleChart.SetVisibleCandlesRangeCenter(thisCandleChart.lastCenterCandleDateTime);
                 else
                     thisCandleChart.ReCalc_VisibleCandlesRange();
-                thisCandleChart.ReCalc_CandlesLH();
-                thisCandleChart.ReCalc_CandlesMaxVolume();
-                thisCandleChart.ReCalc_VisibleCandles();
+
+                //thisCandleChart.ReCalc_FinishedCandlesExtremums();
+                thisCandleChart.ReCalc_VisibleCandlesExtremums();
             }
         }
 
@@ -1288,21 +1393,20 @@ namespace FancyCandles
             //different kind of changes that may have occurred in collection
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                if (e.NewStartingIndex == (CandlesSource.Count - 1) && (VisibleCandlesRange.Start_i + VisibleCandlesRange.Count) == e.NewStartingIndex)
+                if (e.NewStartingIndex == (CandlesSource.Count - 1))
                 {
-                    VisibleCandlesRange = new IntRange(VisibleCandlesRange.Start_i + 1, VisibleCandlesRange.Count);
+                    //if (CandlesSource.Count > 1)
+                    //    ReCalc_FinishedCandlesExtremums_AfterNewFinishedCandleAdded(CandlesSource[CandlesSource.Count - 2]);
+
+                    if ((VisibleCandlesRange.Start_i + VisibleCandlesRange.Count) == e.NewStartingIndex)
+                        VisibleCandlesRange = new IntRange(VisibleCandlesRange.Start_i + 1, VisibleCandlesRange.Count);
                 }
             }
             if (e.Action == NotifyCollectionChangedAction.Replace)
             {
                 int vc_i = e.NewStartingIndex - VisibleCandlesRange.Start_i; // VisibleCandles index.
                 if (vc_i >= 0 && vc_i < VisibleCandlesRange.Count)
-                {
-                    //WholeContainerCandle old_wcc = VisibleCandles[vc_i];
-                    ReCalc_CandlesLH_AfterOneCandleChanged(e.NewStartingIndex);
-                    ReCalc_CandlesMaxVolume_AfterOneCandleChanged(e.NewStartingIndex);
-                    ReCalc_VisibleCandles();
-                }
+                    ReCalc_VisibleCandlesExtremums_AfterOneCandleChanged(e.NewStartingIndex);
             }
             if (e.Action == NotifyCollectionChangedAction.Remove) { /* your code */ }
             if (e.Action == NotifyCollectionChangedAction.Move) { /* your code */ }
@@ -1357,96 +1461,50 @@ namespace FancyCandles
             TimeFrame = (int)(max_freq_ts.TotalMinutes);
         }
         //----------------------------------------------------------------------------------------------------------------------------------
-        long candlesMaxVolume;
-        /// <summary>Gets the maximum volume of the visible candles.</summary>
-        ///<value>The maximum volume of the visible candles.</value>
-        ///<remarks>
-        ///The visible candles are those that fall inside the visible candles range, which is determined by the <see cref="VisibleCandlesRange"/> property.
-        ///</remarks>
-        public long CandlesMaxVolume
-        {
-            get { return candlesMaxVolume; }
-            private set
-            {
-                if (value == candlesMaxVolume)
-                    return;
-
-                candlesMaxVolume = value;
-                OnPropertyChanged();
-            }
-        }
-
-        void ReCalc_CandlesMaxVolume()
-        {
-            int end_i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - 1;
-            long maxVolume = 0;
-            for (int i = VisibleCandlesRange.Start_i; i <= end_i; i++)
-            {
-                ICandle cndl = CandlesSource[i];
-                if (cndl.V > maxVolume) maxVolume = cndl.V;
-            }
-
-            if (CandlesMaxVolume != maxVolume)
-                CandlesMaxVolume = maxVolume;
-        }
-
-        void ReCalc_CandlesMaxVolume_AfterOneCandleChanged(int changedCandle_i)
-        {
-            ICandle cndl = CandlesSource[changedCandle_i];
-            if (CandlesMaxVolume < cndl.V)
-            {
-                CandlesMaxVolume = cndl.V;
-            }
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        Vector candlesLH;
+        CandleExtremums visibleCandlesExtremums;
         ///<summary>Gets the Low and High of the visible candles in vector format (Low,High).</summary>
         ///<value>The Low and High of the visible candles in vector format (Low,High).</value>
         ///<remarks>
         ///<para>The visible candles are those that fall inside the visible candles range, which is determined by the <see cref="VisibleCandlesRange"/> property.</para>
         ///The Low of a set of candles is a minimum Low value of this candles. The High of a set of candles is a maximum High value of this candles.
         ///</remarks>
-        public Vector CandlesLH
+        public CandleExtremums VisibleCandlesExtremums
         {
-            get { return candlesLH; }
+            get { return visibleCandlesExtremums; }
             private set
             {
-                if (value == candlesLH)
-                    return;
-
-                candlesLH = value;
+                visibleCandlesExtremums = value;
                 OnPropertyChanged();
             }
         }
 
-        void ReCalc_CandlesLH()
+        void ReCalc_VisibleCandlesExtremums()
         {
-            //Debug.WriteLine($"ReCalc_CandlesLH {VisibleCandlesRange.Start_i}");
             int end_i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - 1;
-            double candlesTotalH = double.MinValue;
-            double candlesTotalL = double.MaxValue;
+            double maxH = double.MinValue;
+            double minL = double.MaxValue;
+            long maxV = long.MinValue;
+            long minV = long.MaxValue;
             for (int i = VisibleCandlesRange.Start_i; i <= end_i; i++)
             {
                 ICandle cndl = CandlesSource[i];
-                if (cndl.H > candlesTotalH) candlesTotalH = cndl.H;
-                if (cndl.L < candlesTotalL) candlesTotalL = cndl.L;
+                if (cndl.H > maxH) maxH = cndl.H;
+                if (cndl.L < minL) minL = cndl.L;
+                if (cndl.V < minV) minV = cndl.V;
+                if (cndl.V > maxV) maxV = cndl.V;
             }
 
-            if (CandlesLH.X != candlesTotalL || CandlesLH.Y != candlesTotalH)
-            {
-                CandlesLH = new Vector(candlesTotalL, candlesTotalH);
-            }
+            VisibleCandlesExtremums = new CandleExtremums(minL, maxH, minV, maxV);
         }
 
-        void ReCalc_CandlesLH_AfterOneCandleChanged(int changedCandle_i)
+        void ReCalc_VisibleCandlesExtremums_AfterOneCandleChanged(int changedCandle_i)
         {
             ICandle cndl = CandlesSource[changedCandle_i];
-            double newL = Math.Min(cndl.L, CandlesLH.X);
-            double newH = Math.Max(cndl.H, CandlesLH.Y);
-            if (newL < CandlesLH.X || newH > CandlesLH.Y)
-            {
-                CandlesLH = new Vector(newL, newH);
-            }
+            double newPriceL = Math.Min(cndl.L, VisibleCandlesExtremums.PriceLow);
+            double newPriceH = Math.Max(cndl.H, VisibleCandlesExtremums.PriceHigh);
+            long newVolL = Math.Min(cndl.V, VisibleCandlesExtremums.VolumeLow);
+            long newVolH = Math.Max(cndl.V, VisibleCandlesExtremums.VolumeHigh);
+            VisibleCandlesExtremums = new CandleExtremums(newPriceL, newPriceH, newVolL, newVolH);
         }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets the range of indexes of candles, currently visible in this chart window.</summary>
@@ -1471,16 +1529,11 @@ namespace FancyCandles
         {
             CandleChart thisCandleChart = (CandleChart)obj;
             if (thisCandleChart.IsLoaded)
-            {
-                thisCandleChart.ReCalc_CandlesLH();
-                thisCandleChart.ReCalc_CandlesMaxVolume();
-                thisCandleChart.ReCalc_VisibleCandles();
-            }
+                thisCandleChart.ReCalc_VisibleCandlesExtremums();
         }
 
         private static object CoerceVisibleCandlesRange(DependencyObject objWithOldDP, object baseValue)
         {
-            // Если произошли изменения CandleWidth или GapBetweenCandles, то возвращает true. Иначе - false.
             CandleChart thisCandleChart = (CandleChart)objWithOldDP; // Содержит старое значение для изменяемого свойства.
             IntRange newValue = (IntRange)baseValue;
 
@@ -1507,7 +1560,7 @@ namespace FancyCandles
         }
 
         // Пересчитывает VisibleCandlesRange.Count таким образом, чтобы по возможности сохранить индекс последней видимой свечи 
-        // и соответствовать текущим значениям CandleWidth и GapBetweenCandles.
+        // и соответствовать текущим значениям CandleWidth и CandleGap.
         void ReCalc_VisibleCandlesRange()
         {
             if (priceChartContainer.ActualWidth == 0 || CandlesSource == null)
@@ -1516,7 +1569,7 @@ namespace FancyCandles
                 return;
             }
 
-            int newCount = (int)(priceChartContainer.ActualWidth / (CandleWidth + GapBetweenCandles));
+            int newCount = (int)(priceChartContainer.ActualWidth / (CandleWidth + CandleGap));
             if (newCount > CandlesSource.Count) newCount = CandlesSource.Count;
             int new_start_i = IntRange.IsUndefined(VisibleCandlesRange) ? (CandlesSource.Count - newCount) : VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - newCount;
             if (new_start_i < 0) new_start_i = 0;
@@ -1593,35 +1646,8 @@ namespace FancyCandles
                 i1 = CandlesSource.FindCandleByDatetime(upperBound);
 
             int newVisibleCandlesCount = i1 - i0 + 1;
-            ReCalc_CandleWidthAndGapBetweenCandles(newVisibleCandlesCount);
+            ReCalc_CandleWidthAndGap(newVisibleCandlesCount);
             VisibleCandlesRange = new IntRange(i0, newVisibleCandlesCount);
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        bool ReCalc_CandleWidthAndGapBetweenCandles(int new_VisibleCandlesCount)
-        {
-            if (new_VisibleCandlesCount <= 0) return false;
-
-            double new_ActualWidth = priceChartContainer.ActualWidth;
-            if (new_ActualWidth == 0)
-            {
-                CandleWidth = 0;
-                GapBetweenCandles = 0;
-                return false;
-            }
-
-            while (new_VisibleCandlesCount * (CandleWidth + 1.0) + 1.0 > new_ActualWidth)
-            {
-                if (Math.Round(CandleWidth) < 3.0)
-                    return false;
-                else
-                    CandleWidth -= 2.0;
-            }
-
-            while (new_VisibleCandlesCount * (CandleWidth + 3.0) + 1.0 < new_ActualWidth)
-                CandleWidth += 2.0;
-
-            GapBetweenCandles = (new_ActualWidth - new_VisibleCandlesCount * CandleWidth - 1.0) / new_VisibleCandlesCount;
-            return true;
         }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the modifier key that in conjunction with mouse wheel rolling will cause a change of the visible candles range width.</summary>
@@ -1666,13 +1692,13 @@ namespace FancyCandles
         //--------
         private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            // Пересчитывает VisibleCandlesRange.Start_i, CandleWidth и GapBetweenCandles таким образом, 
+            // Пересчитывает VisibleCandlesRange.Start_i, CandleWidth и CandleGap таким образом, 
             // чтобы установить заданное значение для VisibleCandlesRange.Count и по возможности сохраняет индекс последней видимой свечи. 
             void SetVisibleCandlesRangeCount(int newCount)
             {
                 if (newCount > CandlesSource.Count) newCount = CandlesSource.Count;
                 if (newCount == VisibleCandlesRange.Count) return;
-                if (!ReCalc_CandleWidthAndGapBetweenCandles(newCount)) return; // Если график уже нельзя больше сжимать.
+                if (!ReCalc_CandleWidthAndGap(newCount)) return; // Если график уже нельзя больше сжимать.
 
                 int new_start_i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - newCount;
                 if (new_start_i < 0) new_start_i = 0;

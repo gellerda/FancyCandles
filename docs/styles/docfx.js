@@ -568,13 +568,14 @@ $(function () {
 
   //Setup Affix
   function renderAffix() {
+	  
     var hierarchy = getHierarchy();
     if (hierarchy && hierarchy.length > 0) {
-      var html = '<h5 class="title">In This Article</h5>'
-      html += util.formList(hierarchy, ['nav', 'bs-docs-sidenav']);
+      //var html = '<h5 class="title">In This Article</h5>'
+      var html = util.formList(hierarchy, ['nav', 'bs-docs-sidenav']);
       $("#affix").empty().append(html);
       if ($('footer').is(':visible')) {
-        $(".sideaffix").css("bottom", "70px");
+        $(".sideaffix").css("bottom", "0px");
       }
       $('#affix a').click(function(e) {
         var scrollspy = $('[data-spy="scroll"]').data()['bs.scrollspy'];

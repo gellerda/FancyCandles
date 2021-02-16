@@ -25,6 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\FancyCandles.xml</DocumentationFile>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -55,13 +56,12 @@
     <Compile Include="ICandleExtensionMethods.cs" />
     <Compile Include="MyDateAndTime.cs" />
     <Compile Include="MyWpfMath.cs" />
+    <Compile Include="PriceChartElement.cs" />
     <Compile Include="PriceTicksElement.cs" />
     <Compile Include="TimeTick.cs" />
     <Compile Include="TimeTicksElement.cs" />
+    <Compile Include="VolumeChartElement.cs" />
     <Compile Include="VolumeTicksElement.cs" />
-    <Compile Include="WholeContainerCandle.cs" />
-    <Compile Include="WholeContainerCandleElement.cs" />
-    <Compile Include="WholeContainerHistogramBarElement.cs" />
     <Page Include="CandleChart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
