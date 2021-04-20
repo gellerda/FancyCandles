@@ -65,6 +65,7 @@
     <Compile Include="Converters.cs" />
     <Compile Include="DateTimeMilestones.cs" />
     <Compile Include="ICandleExtensionMethods.cs" />
+    <Compile Include="Indicators\ExponentialMovingAverage.cs" />
     <Compile Include="Indicators\SimpleMovingAverage.cs" />
     <Compile Include="MyAttributes.cs" />
     <Compile Include="MyDateAndTime.cs" />
