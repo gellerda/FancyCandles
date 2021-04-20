@@ -6,3 +6,5 @@
   href: creating_candlestick_chart.md
 - name: Populating candlestick chart with candles
   href: populating_candlestick_chart.md
+- name: Creating add-in overlay indicator
+  href: creating_overlay_indicator.md

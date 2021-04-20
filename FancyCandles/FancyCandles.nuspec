@@ -2,17 +2,27 @@
 <package >
   <metadata>
     <id>FancyCandles</id>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
     <title>FancyCandles for WPF</title>
     <authors>Dennis Geller</authors>
     <owners>Dennis Geller</owners>
     <license type="expression">GPL-3.0-only</license>
     <projectUrl>https://github.com/gellerda/FancyCandles</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/gellerda/FancyCandles/master/FancyCandles/icon.png</iconUrl>
+	<icon>images\icon.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>A candlestick chart control for WPF.</description>
-    <releaseNotes>November 18, 2019. FancyCandles for WPF.</releaseNotes>
+    <releaseNotes>v.2.0.0.
+-Add overlay technical indicators. 
+-Make it possible for users to create their own add-in overlay indicators.
+-Add chart settings window you can access via context menu.
+-Add Save and Load chart settings feature.</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags>candlestick price chart candle OHLC WPF control</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="12.0.3"/>
+    </dependencies>
   </metadata>
+  <files>
+	<file src="icon.png" target="images\"/>
+  </files>
 </package>

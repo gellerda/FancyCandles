@@ -1,0 +1,522 @@
+﻿<!-- 
+    Copyright 2019 Dennis Geller.
+
+    This file is part of FancyCandles.
+
+    FancyCandles is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    FancyCandles is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with FancyCandles.  If not, see <https://www.gnu.org/licenses/>. -->
+
+<Window x:Class="FancyCandles.CandleChartPropertiesWindow"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FancyCandles"
+        xmlns:localIndicators="clr-namespace:FancyCandles.Indicators"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:fp="clr-namespace:FancyPrimitives;assembly=FancyPrimitives"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        Title="Chart Properties" Height="490" Width="590"
+        WindowStartupLocation="CenterOwner"
+        x:Name="thisWindow">
+    
+    <Window.Resources>
+        <fp:SymColorBrushStringConverter x:Key="symColorBrushStringConverter"/>
+        <fp:SymStringToNumberConverter x:Key="symStringToNumberConverter"/>
+        <local:HorizontalMarginToMarginsConverter x:Key="horizontalMarginToMarginsConverter"/>
+        <local:VerticalMarginToMarginsConverter x:Key="verticalMarginToMarginsConverter"/>
+        <local:TypeToStaticNamePropertyConverter x:Key="typeToStaticNamePropertyConverter"/>
+        <fp:StringFormatConverter x:Key="stringFormatConverter" StringFormat="{}{0} properties"/>
+
+        <Style x:Key="textblockHelpTTTitle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="horizontalCaption" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0 0 5 3"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+        </Style>
+        
+        <Style x:Key="consequentHorizontalCaption" TargetType="TextBlock">
+            <Setter Property="Margin" Value="20 0 5 3"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+        </Style>
+
+        <Style x:Key="listCaption" TargetType="Label">
+            <Setter Property="FontStyle" Value="Italic"/>
+            <Setter Property="Margin" Value="5 8 0 3"/>
+            <Setter Property="Padding" Value="0 0 0 0"/>
+        </Style>
+        
+        <Style x:Key="settingsItem" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="FrameworkElement.HorizontalAlignment" Value="Left"/>
+            <Setter Property="FrameworkElement.Margin" Value="0 8 0 0"/>
+            <Setter Property="ToolTipService.InitialShowDelay" Value="0"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="7000"/>
+        </Style>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Control.BorderBrush" Value="Gray"/>
+            <Setter Property="Control.BorderThickness" Value="1"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="5 2 5 2"/>
+            <Setter Property="Margin" Value="0 5 0 0"/>
+            <Setter Property="HeaderTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontStyle="Italic"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style TargetType="TabItem">
+            <Setter Property="HeaderTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontWeight="Medium"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    
+    <Grid Background="#FFF0F0F0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <TabControl Grid.Row="0">
+            
+            <!-- General Tab -->
+            <TabItem Header="General" VerticalContentAlignment="Top">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="0" VerticalAlignment="Top" Margin="5 10 0 0">
+                        <StackPanel Style="{StaticResource settingsItem}" ToolTip="Horizontal time scale below the chart, that shows time.">
+                            <TextBlock Style="{StaticResource horizontalCaption}">Time scale font size:</TextBlock>
+                            <fp:EditableDoubleComboBox MinValue="0" VerticalAlignment="Bottom"
+                                                       Text="{Binding TimeTickFontSize, Converter={StaticResource symStringToNumberConverter}, Mode=TwoWay}">
+                                    <ComboBoxItem Content="8"/>
+                                    <ComboBoxItem Content="9"/>
+                                    <ComboBoxItem Content="10"/>
+                                    <ComboBoxItem Content="11"/>
+                                    <ComboBoxItem Content="12"/>
+                                    <ComboBoxItem Content="13"/>
+                                    <ComboBoxItem Content="14"/>
+                                    <ComboBoxItem Content="15"/>
+                                    <ComboBoxItem Content="16"/>
+                                    <ComboBoxItem Content="17"/>
+                                    <ComboBoxItem Content="18"/>
+                            </fp:EditableDoubleComboBox>
+                        </StackPanel>
+
+                        <StackPanel Style="{StaticResource settingsItem}" ToolTip="Vertical scale on the right of the chart, that shows price, volume and other indicator values.">
+                            <TextBlock Style="{StaticResource horizontalCaption}">Price scale font size:</TextBlock>
+                            <fp:EditableDoubleComboBox MinValue="0" IsSynchronizedWithCurrentItem="False" VerticalAlignment="Bottom"
+                                                       Text="{Binding PriceTickFontSize, Converter={StaticResource symStringToNumberConverter}, Mode=TwoWay}">
+                                <ComboBoxItem Content="8"/>
+                                <ComboBoxItem Content="9"/>
+                                <ComboBoxItem Content="10"/>
+                                <ComboBoxItem Content="11"/>
+                                <ComboBoxItem Content="12"/>
+                                <ComboBoxItem Content="13"/>
+                                <ComboBoxItem Content="14"/>
+                                <ComboBoxItem Content="15"/>
+                                <ComboBoxItem Content="16"/>
+                                <ComboBoxItem Content="17"/>
+                                <ComboBoxItem Content="18"/>
+                            </fp:EditableDoubleComboBox>
+                        </StackPanel>
+
+                        <StackPanel Style="{StaticResource settingsItem}" ToolTip="Background of the chart area only, not of the time and price scales.">
+                            <TextBlock Style="{StaticResource horizontalCaption}">Chart area background:</TextBlock>
+                            <fp:StandardColorPicker SelectedColor="{Binding ChartAreaBackground, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                        </StackPanel>
+
+                        <StackPanel Style="{StaticResource settingsItem}" ToolTip="While loading data the whole chart is covered by a semitransparent plain-coloured layer.">
+                            <TextBlock Style="{StaticResource horizontalCaption}">Color in disabled mode:</TextBlock>
+                            <fp:StandardColorPickerWithAChannel SelectedColor="{Binding DisabledFill, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                        </StackPanel>
+
+                        <GroupBox Header="Scrollbar">
+                            <StackPanel>
+                                <StackPanel Style="{StaticResource settingsItem}" ToolTip="The Color of the horizontal scrollbar at the bottom of the chart.">
+                                    <TextBlock Style="{StaticResource horizontalCaption}">Color:</TextBlock>
+                                    <fp:StandardColorPicker SelectedColor="{Binding ScrollBarBackground, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource settingsItem}" ToolTip="The Height of the horizontal scrollbar at the bottom of the chart.">
+                                    <TextBlock Style="{StaticResource horizontalCaption}">Height:</TextBlock>
+                                    <fp:DoubleTextBox Text="{Binding ScrollBarHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                    
+                        <GroupBox Header="Gridlines">
+                            <StackPanel>
+                                <StackPanel Style="{StaticResource settingsItem}" ToolTip="Enable horizontal gridlines.">
+                                    <TextBlock Style="{StaticResource horizontalCaption}">Horizontal:</TextBlock>
+                                    <CheckBox IsChecked="{Binding IsHorizontalGridlinesEnabled, Mode=TwoWay}"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource settingsItem}" ToolTip="Enable vertical gridlines.">
+                                    <TextBlock Style="{StaticResource horizontalCaption}">Vertical:</TextBlock>
+                                    <CheckBox IsChecked="{Binding IsVerticalGridlinesEnabled, Mode=TwoWay}"/>
+                                </StackPanel>
+                            
+                                <StackPanel Style="{StaticResource settingsItem}" ToolTip="Hide minor vertical gridlines.">
+                                    <TextBlock Style="{StaticResource horizontalCaption}">Hide minor vertical:</TextBlock>
+                                    <CheckBox IsChecked="{Binding HideMinorVerticalGridlines, Mode=TwoWay}"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource settingsItem}" ToolTip="The appearance of the horizontal gridlines.">
+                                    <TextBlock Style="{StaticResource horizontalCaption}">Horizontal lines:</TextBlock>
+                                    <fp:PenSelector SelectedPen="{Binding HorizontalGridlinesPen, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource settingsItem}" ToolTip="The appearance of the vertical gridlines.">
+                                    <TextBlock Style="{StaticResource horizontalCaption}">Vertical lines:</TextBlock>
+                                    <fp:PenSelector SelectedPen="{Binding VerticalGridlinesPen, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+
+                    <!-- Vertical separation line -->
+                    <Line Grid.Column="1" Margin="0 10 0 10"
+                          X1="0" X2="0" Y1="0" 
+                          Y2="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Grid}}, Path=ActualHeight}" 
+                          StrokeThickness="1" Stroke="LightSteelBlue"/>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="5 10 0 0">
+                        <GroupBox Header="Cross">
+                            <StackPanel>
+                                <StackPanel Style="{StaticResource settingsItem}" ToolTip="Show cross lines.">
+                                    <TextBlock Style="{StaticResource horizontalCaption}">Cross lines:</TextBlock>
+                                    <CheckBox IsChecked="{Binding IsCrossLinesVisible, Mode=TwoWay}"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource settingsItem}" ToolTip="Background of the chart area only, not of the time and price scales.">
+                                    <TextBlock Style="{StaticResource horizontalCaption}">Cross lines color:</TextBlock>
+                                    <fp:StandardColorPickerWithAChannel SelectedColor="{Binding CrossLinesBrush, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                                </StackPanel>
+                                
+                                <StackPanel Style="{StaticResource settingsItem}" ToolTip="Show cross price or cross volume on the vertical scale.">
+                                    <TextBlock Style="{StaticResource horizontalCaption}">Cross price:</TextBlock>
+                                    <CheckBox IsChecked="{Binding IsCrossPriceVisible, Mode=TwoWay}"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource settingsItem}">
+                                    <TextBlock Style="{StaticResource horizontalCaption}">Cross price color:</TextBlock>
+                                    <fp:StandardColorPicker SelectedColor="{Binding CrossPriceForeground, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource settingsItem}">
+                                    <TextBlock Style="{StaticResource horizontalCaption}">Cross price background:</TextBlock>
+                                    <fp:StandardColorPicker SelectedColor="{Binding CrossPriceBackground, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                    
+                </Grid>
+            </TabItem>
+
+            <!-- Legend Tab -->
+            <TabItem Header="Legend" VerticalContentAlignment="Top">
+                <StackPanel VerticalAlignment="Top" Margin="5 10 0 0">
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Legend:</TextBlock>
+                        <TextBox Text="{Binding LegendText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
+                    </StackPanel>
+
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Font weight:</TextBlock>
+                        <ComboBox VerticalAlignment="Bottom"
+                                  SelectedValue="{Binding LegendFontWeight, Mode=TwoWay}">
+                            <FontWeight>Light</FontWeight>
+                            <FontWeight>Normal</FontWeight>
+                            <FontWeight>Bold</FontWeight>
+                            <FontWeight>ExtraBold</FontWeight>
+                        </ComboBox>
+                    </StackPanel>
+                    
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Font size:</TextBlock>
+                        <fp:EditableDoubleComboBox MinValue="0" VerticalAlignment="Bottom"
+                                                   Text="{Binding LegendFontSize, Converter={StaticResource symStringToNumberConverter}, Mode=TwoWay}">
+                            <ComboBoxItem Content="10"/>
+                            <ComboBoxItem Content="12"/>
+                            <ComboBoxItem Content="14"/>
+                            <ComboBoxItem Content="16"/>
+                            <ComboBoxItem Content="18"/>
+                            <ComboBoxItem Content="20"/>
+                            <ComboBoxItem Content="22"/>
+                            <ComboBoxItem Content="24"/>
+                            <ComboBoxItem Content="26"/>
+                            <ComboBoxItem Content="28"/>
+                            <ComboBoxItem Content="30"/>
+                            <ComboBoxItem Content="32"/>
+                            <ComboBoxItem Content="34"/>
+                        </fp:EditableDoubleComboBox>
+                    </StackPanel>
+
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Legend color:</TextBlock>
+                        <fp:StandardColorPickerWithAChannel SelectedColor="{Binding LegendForeground, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                    </StackPanel>
+                    
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Horizontal alignment:</TextBlock>
+                        <ComboBox x:Name="comboLegendHorizAlignment"
+                                  VerticalAlignment="Bottom"
+                                  SelectedValue="{Binding LegendHorizontalAlignment, Mode=TwoWay}">
+                            <HorizontalAlignment>Left</HorizontalAlignment>
+                            <HorizontalAlignment>Right</HorizontalAlignment>
+                            <HorizontalAlignment>Center</HorizontalAlignment>
+                        </ComboBox>
+
+                        <TextBlock Style="{StaticResource consequentHorizontalCaption}">Indent from left or right:</TextBlock>
+                        <fp:IntegerTextBox x:Name="txtBoxLegendHorizMargin" MinValue="0" Width="30">
+                            <fp:IntegerTextBox.Text>
+                                <MultiBinding Converter="{StaticResource horizontalMarginToMarginsConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding Path="LegendMargin" Mode="TwoWay"/>
+                                    <Binding Path="LegendHorizontalAlignment" Mode="OneWay"/>
+                                </MultiBinding>
+                            </fp:IntegerTextBox.Text>
+                        </fp:IntegerTextBox>
+                        <fp:UpDownButtonBlock Height="{Binding ElementName=txtBoxLegendHorizMargin, Path=ActualHeight}" Width="20"
+                                         UpButtonPressedCommand="{Binding ElementName=txtBoxLegendHorizMargin, Path=IncrementValueCommand}"
+                                         DownButtonPressedCommand="{Binding ElementName=txtBoxLegendHorizMargin, Path=DecrementValueCommand}"/>
+                    </StackPanel>
+
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Vertical alignment:</TextBlock>
+                        <ComboBox VerticalAlignment="Bottom"
+                                  SelectedValue="{Binding LegendVerticalAlignment, Mode=TwoWay}">
+                            <VerticalAlignment>Top</VerticalAlignment>
+                            <VerticalAlignment>Bottom</VerticalAlignment>
+                            <VerticalAlignment>Center</VerticalAlignment>
+                        </ComboBox>
+
+                        <TextBlock Style="{StaticResource consequentHorizontalCaption}">Indent from top or bottom:</TextBlock>
+                        <fp:IntegerTextBox x:Name="txtBoxLegendVertMargin" MinValue="0" Width="30">
+                            <fp:IntegerTextBox.Text>
+                                <MultiBinding Converter="{StaticResource verticalMarginToMarginsConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding Path="LegendMargin" Mode="TwoWay"/>
+                                    <Binding Path="LegendHorizontalAlignment" Mode="OneWay"/>
+                                </MultiBinding>
+                            </fp:IntegerTextBox.Text>
+                        </fp:IntegerTextBox>
+                        <fp:UpDownButtonBlock Height="{Binding ElementName=txtBoxLegendVertMargin, Path=ActualHeight}" Width="20"
+                                         UpButtonPressedCommand="{Binding ElementName=txtBoxLegendVertMargin, Path=IncrementValueCommand}"
+                                         DownButtonPressedCommand="{Binding ElementName=txtBoxLegendVertMargin, Path=DecrementValueCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+            <!-- Overlay Indicators Tab -->
+            <TabItem Header="Overlay Indicators" VerticalContentAlignment="Top">
+                <Grid Margin="5 10 5 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="7*" />
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Idicator to add:" Grid.Column="0" Grid.Row="0" Style="{StaticResource listCaption}"/>
+                    <ListBox x:Name="listOverlayIndicatorTypes" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2"
+                                ItemsSource="{Binding ElementName=thisWindow, Path=OverlayIndicatorTypes}" 
+                                SelectedIndex="0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=., Converter={StaticResource typeToStaticNamePropertyConverter}, Mode=OneWay}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Button Grid.Column="1" Grid.Row="1" 
+                            ToolTip="Add an indicator of the selected type to the price chart"
+                            VerticalAlignment="Center" Margin="7 0 7 0"
+                            Command="{Binding AddOverlayIndicatorCommand}" 
+                            CommandParameter="{Binding ElementName=listOverlayIndicatorTypes, Path=SelectedValue}">
+                            <TextBlock TextAlignment="Center" Margin="10 0 10 0">>>><LineBreak/>Add</TextBlock>
+                    </Button>
+
+
+                    <Label Content="Idicators on the price chart:" Grid.Column="2" Grid.Row="0" Style="{StaticResource listCaption}"/>
+                    <ListBox x:Name="listOverlayIndicators" Grid.Column="2" Grid.Row="1"
+                                ItemsSource="{Binding OverlayIndicators}"
+                                SelectionChanged="ListOverlayIndicators_SelectionChanged"
+                                SizeChanged="ListOverlayIndicators_SizeChanged" VerticalAlignment="Top">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=FullName, Mode=OneWay}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <StackPanel Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" Margin="3 0 0 0">
+                        <fp:UpDownButtonBlock Width="{Binding ElementName=buttonDelOverlayIndicator, Path=ActualWidth}" Height="30" 
+                                              ToolTip="Reorder indicators"
+                                              Margin="0 0 0 3"
+                                              UpButtonPressedCommand="{Binding MoveOverlayIndicatorLeftCommand}" 
+                                              UpButtonPressedCommandParameter="{Binding ElementName=listOverlayIndicators, Path=SelectedIndex}"
+                                              DownButtonPressedCommand="{Binding MoveOverlayIndicatorRightCommand}" 
+                                              DownButtonPressedCommandParameter="{Binding ElementName=listOverlayIndicators, Path=SelectedIndex}"/>
+                        
+                        <Button x:Name="buttonDelOverlayIndicator" Command="{Binding RemoveOverlayIndicatorCommand}" 
+                                ToolTip="Remove selected indicator from price chart"
+                                CommandParameter="{Binding ElementName=listOverlayIndicators, Path=SelectedIndex}" 
+                                Content="Del"/>
+                    </StackPanel>
+
+                    <GroupBox Header="{Binding ElementName=listOverlayIndicators, Path=SelectedItem.ShortName, Converter={StaticResource stringFormatConverter}}" 
+                              Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
+                        <Grid x:Name="overlayIndicatorEditor" Margin="0 0 0 3">
+                            <!-- This is a fix for using namespace i -->
+                            <i:Interaction.Triggers >
+                                <i:EventTrigger x:Name="fix_for_i_namespace">
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Grid>
+                    </GroupBox>
+
+                </Grid>
+            </TabItem>
+
+            <!-- Price Chart Tab -->
+            <TabItem Header="Price Chart" VerticalContentAlignment="Top">
+                <StackPanel VerticalAlignment="Top" Margin="5 10 0 0">
+                    <StackPanel Style="{StaticResource settingsItem}" ToolTip="The gap between the highest point of the visible candles and the top border of the price chart panel.">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Indent from top:</TextBlock>
+                        <fp:IntegerTextBox x:Name="txtBoxPriceChartTopMargin" 
+                                      MinValue="0" Width="30"
+                                      Text="{Binding PriceChartTopMargin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <fp:UpDownButtonBlock Height="{Binding ElementName=txtBoxPriceChartTopMargin, Path=ActualHeight}" Width="20"
+                                         UpButtonPressedCommand="{Binding ElementName=txtBoxPriceChartTopMargin, Path=IncrementValueCommand}"
+                                         DownButtonPressedCommand="{Binding ElementName=txtBoxPriceChartTopMargin, Path=DecrementValueCommand}"/>
+                    </StackPanel>
+
+                    <StackPanel Style="{StaticResource settingsItem}" ToolTip="The gap between the lowest point of the visible candles and the bottom border of the price chart panel.">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Indent from bottom:</TextBlock>
+                        <fp:IntegerTextBox x:Name="txtBoxPriceChartBottomMargin" 
+                                      MinValue="0" Width="30"
+                                      Text="{Binding PriceChartBottomMargin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <fp:UpDownButtonBlock Height="{Binding ElementName=txtBoxPriceChartBottomMargin, Path=ActualHeight}" Width="20"
+                                         UpButtonPressedCommand="{Binding ElementName=txtBoxPriceChartBottomMargin, Path=IncrementValueCommand}"
+                                         DownButtonPressedCommand="{Binding ElementName=txtBoxPriceChartBottomMargin, Path=DecrementValueCommand}"/>
+                    </StackPanel>
+                    
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Bullish candle fill:</TextBlock>
+                        <fp:StandardColorPicker SelectedColor="{Binding BullishCandleFill, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                    </StackPanel>
+                    
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Bullish candle outline:</TextBlock>
+                        <fp:StandardColorPicker SelectedColor="{Binding BullishCandleStroke, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                    </StackPanel>
+
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Bearish candle fill:</TextBlock>
+                        <fp:StandardColorPicker SelectedColor="{Binding BearishCandleFill, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                    </StackPanel>
+
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Bearish candle outline:</TextBlock>
+                        <fp:StandardColorPicker SelectedColor="{Binding BearishCandleStroke, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            
+            <!-- Volume Histogram Tab -->
+            <TabItem Header="Volume Histogram" VerticalContentAlignment="Top">
+                <StackPanel VerticalAlignment="Top" Margin="5 10 0 0">
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Volume histogram:</TextBlock>
+                        <CheckBox x:Name="checkBoxIsVolumePanelVisible" IsChecked="{Binding IsVolumePanelVisible, Mode=TwoWay}"/>
+                    </StackPanel>
+                    
+                    <StackPanel Style="{StaticResource settingsItem}" ToolTip="The gap between the highest point of the visible bars and the top border of the volume histogram panel.">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Indent from top:</TextBlock>
+                        <fp:IntegerTextBox x:Name="txtBoxVolumeHistogramTopMargin" 
+                                           MinValue="0" Width="30"
+                                           Text="{Binding VolumeHistogramTopMargin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                           IsEnabled="{Binding ElementName=checkBoxIsVolumePanelVisible, Path=IsChecked}"/>
+                        <fp:UpDownButtonBlock Height="{Binding ElementName=txtBoxVolumeHistogramTopMargin, Path=ActualHeight}" Width="20"
+                                              UpButtonPressedCommand="{Binding ElementName=txtBoxVolumeHistogramTopMargin, Path=IncrementValueCommand}"
+                                              DownButtonPressedCommand="{Binding ElementName=txtBoxVolumeHistogramTopMargin, Path=DecrementValueCommand}"
+                                              IsEnabled="{Binding ElementName=checkBoxIsVolumePanelVisible, Path=IsChecked}"/>
+                    </StackPanel>
+
+                    <StackPanel Style="{StaticResource settingsItem}" ToolTip="The gap between the lowest point of the visible bars and the bottom border of the volume histogram panel.">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Indent from bottom:</TextBlock>
+                        <fp:IntegerTextBox x:Name="txtBoxVolumeHistogramBottomMargin" 
+                                           MinValue="0" Width="30"
+                                           Text="{Binding VolumeHistogramBottomMargin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                           IsEnabled="{Binding ElementName=checkBoxIsVolumePanelVisible, Path=IsChecked}"/>
+                        <fp:UpDownButtonBlock Height="{Binding ElementName=txtBoxVolumeHistogramBottomMargin, Path=ActualHeight}" Width="20"
+                                              UpButtonPressedCommand="{Binding ElementName=txtBoxVolumeHistogramBottomMargin, Path=IncrementValueCommand}"
+                                              DownButtonPressedCommand="{Binding ElementName=txtBoxVolumeHistogramBottomMargin, Path=DecrementValueCommand}"
+                                              IsEnabled="{Binding ElementName=checkBoxIsVolumePanelVisible, Path=IsChecked}"/>
+                    </StackPanel>
+                    
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Bullish volume bar fill:</TextBlock>
+                        <fp:StandardColorPicker SelectedColor="{Binding BullishVolumeBarFill, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"
+                                                IsEnabled="{Binding ElementName=checkBoxIsVolumePanelVisible, Path=IsChecked}"/>
+                    </StackPanel>
+                    
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Bearish volume bar fill:</TextBlock>
+                        <fp:StandardColorPicker SelectedColor="{Binding BearishVolumeBarFill, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"
+                                                IsEnabled="{Binding ElementName=checkBoxIsVolumePanelVisible, Path=IsChecked}"/>
+                    </StackPanel>
+
+                    <StackPanel Style="{StaticResource settingsItem}">
+                        <TextBlock Style="{StaticResource horizontalCaption}">Volume bar width:</TextBlock>
+                        <Slider Value="{Binding VolumeBarWidthToCandleWidthRatio, Mode=TwoWay}" 
+                                VerticalAlignment="Bottom" Width="70" Minimum="0" Maximum="1.0"
+                                IsEnabled="{Binding ElementName=checkBoxIsVolumePanelVisible, Path=IsChecked}"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+        </TabControl>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0 5 10 5" HorizontalAlignment="Right">
+            <Button x:Name="buttonOk" Width="80" Margin="0 0 10 0" HorizontalAlignment="Right" Click="OkButton_Click" Padding="15 3">Ok</Button>
+            <Button x:Name="buttonCancel" Width="80" HorizontalAlignment="Right" IsCancel="True" Click="CancelButton_Click" Padding="15 3">Cancel</Button>
+        </StackPanel>
+    </Grid>
+    
+</Window>

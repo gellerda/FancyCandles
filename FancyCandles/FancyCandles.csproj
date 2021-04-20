@@ -36,8 +36,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\FancyCandleChartDemo\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\FancyCandleChartDemo\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\FancyCandleChartDemo\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -52,11 +62,18 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters.cs" />
     <Compile Include="DateTimeMilestones.cs" />
     <Compile Include="ICandleExtensionMethods.cs" />
+    <Compile Include="Indicators\SimpleMovingAverage.cs" />
+    <Compile Include="MyAttributes.cs" />
     <Compile Include="MyDateAndTime.cs" />
     <Compile Include="MyWpfMath.cs" />
     <Compile Include="PriceChartElement.cs" />
+    <Compile Include="Indicators\OverlayIndicator.cs" />
+    <Compile Include="CandleChartPropertiesWindow.xaml.cs">
+      <DependentUpon>CandleChartPropertiesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PriceTicksElement.cs" />
     <Compile Include="TimeTick.cs" />
     <Compile Include="TimeTicksElement.cs" />
@@ -69,9 +86,12 @@
     <Compile Include="CandleChart.xaml.cs">
       <DependentUpon>CandleChart.xaml</DependentUpon>
     </Compile>
+    <Page Include="CandleChartPropertiesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CandleChartConverters.cs" />
     <Compile Include="ICandle.cs" />
     <Compile Include="IntRange.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -90,11 +110,20 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\FancyPrimitives\FancyPrimitives.csproj">
+      <Project>{cefe18e3-e073-4cc7-8cb9-c277c8d5b76f}</Project>
+      <Name>FancyPrimitives</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

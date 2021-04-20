@@ -36,7 +36,7 @@
         <local:CrossVolumeConverter x:Key="crossVolumeConverter"/>
 
         <local:IntRange_Start_i_Converter x:Key="intRange_Start_i_Converter"/>
-        <local:IntRange_Count_Converter x:Key="intRange_Count_Converter"/>
+        <local:IntRangeCountToNoNegativeConverter x:Key="intRangeCountToNoNegativeConverter"/>
 
         <local:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
         <local:NotBoolToVisibilityConverter x:Key="notBoolToVisibilityConverter"/>
@@ -45,7 +45,6 @@
         <local:IntRangeToPointConverter x:Key="intRangeToPointConverter"/>
         <local:CandleExtremumsToPriceExtremumsPointConverter x:Key="candleExtremumsToPriceExtremumsPointConverter"/>
         <local:CandleDrawingParametersToPointConverter x:Key="candleDrawingParametersToPointConverter"/>
-        <local:BrushToColorConverter x:Key="brushToColorConverter"/>
         <local:CandleDrawingParametersConverter x:Key="candleDrawingParametersConverter"/>
 
         <Style x:Key="rowSpanPriceChartIfVolumeDisabled">
@@ -57,7 +56,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Background="{Binding Path=Background, Mode=OneWay}">
+    <Grid DataContext="{Binding ElementName=thisUserControl, Path=.}" Background="{Binding Path=Background, Mode=OneWay}">
         <Grid.RowDefinitions>
             <RowDefinition Height="4*"/>
             <RowDefinition Height="Auto"/>
@@ -86,10 +85,19 @@
               SizeChanged="OnPanelCandlesContainerSizeChanged" MouseWheel="OnMouseWheel" MouseMove="OnMouseMoveInsidePriceChartContainer" Panel.ZIndex="2">
 
             <!-- Нужно заполнить весь контейнер прозрачным содержимым, а иначе перекрестие не работает: -->
-            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent"/>
+            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent">
+                <Rectangle.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Settings" Click="OpenCandleChartPropertiesWindow"></MenuItem>
+                        <MenuItem Header="Load Settings" Click="OpenLoadSettingsDialog"></MenuItem>
+                        <MenuItem Header="Save Settings As" Click="OpenSaveSettingsAsDialog"></MenuItem>
+                    </ContextMenu>
+                </Rectangle.ContextMenu>
+            </Rectangle>
 
             <local:PriceChartElement x:Name="priceChart" 
                 CandlesSource="{Binding ElementName=thisUserControl, Path=CandlesSource, Mode=OneWay}"
+                Indicators="{Binding ElementName=thisUserControl, Path=OverlayIndicators,Mode=OneWay}"
                 VisibleCandlesRange="{Binding ElementName=thisUserControl, Path=VisibleCandlesRange, Mode=OneWay}"
                 VisibleCandlesExtremums="{Binding ElementName=thisUserControl, Path=VisibleCandlesExtremums, Mode=OneWay}"
                 BullishCandleFill="{Binding ElementName=thisUserControl, Path=BullishCandleFill, Mode=OneWay}"
@@ -99,6 +107,7 @@
                 ToolTipService.PlacementTarget="{Binding ElementName=priceChartContainer, Path=., Mode=OneWay}"
                 ToolTipService.Placement="Relative"
                 RenderOptions.EdgeMode="Aliased" RenderOptions.BitmapScalingMode="NearestNeighbor">
+
                 <local:PriceChartElement.CandleWidthAndGap>
                     <MultiBinding Converter="{StaticResource candleDrawingParametersConverter}">
                         <Binding ElementName="thisUserControl" Path="CandleWidth" Mode="OneWay"/>
@@ -177,12 +186,21 @@
               Visibility="{Binding Path=IsVolumePanelVisible, Converter={StaticResource boolToVisibilityConverter}}" >
 
             <!-- Нужно заполнить весь контейнер прозрачным содержимым, а иначе перекрестие не работает: -->
-            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent"/>
+            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent">
+                <Rectangle.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Settings" Click="OpenCandleChartPropertiesWindow"></MenuItem>
+                        <MenuItem Header="Load Settings" Click="OpenLoadSettingsDialog"></MenuItem>
+                        <MenuItem Header="Save Settings As" Click="OpenSaveSettingsAsDialog"></MenuItem>
+                    </ContextMenu>
+                </Rectangle.ContextMenu>
+            </Rectangle>
 
             <local:VolumeChartElement 
                 CandlesSource="{Binding ElementName=thisUserControl, Path=CandlesSource, Mode=OneWay}"
                 VisibleCandlesRange="{Binding ElementName=thisUserControl, Path=VisibleCandlesRange, Mode=OneWay}"
                 VisibleCandlesExtremums="{Binding ElementName=thisUserControl, Path=VisibleCandlesExtremums, Mode=OneWay}"
+                VolumeBarWidthToCandleWidthRatio="{Binding ElementName=thisUserControl, Path=VolumeBarWidthToCandleWidthRatio, Mode=OneWay}"
                 BullishBarFill="{Binding ElementName=thisUserControl, Path=BullishVolumeBarFill, Mode=OneWay}"
                 BearishBarFill="{Binding ElementName=thisUserControl, Path=BearishVolumeBarFill, Mode=OneWay}" 
                 ToolTipService.PlacementTarget="{Binding ElementName=volumeHistogramContainer, Path=., Mode=OneWay}"
@@ -196,8 +214,8 @@
                 </local:VolumeChartElement.CandleWidthAndGap>
                 <local:VolumeChartElement.Margin>
                     <MultiBinding Converter="{StaticResource topBottomMarginConverter}">
-                        <Binding ElementName="thisUserControl" Path="PriceChartTopMargin" Mode="OneWay"/>
-                        <Binding ElementName="thisUserControl" Path="PriceChartBottomMargin" Mode="OneWay"/>
+                        <Binding ElementName="thisUserControl" Path="VolumeHistogramTopMargin" Mode="OneWay"/>
+                        <Binding ElementName="thisUserControl" Path="VolumeHistogramBottomMargin" Mode="OneWay"/>
                     </MultiBinding>
                 </local:VolumeChartElement.Margin>
             </local:VolumeChartElement>
@@ -350,7 +368,7 @@
                    Background="{Binding ElementName=thisUserControl, Path=ScrollBarBackground}"
                    Height="{Binding ElementName=thisUserControl, Path=ScrollBarHeight}"
                    Value="{Binding Path=VisibleCandlesRange, Converter={StaticResource intRange_Start_i_Converter}, Mode=TwoWay}"
-                   ViewportSize="{Binding Path=VisibleCandlesRange, Converter={StaticResource intRange_Count_Converter}, Mode=OneWay}">
+                   ViewportSize="{Binding Path=VisibleCandlesRange, Converter={StaticResource intRangeCountToNoNegativeConverter}, Mode=OneWay}">
             <ScrollBar.Maximum>
                 <MultiBinding Converter="{StaticResource firstCandleMaxIndexConverter}">
                     <Binding Path="CandlesSource"/>

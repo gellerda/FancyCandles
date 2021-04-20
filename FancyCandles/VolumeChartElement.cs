@@ -150,16 +150,31 @@ namespace FancyCandles
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
         public static readonly DependencyProperty CandleWidthAndGapProperty
-             = DependencyProperty.Register("CandleWidthAndGap", typeof(CandleDrawingParameters), typeof(VolumeChartElement), new FrameworkPropertyMetadata(new CandleDrawingParameters()));
+             = DependencyProperty.Register("CandleWidthAndGap", typeof(CandleDrawingParameters), typeof(VolumeChartElement),
+                 new FrameworkPropertyMetadata(new CandleDrawingParameters()));
         public CandleDrawingParameters CandleWidthAndGap
         {
             get { return (CandleDrawingParameters)GetValue(CandleWidthAndGapProperty); }
             set { SetValue(CandleWidthAndGapProperty, value); }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
+        public double VolumeBarWidthToCandleWidthRatio
+        {
+            get { return (double)GetValue(VolumeBarWidthToCandleWidthRatioProperty); }
+            set { SetValue(VolumeBarWidthToCandleWidthRatioProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for VolumeBarWidthToCandleWidthRatio.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty VolumeBarWidthToCandleWidthRatioProperty =
+            DependencyProperty.Register("VolumeBarWidthToCandleWidthRatio", typeof(double), typeof(VolumeChartElement), 
+                new FrameworkPropertyMetadata(1.0) { AffectsRender = true });
+        //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnRender(DrawingContext drawingContext)
         {
             //drawingContext.DrawRectangle(Brushes.Aquamarine, transparentPen, new Rect(0, 0, RenderSize.Width, RenderSize.Height));
+            double volumeBarWidth = VolumeBarWidthToCandleWidthRatio * CandleWidthAndGap.Width;
+            double volumeBarGap = (1.0 - VolumeBarWidthToCandleWidthRatio) * CandleWidthAndGap.Width + CandleWidthAndGap.Gap;
+            double halfDWidth = 0.5 * (CandleWidthAndGap.Width - volumeBarWidth);
 
             for (int i = 0; i < VisibleCandlesRange.Count; i++)
             {
@@ -169,12 +184,11 @@ namespace FancyCandles
 
                 double wnd_V = (1.0 - cndl.V / (double)VisibleCandlesExtremums.VolumeHigh) * RenderSize.Height;
 
-                double cndlLeftX = i * (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
-                //double cndlCenterX = cndlLeftX + 0.5 * CandleWidthAndGap.Width;
+                double volumeBarLeftX = halfDWidth + i * (volumeBarWidth + volumeBarGap);
                 if (cndl.V > 0L)
-                    drawingContext.DrawRectangle(cndlBrush, null, new Rect(cndlLeftX, wnd_V, CandleWidthAndGap.Width, RenderSize.Height - wnd_V));
+                    drawingContext.DrawRectangle(cndlBrush, null, new Rect(volumeBarLeftX, wnd_V, volumeBarWidth, RenderSize.Height - wnd_V));
                 else
-                    drawingContext.DrawLine(cndlPen, new Point(cndlLeftX, 0.0), new Point(cndlLeftX + CandleWidthAndGap.Width, 0.0));
+                    drawingContext.DrawLine(cndlPen, new Point(volumeBarLeftX, 0.0), new Point(volumeBarLeftX + volumeBarWidth, 0.0));
             }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------

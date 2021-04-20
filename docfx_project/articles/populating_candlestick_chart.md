@@ -37,10 +37,10 @@ After [the empty instance of the CandleChart control has been created](creating_
       ```cs
           ObservableCollection<ICandle> candles = new ObservableCollection<ICandle>();
       ```
-    - Fill this collection with some data. To do it for this example, we will generate the meaningless set of instances of **class Candle**:
+    - In the constructor of the **MainWindow** class populate this collection with some data. In this example, we will generate a meaningless set of **Candle** instances:
       ```cs
           DateTime t0 = new DateTime(2019, 6, 11, 23, 40, 0);
-          for (int i = 0; i < 100; i++)
+          for (int i = 0; i < 500; i++)
           {
               double p0 = Math.Round(Math.Sin(0.3*i) + 0.1*i, 3);
               double p1 = Math.Round(Math.Sin(0.3*i + 1) + 0.1*i, 3);
@@ -77,7 +77,7 @@ After [the empty instance of the CandleChart control has been created](creating_
 1. In **MainWindow.xaml** of your project, set the [CandlesSource](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource) attribute for the [CandleChart](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html) element:
 
     ```cs
-        <fc:CandleChart CandlesSource="{Binding Path=.}"/>
+        <fc:CandleChart CandlesSource="{Binding Path=.}"  xmlns:fc="clr-namespace:FancyCandles;assembly=FancyCandles"/>
     ```
 
 Finally, a set of candles should appear in your CandleChart control.<br><br>

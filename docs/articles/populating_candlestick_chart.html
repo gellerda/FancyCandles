@@ -8,7 +8,7 @@
     <title>Populating CandleChart with candles </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Populating CandleChart with candles ">
-    <meta name="generator" content="docfx 2.56.6.0">
+    <meta name="generator" content="docfx 2.56.7.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -111,9 +111,9 @@
 <pre><code class="lang-cs">    ObservableCollection&lt;ICandle&gt; candles = new ObservableCollection&lt;ICandle&gt;();
 </code></pre>
 </li>
-<li>Fill this collection with some data. To do it for this example, we will generate the meaningless set of instances of <strong>class Candle</strong>:
+<li>In the constructor of the <strong>MainWindow</strong> class populate this collection with some data. In this example, we will generate a meaningless set of <strong>Candle</strong> instances:
 <pre><code class="lang-cs">    DateTime t0 = new DateTime(2019, 6, 11, 23, 40, 0);
-    for (int i = 0; i &lt; 100; i++)
+    for (int i = 0; i &lt; 500; i++)
     {
         double p0 = Math.Round(Math.Sin(0.3*i) + 0.1*i, 3);
         double p1 = Math.Round(Math.Sin(0.3*i + 1) + 0.1*i, 3);
@@ -150,7 +150,7 @@
 </code></pre>
 </li>
 <li><p>In <strong>MainWindow.xaml</strong> of your project, set the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource">CandlesSource</a> attribute for the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> element:</p>
-<pre><code class="lang-cs">    &lt;fc:CandleChart CandlesSource=&quot;{Binding Path=.}&quot;/&gt;
+<pre><code class="lang-cs">    &lt;fc:CandleChart CandlesSource=&quot;{Binding Path=.}&quot;  xmlns:fc=&quot;clr-namespace:FancyCandles;assembly=FancyCandles&quot;/&gt;
 </code></pre>
 </li>
 </ol>
@@ -163,9 +163,6 @@
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
-                  <li>
-                    <a href="https://github.com/gellerda/FancyCandles/blob/master/docfx_project/articles/populating_candlestick_chart.md/#L1" class="contribution-link">Improve this Doc</a>
-                  </li>
                 </ul>
               </div>
           	

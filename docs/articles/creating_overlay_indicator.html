@@ -1,0 +1,464 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Creating your own overlay technical indicator </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Creating your own overlay technical indicator ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+        
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../fancy_candles_logo_in_circle_85x85.png" alt="">
+              </a>
+              
+              <a id="navbar-header-logo-text" class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../fancy_candles_logo_text.png" alt="">
+              </a>
+            </div>
+        
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+        
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="creating-your-own-overlay-technical-indicator">Creating your own overlay technical indicator</h1>
+
+<p>The <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> control contains a small set of built-in technical indicators to demonstrate such a functionality. Expextedly, you will want to expand the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> control with your own add-in overlay indicators. You have such possibility and in this article we'll walk through a creation of your own overlay indicator.</p>
+<p>Let's create an add-in Exponential Moving Average indicator, which is not included in the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> control assembly.</p>
+<ol>
+<li><p>An add-in overlay indicator class must be derived from the base <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.Indicators.OverlayIndicator.html">OverlayIndicator</a> class. Add your new indicator class to a Startup project of your solution:</p>
+<pre><code class="lang-cs">    using System.Collections.Generic;
+    using System.Windows.Media;
+    using System.Windows;
+    using Newtonsoft.Json;
+    using FancyCandles;
+    using FancyCandles.Indicators;
+
+    [JsonObject(MemberSerialization.OptIn)]
+    public sealed class ExponentialMovingAverage : OverlayIndicator
+    {
+    }
+</code></pre>
+<p><a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> uses the <a href="https://www.newtonsoft.com/json">Json.NET</a> framework for serialization. So make sure to install <a href="https://www.nuget.org/packages/Newtonsoft.Json/">Newtonsoft.Json</a> Nuget package to your project.
+<code>[JsonObject]</code>  is an attribute  necessary for the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> control's serialization system.</p>
+</li>
+<li><p>Implement two abstract base class properties providing an indicator instance name:</p>
+<pre><code class="lang-cs">    public override string ShortName { get { return &quot;Exponential MA&quot;; } }
+    public override string FullName { get { return $&quot;Exponential Moving Average, a={Smoothing}&quot;; } }
+</code></pre>
+<p>, and one static property for the same purpose:</p>
+<pre><code class="lang-cs">    public static string StaticName { get { return &quot;Exponential Moving Average&quot;; } }
+</code></pre>
+<p>The names of the properties is self-explanatory. These properties will be used in UI. Try not to create too long name values.</p>
+</li>
+<li><p>It's not mandatory, but for perfomance we will store precalculated indicator values for all periods of time. For this purpose we'll create a List field:</p>
+<pre><code class="lang-cs">    private List&lt;double&gt; indicatorValues;
+</code></pre>
+<p>To provide a possibility for indicator users to get an indicator value at a specified time period we must implement the abstract <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.Indicators.OverlayIndicator.html#FancyCandles_Indicators_OverlayIndicator_GetIndicatorValue">OverlayIndicator.GetIndicatorValue()</a> method, which will just get a value from the <code>indicatorValues</code> list:</p>
+<pre><code class="lang-cs">    public override double GetIndicatorValue(int candle_i)
+    {
+        if (indicatorValues == null) return 0;
+
+        return indicatorValues[candle_i];
+    }
+</code></pre>
+</li>
+<li><p><code>indicatorValues</code> will always has the same Length as the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.Indicators.OverlayIndicator.html#FancyCandles_Indicators_OverlayIndicator_CandlesSource">OverlayIndicator.CandlesSource</a> collection. Changing the last element of <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.Indicators.OverlayIndicator.html#FancyCandles_Indicators_OverlayIndicator_CandlesSource">OverlayIndicator.CandlesSource</a> will cause recalculation of the last element of <code>indicatorValues</code>. And the same about adding a new element. For realizing such a behaviour the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.Indicators.OverlayIndicator.html">OverlayIndicator</a> class has some abstract methods that we must implement in our <code>ExponentialMovingAverage</code> class:</p>
+<pre><code class="lang-cs">    protected override void ReCalcAllIndicatorValues()
+    {
+        indicatorValues = new List&lt;double&gt;();
+        if (CandlesSource == null) return;
+
+        indicatorValues.Add(CandlesSource[0].C);
+        for (int candle_i = 1; candle_i &lt; CandlesSource.Count; candle_i++)
+            indicatorValues.Add(CalcIndicatorValue(candle_i));
+    }
+
+    protected override void OnLastCandleChanged()
+    {
+        if (CandlesSource.Count &lt; 2) return;
+        indicatorValues[indicatorValues.Count - 1] = CalcIndicatorValue(CandlesSource.Count - 1);
+    }
+
+    protected override void OnNewCandleAdded()
+    {
+        if (CandlesSource.Count &lt; 2) return;
+        indicatorValues.Add(CalcIndicatorValue(CandlesSource.Count - 1));
+    }
+</code></pre>
+<p>All of aforementioned methods calls the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.Indicators.OverlayIndicator.html#FancyCandles_Indicators_OverlayIndicator_CalcIndicatorValue">CalcIndicatorValue()</a> method, which contains the formula for calculating the Exponential Moving Average indicator:</p>
+<pre><code class="lang-cs">    private double CalcIndicatorValue(int candle_i)
+    {
+        double ema = CandlesSource[candle_i].C * Smoothing + GetIndicatorValue(candle_i - 1) * (1 - Smoothing);
+        return ema;
+    }
+</code></pre>
+<p>Besides that, we have to add a class property for every mathematical parameter of a technical indicator. In our case it will be the only <code>Smoothing</code> parameter, which you can see in the above formula:</p>
+<pre><code class="lang-cs">    [JsonProperty]
+    public double Smoothing
+    {
+        get { return smoothing; }
+        set
+        {
+            if (smoothing == value) return;
+            smoothing = value;
+            ReCalcAllIndicatorValues();
+            OnPropertyChanged();
+            OnPropertyChanged(&quot;FullName&quot;);
+        }
+    }
+</code></pre>
+<p>Make sure each of these properties has the <code>[JsonProperty]</code> attribute. It is necessary for the CandleChart serialization system.</p>
+</li>
+<li><p>Add the <code>Pen</code> property so class users could specify a <a href="https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.pen?view=netframework-4.7.2">Pen</a> to draw the indicator chart:</p>
+<pre><code class="lang-cs">    private Pen pen = new Pen(Brushes.Black, 1); //default value is Black solid Pen with Thickness = 1
+
+    [JsonProperty]
+    public Pen Pen
+    {
+        get { return pen; }
+        set
+        {
+            pen = (Pen)value.GetCurrentValueAsFrozen();
+            OnPropertyChanged();
+        }
+    }
+</code></pre>
+<p>Make sure it has the <code>[JsonProperty]</code> attribute.</p>
+</li>
+<li><p>Implement the abstract <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.Indicators.OverlayIndicator.html#FancyCandles_Indicators_OverlayIndicator_OnRender">OnRender()</a> method of the base <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.Indicators.OverlayIndicator.html">OverlayIndicator</a> class:</p>
+<pre><code class="lang-cs">    public override void OnRender(DrawingContext drawingContext, IntRange visibleCandlesRange, CandleExtremums visibleCandlesExtremums,
+                                  double candleWidth, double gapBetweenCandles, double RenderHeight)
+    {
+        if (visibleCandlesRange.Count &lt; 0 || visibleCandlesRange.Start_i &lt; 0) return;
+
+        double candleWidthPlusGap = candleWidth + gapBetweenCandles;
+        double range = visibleCandlesExtremums.PriceHigh - visibleCandlesExtremums.PriceLow;
+        double prevCndlCenterX = 0;
+        double prevLocalIndicatorValue = 0;
+
+        prevCndlCenterX = 0.5 * candleWidth;
+        double prevIndicatorValue = GetIndicatorValue(visibleCandlesRange.Start_i);
+        prevLocalIndicatorValue = (1.0 - (prevIndicatorValue - visibleCandlesExtremums.PriceLow) / range) * RenderHeight;
+
+        for (int cndl_i = 1; cndl_i &lt; visibleCandlesRange.Count; cndl_i++)
+        {
+            double indicatorValue = GetIndicatorValue(visibleCandlesRange.Start_i + cndl_i);
+            double localIndicatorValue = (1.0 - (indicatorValue - visibleCandlesExtremums.PriceLow) / range) * RenderHeight;
+            double cndlCenterX = cndl_i * candleWidthPlusGap + 0.5 * candleWidth;
+
+            drawingContext.DrawLine(Pen, new Point(prevCndlCenterX, prevLocalIndicatorValue), new Point(cndlCenterX, localIndicatorValue));
+
+            prevCndlCenterX = cndlCenterX;
+            prevLocalIndicatorValue = localIndicatorValue;
+        }
+    }
+</code></pre>
+<p>It draws a visible part of the indicator chart and will be called from the <a href="https://docs.microsoft.com/en-us/dotnet/api/system.windows.uielement.onrender?view=netframework-4.7.2">UIElement.OnRender(DrawingContext)</a> method that is responsible for drawing the price chart. It will be called with the same <code>DrawingContext</code>. <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.Indicators.OverlayIndicator.html#FancyCandles_Indicators_OverlayIndicator_OnRender">OnRender()</a> gets as parameters additional information about a drawing area and a visible part of the price chart.</p>
+</li>
+<li><p>And the last abstract property of the base <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.Indicators.OverlayIndicator.html">OverlayIndicator</a> class you need to implement is <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.Indicators.OverlayIndicator.html#FancyCandles_Indicators_OverlayIndicator_PropertiesEditorXAML">PropertiesEditorXAML</a>:</p>
+<pre><code class="lang-cs">    public override string PropertiesEditorXAML
+    {
+        get
+        {
+            string xaml = $@&quot;
+                &lt;StackPanel&gt;
+                    &lt;StackPanel.Resources&gt;
+                        &lt;fp:SymStringToNumberConverter x:Key=&quot;&quot;symStringToNumberConverter&quot;&quot;/&gt;
+
+                        &lt;Style x:Key=&quot;&quot;horizontalCaption_&quot;&quot; TargetType=&quot;&quot;TextBlock&quot;&quot;&gt;
+                            &lt;Setter Property=&quot;&quot;Margin&quot;&quot; Value=&quot;&quot;0 0 5 2&quot;&quot;/&gt;
+                            &lt;Setter Property=&quot;&quot;VerticalAlignment&quot;&quot; Value=&quot;&quot;Bottom&quot;&quot;/&gt;
+                        &lt;/Style&gt;
+
+                        &lt;Style x:Key=&quot;&quot;settingsItem_&quot;&quot; TargetType=&quot;&quot;StackPanel&quot;&quot;&gt;
+                            &lt;Setter Property=&quot;&quot;Orientation&quot;&quot; Value=&quot;&quot;Horizontal&quot;&quot;/&gt;
+                            &lt;Setter Property=&quot;&quot;FrameworkElement.HorizontalAlignment&quot;&quot; Value=&quot;&quot;Left&quot;&quot;/&gt;
+                            &lt;Setter Property=&quot;&quot;FrameworkElement.Margin&quot;&quot; Value=&quot;&quot;0 8 0 0&quot;&quot;/&gt;
+                        &lt;/Style&gt;
+                    &lt;/StackPanel.Resources&gt;
+
+                    &lt;StackPanel Style=&quot;&quot;{{StaticResource settingsItem_}}&quot;&quot;&gt;
+                        &lt;TextBlock Style=&quot;&quot;{{StaticResource horizontalCaption_}}&quot;&quot; ToolTip=&quot;&quot;Smoothing parameter (between 0 and 1 inclusive).&quot;&quot;&gt;a=&lt;/TextBlock&gt;
+                        &lt;fp:DoubleTextBox MinValue=&quot;&quot;0&quot;&quot; MaxValue=&quot;&quot;1&quot;&quot; VerticalAlignment=&quot;&quot;Bottom&quot;&quot; Width=&quot;&quot;50&quot;&quot;
+                                          Text=&quot;&quot;{{Binding Smoothing, Converter={{StaticResource symStringToNumberConverter}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}}&quot;&quot;/&gt;
+                    &lt;/StackPanel&gt;
+
+                    &lt;StackPanel Style=&quot;&quot;{{StaticResource settingsItem_}}&quot;&quot;&gt;
+                        &lt;TextBlock Style=&quot;&quot;{{StaticResource horizontalCaption_}}&quot;&quot;&gt;Line:&lt;/TextBlock&gt;
+                        &lt;fp:PenSelector SelectedPen=&quot;&quot;{{Binding Pen, Mode = TwoWay}}&quot;&quot; VerticalAlignment=&quot;&quot;Bottom&quot;&quot;/&gt;
+                    &lt;/StackPanel&gt;
+
+                &lt;/StackPanel&gt;&quot;;
+
+            return xaml;
+        }
+    }
+</code></pre>
+<p>It provides a XAML snippet to load dynamically in a <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> properties window. It represents an editor to tune up the indicator instance. The <a href="https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkelement?view=netframework-4.7.2">FrameworkElement</a> instance created from this XAML will has a <a href="https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkelement.datacontext?view=netframework-4.7.2">DataContext</a> set to this indicator class instance (value inherited from its container).</p>
+<p><br><br></p>
+</li>
+</ol>
+<h1 id="using-the-add-in-overlay-indicator-in-conjunction-with-the-candlechart-control">Using the add-in Overlay indicator in conjunction with the CandleChart control</h1>
+<p>Once you have added a class derived from <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.Indicators.OverlayIndicator.html">OverlayIndicator</a> to a Startup Project of your solution you can use it in conjunction with the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> control. Your indicator will be atomatically found by <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> instances of your application. But it is not the only way to add new indicators to your application.</p>
+<p>You or users of your application can add a new add-in indicator by creating it in a separate solution. You have to do the following:</p>
+<ul>
+<li>Add a new indicator class, like shown above in this article, in a new project inside a new solution and build an assembly.</li>
+<li>Locate the assembly file containing the new indicator class in some folder, usually below your main application root directory.</li>
+<li>Specify the aforementioned folder path in the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_AddInIndicatorsFolder">AddInIndicatorsFolder</a> property of the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> element that will be using your new indicator. The path can be full or relative to the <a href="https://docs.microsoft.com/en-us/dotnet/api/system.appdomain.basedirectory?view=netframework-4.7.2&amp;f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.AppDomain.BaseDirectory);k(TargetFrameworkMoniker-.NETFramework,Version%253Dv4.7.2);k(DevLang-csharp)%26rd%3Dtrue">BaseDirectory</a> of your application. For example, it could look like this:</li>
+</ul>
+<pre><code class="lang-xml">        &lt;fc:CandleChart AddInIndicatorsAssemblyPath=&quot;AddInIndicators&quot; .../&gt;
+</code></pre>
+<p>In the example above, folder &quot;AddInIndicators&quot; must be located inside the base folder of your application. There can be multiple assembly files in this folder. All of them will be found by the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> element.</p>
+<p>To observe the result do the folowing:</p>
+<ul>
+<li>Right click on the price chart area of the CandleChart control.</li>
+<li>Select the &quot;Settings&quot; menu item.</li>
+<li>In the Properties window select the &quot;Overlay Indicators&quot; tab.</li>
+</ul>
+<p>If you have done everything right you will see your indicator in the CandleChart available indicator list:<br></p>
+<p><img src="../images/add_in_overlay_indicator.png" alt="Add custom overlay indicator"></p>
+<p><br><br></p>
+<p>Full source code of the <code>ExponentialMovingAverage</code> class:</p>
+<pre><code class="lang-cs">        using System.Collections.Generic;
+        using System.Windows.Media;
+        using System.Windows;
+        using Newtonsoft.Json;
+        using FancyCandles;
+        using FancyCandles.Indicators;
+
+        namespace FancyCandleChartDemo
+        {
+            [JsonObject(MemberSerialization.OptIn)]
+            public sealed class ExponentialMovingAverage : OverlayIndicator
+            {
+                private List&lt;double&gt; indicatorValues;
+
+                public static string StaticName { get { return &quot;Exponential Moving Average&quot;; } }
+                public override string ShortName { get { return &quot;Exponential MA&quot;; } }
+                public override string FullName { get { return $&quot;Exponential Moving Average, a={Smoothing}&quot;; } }
+                //---------------------------------------------------------------------------------------------------------------------------------------
+                private double smoothing = 0.25;
+
+                [JsonProperty]
+                public double Smoothing
+                {
+                    get { return smoothing; }
+                    set
+                    {
+                        if (smoothing == value) return;
+                        smoothing = value;
+                        ReCalcAllIndicatorValues();
+                        OnPropertyChanged();
+                        OnPropertyChanged(&quot;FullName&quot;);
+                    }
+                }
+                //---------------------------------------------------------------------------------------------------------------------------------------
+                private Pen pen = new Pen(Brushes.Black, 1);
+
+                [JsonProperty]
+                public Pen Pen
+                {
+                    get { return pen; }
+                    set
+                    {
+                        pen = (Pen)value.GetCurrentValueAsFrozen();
+                        OnPropertyChanged();
+                    }
+                }
+                //---------------------------------------------------------------------------------------------------------------------------------------
+                public override double GetIndicatorValue(int candle_i)
+                {
+                    if (indicatorValues == null) return 0;
+
+                    return indicatorValues[candle_i];
+                }
+                //---------------------------------------------------------------------------------------------------------------------------------------
+                private double CalcIndicatorValue(int candle_i)
+                {
+                    double ema = CandlesSource[candle_i].C * Smoothing + GetIndicatorValue(candle_i - 1) * (1 - Smoothing);
+                    return ema;
+                }
+                //---------------------------------------------------------------------------------------------------------------------------------------
+                protected override void ReCalcAllIndicatorValues()
+                {
+                    indicatorValues = new List&lt;double&gt;();
+                    if (CandlesSource == null) return;
+
+                    indicatorValues.Add(CandlesSource[0].C);
+                    for (int candle_i = 1; candle_i &lt; CandlesSource.Count; candle_i++)
+                        indicatorValues.Add(CalcIndicatorValue(candle_i));
+                }
+                //---------------------------------------------------------------------------------------------------------------------------------------
+                protected override void OnLastCandleChanged()
+                {
+                    if (CandlesSource.Count &lt; 2) return;
+                    indicatorValues[indicatorValues.Count - 1] = CalcIndicatorValue(CandlesSource.Count - 1);
+                }
+                //---------------------------------------------------------------------------------------------------------------------------------------
+                protected override void OnNewCandleAdded()
+                {
+                    if (CandlesSource.Count &lt; 2) return;
+                    indicatorValues.Add(CalcIndicatorValue(CandlesSource.Count - 1));
+                }
+                //---------------------------------------------------------------------------------------------------------------------------------------
+                public override void OnRender(DrawingContext drawingContext, IntRange visibleCandlesRange, CandleExtremums visibleCandlesExtremums,
+                                            double candleWidth, double gapBetweenCandles, double RenderHeight)
+                {
+                    if (visibleCandlesRange.Count &lt; 0 || visibleCandlesRange.Start_i &lt; 0) return;
+
+                    double candleWidthPlusGap = candleWidth + gapBetweenCandles;
+                    double range = visibleCandlesExtremums.PriceHigh - visibleCandlesExtremums.PriceLow;
+                    double prevCndlCenterX = 0;
+                    double prevLocalIndicatorValue = 0;
+
+                    prevCndlCenterX = 0.5 * candleWidth;
+                    double prevIndicatorValue = GetIndicatorValue(visibleCandlesRange.Start_i);
+                    prevLocalIndicatorValue = (1.0 - (prevIndicatorValue - visibleCandlesExtremums.PriceLow) / range) * RenderHeight;
+
+                    for (int cndl_i = 1; cndl_i &lt; visibleCandlesRange.Count; cndl_i++)
+                    {
+                        double indicatorValue = GetIndicatorValue(visibleCandlesRange.Start_i + cndl_i);
+                        double localIndicatorValue = (1.0 - (indicatorValue - visibleCandlesExtremums.PriceLow) / range) * RenderHeight;
+                        double cndlCenterX = cndl_i * candleWidthPlusGap + 0.5 * candleWidth;
+
+                        drawingContext.DrawLine(Pen, new Point(prevCndlCenterX, prevLocalIndicatorValue), new Point(cndlCenterX, localIndicatorValue));
+
+                        prevCndlCenterX = cndlCenterX;
+                        prevLocalIndicatorValue = localIndicatorValue;
+                    }
+                }
+                //---------------------------------------------------------------------------------------------------------------------------------------
+                public override string PropertiesEditorXAML
+                {
+                    get
+                    {
+                        string xaml = $@&quot;
+                            &lt;StackPanel&gt;
+                                &lt;StackPanel.Resources&gt;
+                                    &lt;fp:SymStringToNumberConverter x:Key=&quot;&quot;symStringToNumberConverter&quot;&quot;/&gt;
+
+                                    &lt;Style x:Key=&quot;&quot;horizontalCaption_&quot;&quot; TargetType=&quot;&quot;TextBlock&quot;&quot;&gt;
+                                        &lt;Setter Property=&quot;&quot;Margin&quot;&quot; Value=&quot;&quot;0 0 5 2&quot;&quot;/&gt;
+                                        &lt;Setter Property=&quot;&quot;VerticalAlignment&quot;&quot; Value=&quot;&quot;Bottom&quot;&quot;/&gt;
+                                    &lt;/Style&gt;
+
+                                    &lt;Style x:Key=&quot;&quot;settingsItem_&quot;&quot; TargetType=&quot;&quot;StackPanel&quot;&quot;&gt;
+                                        &lt;Setter Property=&quot;&quot;Orientation&quot;&quot; Value=&quot;&quot;Horizontal&quot;&quot;/&gt;
+                                        &lt;Setter Property=&quot;&quot;FrameworkElement.HorizontalAlignment&quot;&quot; Value=&quot;&quot;Left&quot;&quot;/&gt;
+                                        &lt;Setter Property=&quot;&quot;FrameworkElement.Margin&quot;&quot; Value=&quot;&quot;0 8 0 0&quot;&quot;/&gt;
+                                    &lt;/Style&gt;
+                                &lt;/StackPanel.Resources&gt;
+
+                                &lt;StackPanel Style=&quot;&quot;{{StaticResource settingsItem_}}&quot;&quot;&gt;
+                                    &lt;TextBlock Style=&quot;&quot;{{StaticResource horizontalCaption_}}&quot;&quot; ToolTip=&quot;&quot;Smoothing parameter (between 0 and 1 inclusive).&quot;&quot;&gt;a=&lt;/TextBlock&gt;
+                                    &lt;fp:DoubleTextBox MinValue=&quot;&quot;0&quot;&quot; MaxValue=&quot;&quot;1&quot;&quot; VerticalAlignment=&quot;&quot;Bottom&quot;&quot; Width=&quot;&quot;50&quot;&quot;
+                                                    Text=&quot;&quot;{{Binding Smoothing, Converter={{StaticResource symStringToNumberConverter}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}}&quot;&quot;/&gt;
+                                &lt;/StackPanel&gt;
+
+                                &lt;StackPanel Style=&quot;&quot;{{StaticResource settingsItem_}}&quot;&quot;&gt;
+                                    &lt;TextBlock Style=&quot;&quot;{{StaticResource horizontalCaption_}}&quot;&quot;&gt;Line:&lt;/TextBlock&gt;
+                                    &lt;fp:PenSelector SelectedPen=&quot;&quot;{{Binding Pen, Mode = TwoWay}}&quot;&quot; VerticalAlignment=&quot;&quot;Bottom&quot;&quot;/&gt;
+                                &lt;/StackPanel&gt;
+
+                            &lt;/StackPanel&gt;&quot;;
+
+                        return xaml;
+                    }
+                }
+                //---------------------------------------------------------------------------------------------------------------------------------------
+            }
+        }
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+          	
+          	<h1 class="sideaffix_title"></h1>
+          	
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>. Copyright &#9400; Dennis Geller 2019.
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

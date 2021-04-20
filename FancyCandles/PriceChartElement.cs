@@ -20,15 +20,13 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.ComponentModel;
-using System.Runtime.CompilerServices; // [CallerMemberName]
 using System.Diagnostics;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Collections.Generic;
+using FancyCandles.Indicators;
 
 namespace FancyCandles
 {
@@ -59,6 +57,76 @@ namespace FancyCandles
                     bearishCandleStrokePen.Freeze();
             }
         }
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        //private Brush transparentFrozenBrush = (Brush)(new SolidColorBrush(Colors.Transparent)).GetCurrentValueAsFrozen();
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        public static readonly DependencyProperty IndicatorsProperty
+            = DependencyProperty.Register("Indicators", typeof(ObservableCollection<OverlayIndicator>), typeof(PriceChartElement), 
+                new FrameworkPropertyMetadata(null, OnIndicatorsChanged) { AffectsRender = true });
+        public ObservableCollection<OverlayIndicator> Indicators
+        {
+            get { return (ObservableCollection<OverlayIndicator>)GetValue(IndicatorsProperty); }
+            set { SetValue(IndicatorsProperty, value); }
+        }
+
+        static void OnIndicatorsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            PriceChartElement thisPriceChartElement = obj as PriceChartElement;
+            if (thisPriceChartElement == null) return;
+
+            ObservableCollection<OverlayIndicator> old_obsCollection = e.OldValue as ObservableCollection<OverlayIndicator>;
+            if (old_obsCollection != null)
+            {
+                old_obsCollection.CollectionChanged -= thisPriceChartElement.OnIndicatorsCollectionChanged;
+
+                foreach (OverlayIndicator indicator in old_obsCollection)
+                    indicator.PropertyChanged -= thisPriceChartElement.OnIndicatorsCollectionItemChanged;
+            }
+
+            ObservableCollection<OverlayIndicator> new_obsCollection = e.NewValue as ObservableCollection<OverlayIndicator>;
+            if (new_obsCollection != null)
+            {
+                new_obsCollection.CollectionChanged += thisPriceChartElement.OnIndicatorsCollectionChanged;
+
+                foreach (OverlayIndicator indicator in new_obsCollection)
+                    indicator.PropertyChanged += thisPriceChartElement.OnIndicatorsCollectionItemChanged;
+            }
+        }
+
+        private void OnIndicatorsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (OverlayIndicator indicator in e.NewItems)
+                    indicator.PropertyChanged += OnIndicatorsCollectionItemChanged;
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Replace)
+            {
+                foreach (OverlayIndicator indicator in e.NewItems)
+                    indicator.PropertyChanged += OnIndicatorsCollectionItemChanged;
+
+                foreach (OverlayIndicator indicator in e.OldItems)
+                    indicator.PropertyChanged -= OnIndicatorsCollectionItemChanged;
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (OverlayIndicator indicator in e.OldItems)
+                    indicator.PropertyChanged -= OnIndicatorsCollectionItemChanged;
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                foreach (OverlayIndicator indicator in (sender as IEnumerable<OverlayIndicator>))
+                    indicator.PropertyChanged += OnIndicatorsCollectionItemChanged;
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Move) {}
+
+            InvalidateVisual();
+        }
+
+        private void OnIndicatorsCollectionItemChanged(object source, PropertyChangedEventArgs args)
+        {
+            InvalidateVisual();
+        }        
         //---------------------------------------------------------------------------------------------------------------------------------------
         public static readonly DependencyProperty CandlesSourceProperty
             = DependencyProperty.Register("CandlesSource", typeof(ObservableCollection<ICandle>), typeof(PriceChartElement), new UIPropertyMetadata(null));
@@ -190,8 +258,10 @@ namespace FancyCandles
         //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnRender(DrawingContext drawingContext)
         {
+            //drawingContext.DrawRectangle(transparentFrozenBrush, null, new Rect(0, 0, RenderSize.Width, RenderSize.Height));
             double range = VisibleCandlesExtremums.PriceHigh - VisibleCandlesExtremums.PriceLow;
             double correctedCndlWidth = CandleWidthAndGap.Width - 1.0;
+            double candleWidthPlusGap = CandleWidthAndGap.Width + CandleWidthAndGap.Gap;
 
             for (int i = 0; i < VisibleCandlesRange.Count; i++)
             {
@@ -204,7 +274,7 @@ namespace FancyCandles
                 double wnd_O = (1.0 - (cndl.O - VisibleCandlesExtremums.PriceLow) / range) * RenderSize.Height;
                 double wnd_C = (1.0 - (cndl.C - VisibleCandlesExtremums.PriceLow) / range) * RenderSize.Height;
 
-                double cndlLeftX = i * (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
+                double cndlLeftX = i * candleWidthPlusGap;
                 double cndlCenterX = cndlLeftX + 0.5 * CandleWidthAndGap.Width;
                 drawingContext.DrawLine(cndlPen, new Point(cndlCenterX, wnd_L), new Point(cndlCenterX, wnd_H));
                 double cndlBodyH = Math.Abs(wnd_O - wnd_C);
@@ -215,6 +285,9 @@ namespace FancyCandles
                 else
                     drawingContext.DrawLine(cndlPen, new Point(cndlLeftX, wnd_O), new Point(cndlLeftX + CandleWidthAndGap.Width, wnd_O));
             }
+
+            for (int i = 0; i < Indicators.Count; i++)
+                Indicators[i].OnRender(drawingContext, VisibleCandlesRange, VisibleCandlesExtremums, CandleWidthAndGap.Width, CandleWidthAndGap.Gap, RenderSize.Height);
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnMouseMove(MouseEventArgs e)

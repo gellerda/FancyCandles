@@ -1,0 +1,575 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class OverlayIndicator
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class OverlayIndicator
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+        
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../fancy_candles_logo_in_circle_85x85.png" alt="">
+              </a>
+              
+              <a id="navbar-header-logo-text" class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../fancy_candles_logo_text.png" alt="">
+              </a>
+            </div>
+        
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+        
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="FancyCandles.Indicators.OverlayIndicator">
+  
+  
+  <h1 id="FancyCandles_Indicators_OverlayIndicator" data-uid="FancyCandles.Indicators.OverlayIndicator" class="text-break">Class OverlayIndicator
+  </h1>
+  <div class="markdown level0 summary"><p>Provides a base class for Overlay technical indicators, such as Moving Average, Bollinger Bands, etc.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">System.Windows.Threading.DispatcherObject</span></div>
+    <div class="level2"><span class="xref">System.Windows.DependencyObject</span></div>
+    <div class="level3"><span class="xref">OverlayIndicator</span></div>
+      <div class="level4"><a class="xref" href="FancyCandles.Indicators.SimpleMovingAverage.html">SimpleMovingAverage</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.ComponentModel.INotifyPropertyChanged</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="FancyCandles.Indicators.html">FancyCandles.Indicators</a></h6>
+  <h6><strong>Assembly</strong>: FancyCandles.dll</h6>
+  <h5 id="FancyCandles_Indicators_OverlayIndicator_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonObject(MemberSerialization.OptIn)]
+public abstract class OverlayIndicator : DependencyObject, INotifyPropertyChanged</code></pre>
+  </div>
+  <h5 id="FancyCandles_Indicators_OverlayIndicator_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>Overlays - Technical indicators that use the same scale as prices and plotted on a price chart area.</p>
+</div>
+  
+  
+  <div class="class_properties">
+  
+  
+  <h3 id="properties">Properties
+  </h3>
+  
+  
+  <a id="FancyCandles_Indicators_OverlayIndicator_CandlesSource_" data-uid="FancyCandles.Indicators.OverlayIndicator.CandlesSource*"></a>
+  
+  
+  <h4 id="FancyCandles_Indicators_OverlayIndicator_CandlesSource" data-uid="FancyCandles.Indicators.OverlayIndicator.CandlesSource">CandlesSource</h4>
+  
+  
+  <div class="markdown level1 summary"><p>Gets or sets the underlying candle data collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ObservableCollection&lt;ICandle&gt; CandlesSource { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.ObjectModel.ObservableCollection</span>&lt;<a class="xref" href="FancyCandles.ICandle.html">ICandle</a>&gt;</td>
+        <td><p>The underlying candle data collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="FancyCandles_Indicators_OverlayIndicator_CandlesSource_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Each overlay indicator calculation is based on an underlying price data series. Usually you need to set the <a class="xref" href="FancyCandles.Indicators.OverlayIndicator.html#FancyCandles_Indicators_OverlayIndicator_CandlesSource">CandlesSource</a> property to the same collection that you use for the <a class="xref" href="FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource">CandlesSource</a> property of the underlying <a class="xref" href="FancyCandles.CandleChart.html">CandleChart</a> object.</p>
+</div>
+  
+  
+  <a id="FancyCandles_Indicators_OverlayIndicator_FullName_" data-uid="FancyCandles.Indicators.OverlayIndicator.FullName*"></a>
+  
+  
+  <h4 id="FancyCandles_Indicators_OverlayIndicator_FullName" data-uid="FancyCandles.Indicators.OverlayIndicator.FullName">FullName</h4>
+  
+  
+  <div class="markdown level1 summary"><p>Gets the full name of this OverlayIndicator object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract string FullName { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>The full name of this OverlayIndicator object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="FancyCandles_Indicators_OverlayIndicator_FullName_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>The full name of an OverlayIndicator object usually contains some of its property values.</p>
+</div>
+  
+  
+  <a id="FancyCandles_Indicators_OverlayIndicator_PropertiesEditorXAML_" data-uid="FancyCandles.Indicators.OverlayIndicator.PropertiesEditorXAML*"></a>
+  
+  
+  <h4 id="FancyCandles_Indicators_OverlayIndicator_PropertiesEditorXAML" data-uid="FancyCandles.Indicators.OverlayIndicator.PropertiesEditorXAML">PropertiesEditorXAML</h4>
+  
+  
+  <div class="markdown level1 summary"><p>Gets the XAML snippet representing a property editor for this OverlayIndicator object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract string PropertiesEditorXAML { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>The String of XAML snippet representing a property editor for this OverlayIndicator object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="FancyCandles_Indicators_OverlayIndicator_PropertiesEditorXAML_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This XAML snippet can be loaded dynamically to instantiate a new element - the OverlayIndicator property editor.</p>
+</div>
+  
+  
+  <a id="FancyCandles_Indicators_OverlayIndicator_ShortName_" data-uid="FancyCandles.Indicators.OverlayIndicator.ShortName*"></a>
+  
+  
+  <h4 id="FancyCandles_Indicators_OverlayIndicator_ShortName" data-uid="FancyCandles.Indicators.OverlayIndicator.ShortName">ShortName</h4>
+  
+  
+  <div class="markdown level1 summary"><p>Gets the short name of this OverlayIndicator object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract string ShortName { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>The short name of this OverlayIndicator object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="FancyCandles_Indicators_OverlayIndicator_ShortName_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>The short name of an OverlayIndicator object usually contains no instance parameter values.</p>
+</div>
+  
+  
+  <a id="FancyCandles_Indicators_OverlayIndicator_TypeName_" data-uid="FancyCandles.Indicators.OverlayIndicator.TypeName*"></a>
+  
+  
+  <h4 id="FancyCandles_Indicators_OverlayIndicator_TypeName" data-uid="FancyCandles.Indicators.OverlayIndicator.TypeName">TypeName</h4>
+  
+  
+  <div class="markdown level1 summary"><p>Gets the type name of this OverlayIndicator object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonProperty]
+public string TypeName { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>The type name of this OverlayIndicator object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="FancyCandles_Indicators_OverlayIndicator_TypeName_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This property is used by serialization system.</p>
+</div>
+  
+  
+  </div>
+  
+  
+  
+  
+  <div class="class_methods">
+  
+  
+  <h3 id="methods">Methods
+  </h3>
+  
+  
+  <a id="FancyCandles_Indicators_OverlayIndicator_GetIndicatorValue_" data-uid="FancyCandles.Indicators.OverlayIndicator.GetIndicatorValue*"></a>
+  
+  
+  <h4 id="FancyCandles_Indicators_OverlayIndicator_GetIndicatorValue_System_Int32_" data-uid="FancyCandles.Indicators.OverlayIndicator.GetIndicatorValue(System.Int32)">GetIndicatorValue(Int32)</h4>
+  
+  
+  <div class="markdown level1 summary"><p>Returns this OverlayIndicator value at a specified time period.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract double GetIndicatorValue(int candle_i)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">candle_i</span></td>
+        <td><p>Specifies the time period at which the OverlayIndicator value is calculated. Usually indicator value is calculated at the candle closing time.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The OverlayIndicator value at a specified time period.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FancyCandles_Indicators_OverlayIndicator_OnLastCandleChanged_" data-uid="FancyCandles.Indicators.OverlayIndicator.OnLastCandleChanged*"></a>
+  
+  
+  <h4 id="FancyCandles_Indicators_OverlayIndicator_OnLastCandleChanged" data-uid="FancyCandles.Indicators.OverlayIndicator.OnLastCandleChanged">OnLastCandleChanged()</h4>
+  
+  
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void OnLastCandleChanged()</code></pre>
+  </div>
+  
+  
+  <a id="FancyCandles_Indicators_OverlayIndicator_OnNewCandleAdded_" data-uid="FancyCandles.Indicators.OverlayIndicator.OnNewCandleAdded*"></a>
+  
+  
+  <h4 id="FancyCandles_Indicators_OverlayIndicator_OnNewCandleAdded" data-uid="FancyCandles.Indicators.OverlayIndicator.OnNewCandleAdded">OnNewCandleAdded()</h4>
+  
+  
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void OnNewCandleAdded()</code></pre>
+  </div>
+  
+  
+  <a id="FancyCandles_Indicators_OverlayIndicator_OnPropertyChanged_" data-uid="FancyCandles.Indicators.OverlayIndicator.OnPropertyChanged*"></a>
+  
+  
+  <h4 id="FancyCandles_Indicators_OverlayIndicator_OnPropertyChanged_System_String_" data-uid="FancyCandles.Indicators.OverlayIndicator.OnPropertyChanged(System.String)">OnPropertyChanged(String)</h4>
+  
+  
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void OnPropertyChanged(string propertyName = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">propertyName</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FancyCandles_Indicators_OverlayIndicator_OnRender_" data-uid="FancyCandles.Indicators.OverlayIndicator.OnRender*"></a>
+  
+  
+  <h4 id="FancyCandles_Indicators_OverlayIndicator_OnRender_System_Windows_Media_DrawingContext_FancyCandles_IntRange_FancyCandles_CandleExtremums_System_Double_System_Double_System_Double_" data-uid="FancyCandles.Indicators.OverlayIndicator.OnRender(System.Windows.Media.DrawingContext,FancyCandles.IntRange,FancyCandles.CandleExtremums,System.Double,System.Double,System.Double)">OnRender(DrawingContext, IntRange, CandleExtremums, Double, Double, Double)</h4>
+  
+  
+  <div class="markdown level1 summary"><p>Draws this OverlayIndicator chart for a specified time span.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void OnRender(DrawingContext drawingContext, IntRange visibleCandlesRange, CandleExtremums visibleCandlesExtremums, double candleWidth, double gapBetweenCandles, double RenderHeight)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Windows.Media.DrawingContext</span></td>
+        <td><span class="parametername">drawingContext</span></td>
+        <td><p>Provides methods for drawing lines and shapes on the price chart area.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="FancyCandles.IntRange.html">IntRange</a></td>
+        <td><span class="parametername">visibleCandlesRange</span></td>
+        <td><p>Specifies the time span currently shown on the price chart area. The range of the candles currently visible on the price chart.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="FancyCandles.CandleExtremums.html">CandleExtremums</a></td>
+        <td><span class="parametername">visibleCandlesExtremums</span></td>
+        <td><p>The maximal High and minimal Low of the candles in visibleCandlesRange.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">candleWidth</span></td>
+        <td><p>The Width of candle of the price chart, in device-independent units.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">gapBetweenCandles</span></td>
+        <td><p>The Gap between candles of the price chart, in device-independent units.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">RenderHeight</span></td>
+        <td><p>The height of the price chart area, in device-independent units.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="FancyCandles_Indicators_OverlayIndicator_OnRender_System_Windows_Media_DrawingContext_FancyCandles_IntRange_FancyCandles_CandleExtremums_System_Double_System_Double_System_Double__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This is an analog of the <a href="https://docs.microsoft.com/en-za/dotnet/api/system.windows.uielement.onrender?view=netframework-4.7.2">UIElement.OnRender()</a> method.
+Participates in rendering operations that are directed by the layout system. The rendering instructions for this indicator are not used directly when this method is invoked, and are instead preserved for later asynchronous use by layout and drawing.</p>
+</div>
+  
+  
+  <a id="FancyCandles_Indicators_OverlayIndicator_ReCalcAllIndicatorValues_" data-uid="FancyCandles.Indicators.OverlayIndicator.ReCalcAllIndicatorValues*"></a>
+  
+  
+  <h4 id="FancyCandles_Indicators_OverlayIndicator_ReCalcAllIndicatorValues" data-uid="FancyCandles.Indicators.OverlayIndicator.ReCalcAllIndicatorValues">ReCalcAllIndicatorValues()</h4>
+  
+  
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void ReCalcAllIndicatorValues()</code></pre>
+  </div>
+  
+  
+  </div>
+  
+  
+  
+  
+  <div class="class_events">
+  
+  
+  <h3 id="events">Events
+  </h3>
+  
+  
+  
+  
+  <h4 id="FancyCandles_Indicators_OverlayIndicator_PropertyChanged" data-uid="FancyCandles.Indicators.OverlayIndicator.PropertyChanged">PropertyChanged</h4>
+  
+  
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event PropertyChangedEventHandler PropertyChanged</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ComponentModel.PropertyChangedEventHandler</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  </div>
+  
+  
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.ComponentModel.INotifyPropertyChanged</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+          	
+          	<h1 class="sideaffix_title">Class OverlayIndicator
+          </h1>
+          	
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>. Copyright &#9400; Dennis Geller 2019.
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

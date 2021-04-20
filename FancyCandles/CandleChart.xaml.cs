@@ -29,6 +29,13 @@ using System.Globalization;
 using System.ComponentModel;
 using System.Runtime.CompilerServices; // [CallerMemberName]
 using System.Diagnostics;
+using System.Reflection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.IO;
+using Newtonsoft.Json.Linq;
+using Microsoft.Win32;
+using FancyCandles.Indicators;
 
 namespace FancyCandles
 {
@@ -82,16 +89,144 @@ namespace FancyCandles
     }
 
     /// <summary>Candlestick chart control derived from UserControl.</summary>
+    [JsonObject(MemberSerialization.OptIn)]
     public partial class CandleChart : UserControl, INotifyPropertyChanged
     {
         //----------------------------------------------------------------------------------------------------------------------------------
 #pragma warning disable CS1591
         public static readonly double ToolTipFontSize = 9.0;
 #pragma warning restore CS1591
-        //----------------------------------------------------------------------------------------------------------------------------------
-        void OnUserControlLoaded(object sender, RoutedEventArgs e)
+
+        /// <summary>Gets or sets the collection of technical overlay indicators attached to the price chart.</summary>
+        ///<value>The collection of technical overlay indicators attached to the price chart. The default is empty collection.</value>
+        ///<remarks>
+        ///This collection contains technical overlay indicators shown on the price chart area. Overlay indicators have the same unit of measure as the price has.
+        ///Therefore such indicator charts can be drawn on the same panel as the price chart.
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="OverlayIndicatorsProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///</remarks>
+        ///<seealso href="https://gellerda.github.io/FancyCandles/articles/creating_overlay_indicator.html">Creating your own overlay technical indicator</seealso>
+        ///<seealso cref="AddInIndicatorsFolder"/>
+        [JsonProperty]
+        public ObservableCollection<OverlayIndicator> OverlayIndicators
         {
-            //IsAlreadyLoaded = true;
+            get { return (ObservableCollection<OverlayIndicator>)GetValue(OverlayIndicatorsProperty); }
+            set { SetValue(OverlayIndicatorsProperty, value); }
+        }
+        /// <summary>Identifies the <see cref="OverlayIndicators"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty OverlayIndicatorsProperty =
+            DependencyProperty.Register("OverlayIndicators", typeof(ObservableCollection<OverlayIndicator>), typeof(CandleChart), 
+                new UIPropertyMetadata(new ObservableCollection<OverlayIndicator>(), OnOverlayIndicatorsChanged));
+
+        private static void OnOverlayIndicatorsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            CandleChart thisCandleChart = obj as CandleChart;
+            if (thisCandleChart == null) return;
+
+            thisCandleChart.SetCandlesSourceForAll_OverlayIndicators();
+        }
+
+        private void SetCandlesSourceForAll_OverlayIndicators()
+        {
+            if (OverlayIndicators == null) return;
+
+            for (int i = 0; i < OverlayIndicators.Count; i++)
+                OverlayIndicators[i].CandlesSource = CandlesSource;
+        }
+
+        private FancyPrimitives.RelayCommand removeOverlayIndicatorCommand;
+        /// <summary>Gets the Command for removing an indicator object from the OverlayIndicators collection.</summary>
+        ///<value>The RelayCommand object representing the command for removing an indicator object from the OverlayIndicators collection..</value>
+        ///<remarks>
+        ///The Command parameter must contain the index of the collection element to be removed from the OverlayIndicators collection.
+        ///</remarks>
+        public FancyPrimitives.RelayCommand RemoveOverlayIndicatorCommand
+        {
+            get
+            {
+                return removeOverlayIndicatorCommand ??
+                  (removeOverlayIndicatorCommand = new FancyPrimitives.RelayCommand(overlayIndicator_i =>
+                  {
+                      int i = (int)overlayIndicator_i;
+                      if (i >= 0 && i < OverlayIndicators.Count)
+                          OverlayIndicators.RemoveAt(i);
+                  }));
+            }
+        }
+
+        private FancyPrimitives.RelayCommand moveOverlayIndicatorLeftCommand;
+        /// <summary>Gets the Command for moving backward one step an indicator in the OverlayIndicators collection.</summary>
+        ///<value>The Command for moving backward one step an indicator in the OverlayIndicators collection.</value>
+        ///<remarks>
+        ///MoveOverlayIndicatorLeftCommand command moves the specified indicator one step in direction to the beginning of the OverlayIndicators collection. 
+        ///The Command parameter must contain the index of the collection element to be moved.
+        ///</remarks>
+        ///<seealso cref = "MoveOverlayIndicatorRightCommand">MoveOverlayIndicatorRightCommand</seealso>
+        public FancyPrimitives.RelayCommand MoveOverlayIndicatorLeftCommand
+        {
+            get
+            {
+                return moveOverlayIndicatorLeftCommand ??
+                  (moveOverlayIndicatorLeftCommand = new FancyPrimitives.RelayCommand(overlayIndicator_i =>
+                  {
+                      int old_i = (int)overlayIndicator_i;
+                      if (old_i < 1) return;
+                      OverlayIndicators.Move(old_i, old_i - 1);
+                  }));
+            }
+        }
+
+        private FancyPrimitives.RelayCommand moveOverlayIndicatorRightCommand;
+        /// <summary>Gets the Command for moving forward one step an indicator in the OverlayIndicators collection.</summary>
+        ///<value>The Command for moving forward one step an indicator in the OverlayIndicators collection.</value>
+        ///<remarks>
+        ///MoveOverlayIndicatorRightCommand command moves the specified indicator one step in direction to the end of the OverlayIndicators collection. 
+        ///The Command parameter must contain the index of the collection element to be moved.
+        ///</remarks>
+        ///<seealso cref = "MoveOverlayIndicatorLeftCommand">MoveOverlayIndicatorLeftCommand</seealso>
+        public FancyPrimitives.RelayCommand MoveOverlayIndicatorRightCommand
+        {
+            get
+            {
+                return moveOverlayIndicatorRightCommand ??
+                  (moveOverlayIndicatorRightCommand = new FancyPrimitives.RelayCommand(overlayIndicator_i =>
+                  {
+                      int old_i = (int)overlayIndicator_i;
+                      if (old_i == (OverlayIndicators.Count-1)) return;
+                      OverlayIndicators.Move(old_i, old_i + 1);
+                  }));
+            }
+        }
+
+        private FancyPrimitives.RelayCommand addOverlayIndicatorCommand;
+        /// <summary>Gets the Command for adding new indicator object to the OverlayIndicators collection.</summary>
+        ///<value>The Command for adding new indicator object to the OverlayIndicators collection.</value>
+        ///<remarks>
+        ///AddOverlayIndicatorCommand creates a new indicator object of specified in the Command parameter type and adds it to the OverlayIndicator collection.
+        ///The Command parameter must contain the <see href="https://docs.microsoft.com/ru-ru/dotnet/api/system.type?view=netframework-4.7.2">Type</see> of overlay indicator to be added.
+        ///It must be the type of class derived from <see cref="OverlayIndicator"/>.
+        ///The new indicator is created with default parameters. You have to tune up its parameters after adding it to OverlayIndicators.
+        ///</remarks>
+        public FancyPrimitives.RelayCommand AddOverlayIndicatorCommand
+        {
+            get
+            {
+                return addOverlayIndicatorCommand ??
+                  (addOverlayIndicatorCommand = new FancyPrimitives.RelayCommand(parameter_overlayIndicatorType =>
+                  {
+                      Type overlayIndicatorType = (Type)parameter_overlayIndicatorType;
+                      OverlayIndicator overlayIndicator = (OverlayIndicator)Activator.CreateInstance(overlayIndicatorType);
+                      OverlayIndicators.Add(overlayIndicator);
+                      OverlayIndicator addedOverlayIndicator = OverlayIndicators[OverlayIndicators.Count - 1];
+                      addedOverlayIndicator.CandlesSource = CandlesSource;
+                  }));
+            }
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        private void OnUserControlLoaded(object sender, RoutedEventArgs e)
+        {
             ReCalc_TimeFrame();
             ReCalc_MaxNumberOfCharsInPrice();
             ReCalc_MaxNumberOfDigitsAfterPointInPrice();
@@ -106,25 +241,172 @@ namespace FancyCandles
             InitialCandleGap = DefaultInitialCandleGap;
 
             InitializeComponent();
-            //IsAlreadyLoaded = false;
 
             VisibleCandlesRange = IntRange.Undefined;
             VisibleCandlesExtremums = new CandleExtremums(0.0, 0.0, 0L, 0L);
             Loaded += new RoutedEventHandler(OnUserControlLoaded);
-            //Dispatcher.Invoke(OnMyCandleChartLoaded, System.Windows.Threading.DispatcherPriority.Loaded);
-            //Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            //Arrange(new Rect(0, 0, DesiredSize.Width, DesiredSize.Height));
-            //SizeChanged += OnSizeChanged;
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        private void OpenCandleChartPropertiesWindow(object sender, RoutedEventArgs e)
+        {
+            string overlayIndicatorArrayJson = SerializeToJson(OverlayIndicators);
+            RecordAllUndoableProperties();
+
+            CandleChartPropertiesWindow popup = new CandleChartPropertiesWindow(this);
+            if (popup.ShowDialog() == true)
+            {
+                ClearUndoablePropertyRecords();
+            }
+            else
+            {
+                ObservableCollection<OverlayIndicator> new_overlayIndicators = DeserializeOverlayIndicatorsFromJson(overlayIndicatorArrayJson);
+                OverlayIndicators = new_overlayIndicators;
+                UndoRecordedUndoableProperties();
+            }
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        private void OpenSaveSettingsAsDialog(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Chart Settings (*.chs)|*.chs";
+            //openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            if (saveFileDialog.ShowDialog() == true)
+                SaveSettingsAs(saveFileDialog.FileName);
+        }
+
+        private void OpenLoadSettingsDialog(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Chart Settings (*.chs)|*.chs";
+            //openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            if (openFileDialog.ShowDialog() == true)
+                LoadSettings(openFileDialog.FileName);
+        }
+
+        ///<summary>Loads and sets chart settings from the specified file.</summary>
+        ///<param name="pathToSettingsFile">The Path to the file containing chart settings.</param>
+        ///<remarks></remarks>
+        ///<seealso cref = "SaveSettingsAs">SaveSettingsAs()</seealso>
+        public void LoadSettings(string pathToSettingsFile)
+        {
+            string jsonCandleChart = File.ReadAllText(pathToSettingsFile);
+            RestoreFromJson(jsonCandleChart);
+        }
+
+        ///<summary>Saves current chart settings to the specified file.</summary>
+        ///<param name="pathToSettingsFile">The Path to the file to save settings to.</param>
+        ///<remarks></remarks>
+        ///<seealso cref = "LoadSettings">LoadSettings()</seealso>
+        public void SaveSettingsAs(string pathToSettingsFile)
+        {
+            string jsonCandleChart = SerializeToJson(this);
+            File.WriteAllText(pathToSettingsFile, jsonCandleChart);
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        private class CandleChartContractResolver : DefaultContractResolver
+        {
+            protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+            {
+                IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);
+
+                if (type == typeof(Pen))
+                    properties = properties.Where(p => (p.PropertyName == "Thickness" || p.PropertyName == "Brush")).ToList();
+
+                return properties;
+            }
+        }
+
+        private string SerializeToJson(object objToSerialize)
+        {
+            return JsonConvert.SerializeObject(objToSerialize, Formatting.Indented,
+                                               new JsonSerializerSettings { ContractResolver = new CandleChartContractResolver() });
+        }
+
+        private ObservableCollection<OverlayIndicator> DeserializeOverlayIndicatorsFromJson(string overlayIndicatorsJsonString)
+        {
+            JArray indicators = JArray.Parse(overlayIndicatorsJsonString);
+            return DeserializeOverlayIndicatorsFromJson(indicators);
+        }
+
+        private ObservableCollection<OverlayIndicator> DeserializeOverlayIndicatorsFromJson(JArray overlayIndicatorsJArray)
+        {
+            MethodInfo getMethodInfo = typeof(JToken).GetMethod(nameof(JToken.ToObject), Type.EmptyTypes);
+            ObservableCollection<OverlayIndicator> new_overlayIndicators = new ObservableCollection<OverlayIndicator>();
+            for (int i = 0; i < overlayIndicatorsJArray.Count; i++)
+            {
+                Type overlayIndicatorType = FindOverlayIndicatorType(overlayIndicatorsJArray[i]["TypeName"].ToString());
+                MethodInfo getMethodTInfo = getMethodInfo.MakeGenericMethod(overlayIndicatorType);
+                OverlayIndicator overlayIndicator = (OverlayIndicator)getMethodTInfo.Invoke(overlayIndicatorsJArray[i], null);
+                new_overlayIndicators.Add(overlayIndicator);
+            }
+
+            return new_overlayIndicators;
+        }
+
+        private void RestoreFromJson(string candleChartJson)
+        {
+            JObject candleChartJToken = JObject.Parse(candleChartJson);
+            JArray overlayIndicatorsJArray = (JArray)candleChartJToken["OverlayIndicators"];
+            OverlayIndicators = DeserializeOverlayIndicatorsFromJson(overlayIndicatorsJArray);
+            candleChartJToken.Remove("OverlayIndicators");
+
+            MethodInfo getMethodInfo = typeof(JToken).GetMethod(nameof(JToken.ToObject), Type.EmptyTypes);
+            foreach (JProperty property in candleChartJToken.Properties())
+            {
+                PropertyInfo propertyInfo = typeof(CandleChart).GetProperty(property.Name);
+                Type propertyType = propertyInfo.PropertyType;
+                MethodInfo getMethodTInfo = getMethodInfo.MakeGenericMethod(propertyType);
+                object propertyValue = getMethodTInfo.Invoke(property.Value, null);
+                FancyPrimitives.MyUtility.SetProperty(this, property.Name, propertyValue, out _);
+            }
+        }
+
+        private Type FindOverlayIndicatorType(string overlayIndicatorTypeName)
+        {
+            Type overlayIndicatorType = Type.GetType(overlayIndicatorTypeName);
+            if (overlayIndicatorType != null) 
+                return overlayIndicatorType;
+
+            overlayIndicatorType = Assembly.GetEntryAssembly().GetType(overlayIndicatorTypeName);
+            if (overlayIndicatorType != null) 
+                return overlayIndicatorType;
+
+            string fullAddInIndicatorsFolder = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, AddInIndicatorsFolder);
+            var allowedExtensions = new[] { ".dll", ".exe" };
+            List<string> addInAssemblyFileNames;
+            try
+            {
+                addInAssemblyFileNames = Directory.GetFiles(fullAddInIndicatorsFolder).Where(file => allowedExtensions.Any(file.ToLower().EndsWith)).ToList();
+            }
+            catch
+            {
+                addInAssemblyFileNames = new List<string>();
+            }
+
+            foreach (string addInAssemblyFileName in addInAssemblyFileNames)
+            {
+                string asmPath = System.IO.Path.Combine(fullAddInIndicatorsFolder, addInAssemblyFileName);
+                Assembly asm = Assembly.LoadFile(asmPath);
+                overlayIndicatorType = asm.GetType(overlayIndicatorTypeName);
+                if (overlayIndicatorType != null) 
+                    return overlayIndicatorType;
+            }
+
+            return null;
         }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the background of the price chart and volume diagram areas.</summary>
-        ///<value>The background of the price chart and volume diagram areas. The default is determined by the <see cref="DefaultChartAreaBackground"/>values.</value>
+        ///<value>The background of the price chart and volume diagram areas. The default is determined by the <see cref="DefaultChartAreaBackground"/> values.</value>
         ///<remarks>
         ///This background is not applied to the horizontal and vertical axis areas, which contain tick marks and labels.
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
         ///<tr><td>Identifier field</td><td><see cref="ChartAreaBackgroundProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush ChartAreaBackground
         {
             get { return (Brush)GetValue(ChartAreaBackgroundProperty); }
@@ -137,7 +419,7 @@ namespace FancyCandles
 
         ///<summary>Gets the default value for the ChartAreaBackground property.</summary>
         ///<value>The default value for the <see cref="ChartAreaBackground"/> property: <c>#FFFFFDE9</c>.</value>
-        public static Brush DefaultChartAreaBackground { get { return (Brush)(new SolidColorBrush(Color.FromArgb(255, 255, 253, 233))).GetCurrentValueAsFrozen(); } } // #FFFFFDE9
+        public static Brush DefaultChartAreaBackground { get { return (Brush)Brushes.Cornsilk.GetCurrentValueAsFrozen(); } }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the fill brush for the rectangle, that covers this chart control if it has been disabled.</summary>
         ///<value>The fill brush for the rectangle, that covers this chart control if it has been disabled. The default is determined by the <see cref="DefaultDisabledFill"/>values.</value>
@@ -146,6 +428,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="DisabledFillProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush DisabledFill
         {
             get { return (Brush)GetValue(DisabledFillProperty); }
@@ -160,6 +444,37 @@ namespace FancyCandles
         ///<value>The default value for the <see cref="DisabledFill"/> property: <c>#CCAAAAAA</c>.</value>
         public static Brush DefaultDisabledFill { get { return (Brush)(new SolidColorBrush(Color.FromArgb(204, 170, 170, 170))).GetCurrentValueAsFrozen(); } } // #CCAAAAAA
         //----------------------------------------------------------------------------------------------------------------------------------
+        #region UNDO FUNCTIONALITY *******************************************************************************************************************************
+        private Dictionary<string, Object> undoablePropertyRecords = new Dictionary<string, object>(); // <PropertyName, PropertyValue>
+        //----------------------------------------------------------------------------------------------------------------------------------
+        private void RecordAllUndoableProperties()
+        {
+            ClearUndoablePropertyRecords();
+
+            PropertyInfo[] props = GetType().GetProperties();
+            foreach (PropertyInfo prop in props)
+            {
+                IEnumerable<UndoablePropertyAttribute> attributes = prop.GetCustomAttributes(typeof(UndoablePropertyAttribute), true).Cast<UndoablePropertyAttribute>();
+                if (attributes.Count() > 0)
+                    undoablePropertyRecords.Add(prop.Name, prop.GetValue(this));
+            }
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        private void UndoRecordedUndoableProperties()
+        {
+            foreach (KeyValuePair<string, Object> keyValue in undoablePropertyRecords)
+                FancyPrimitives.MyUtility.SetProperty(this, keyValue.Key, keyValue.Value, out _);
+
+            ClearUndoablePropertyRecords();
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        private void ClearUndoablePropertyRecords()
+        {
+            undoablePropertyRecords.Clear();
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        #endregion **********************************************************************************************************************************************
+        //----------------------------------------------------------------------------------------------------------------------------------
         #region LEGEND PROPERTIES *******************************************************************************************************************************
 
         ///<summary>Gets or sets the text of the legend.</summary>
@@ -172,6 +487,8 @@ namespace FancyCandles
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         ///<seealso cref = "DefaultLegendText">DefaultLegendText</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public string LegendText
         {
             get { return (string)GetValue(LegendTextProperty); }
@@ -195,6 +512,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="LegendFontFamilyProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public FontFamily LegendFontFamily
         {
             get { return (FontFamily)GetValue(LegendFontFamilyProperty); }
@@ -214,6 +533,8 @@ namespace FancyCandles
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         ///<seealso cref = "DefaultLegendFontSize">DefaultLegendFontSize</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public double LegendFontSize
         {
             get { return (double)GetValue(LegendFontSizeProperty); }
@@ -238,6 +559,8 @@ namespace FancyCandles
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         ///<seealso cref = "DefaultLegendFontStyle">DefaultLegendFontStyle</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public FontStyle LegendFontStyle
         {
             get { return (FontStyle)GetValue(LegendFontStyleProperty); }
@@ -262,6 +585,8 @@ namespace FancyCandles
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         /// <seealso cref = "DefaultLegendFontWeight">DefaultLegendFontWeight</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public FontWeight LegendFontWeight
         {
             get { return (FontWeight)GetValue(LegendFontWeightProperty); }
@@ -286,6 +611,8 @@ namespace FancyCandles
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         /// <seealso cref = "DefaultLegendForeground">DefaultLegendForeground</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush LegendForeground
         {
             get { return (Brush)GetValue(LegendForegroundProperty); }
@@ -300,18 +627,20 @@ namespace FancyCandles
         ///<value>The default value for the LegendForeground property: <c>#3C000000</c>.</value>
         ///<seealso cref = "LegendForeground">LegendForeground</seealso>
         public static Brush DefaultLegendForeground { get { return (Brush)(new SolidColorBrush(Color.FromArgb(60, 0, 0, 0))).GetCurrentValueAsFrozen(); } } // #3C000000
-        //----------------------------------------------------------------------------------------------------------------------------------
+                                                                                                                                                            //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the horizontal alignment for the legend inside the price chart area.</summary>
         /// <value>The horizontal alignment of the legend. The default is determined by the <see cref="DefaultLegendHorizontalAlignment"/> value.</value>
         ///<remarks>
-            ///The legend locates inside the price chart area and could be horizontally and vertically aligned.
-            ///<h3>Dependency Property Information</h3>
-            ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-            ///<tr><td>Identifier field</td><td><see cref="LegendHorizontalAlignmentProperty"/></td></tr> 
-            ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///The legend locates inside the price chart area and could be horizontally and vertically aligned.
+        ///<h3>Dependency Property Information</h3>
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="LegendHorizontalAlignmentProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         /// <seealso cref = "DefaultLegendHorizontalAlignment">DefaultLegendHorizontalAlignment</seealso>
         /// <seealso cref = "LegendVerticalAlignment">LegendVerticalAlignment</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public HorizontalAlignment LegendHorizontalAlignment
         {
             get { return (HorizontalAlignment)GetValue(LegendHorizontalAlignmentProperty); }
@@ -330,14 +659,16 @@ namespace FancyCandles
         /// <summary>Gets or sets the vertical alignment for the legend inside the price chart area.</summary>
         /// <value>The vertical alignment of the legend. The default is determined by the <see cref="DefaultLegendVerticalAlignment"/> value.</value>
         ///<remarks>
-            ///The legend locates inside the price chart area and could be horizontally and vertically aligned.
-            ///<h3>Dependency Property Information</h3>
-            ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-            ///<tr><td>Identifier field</td><td><see cref="LegendVerticalAlignmentProperty"/></td></tr> 
-            ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///The legend locates inside the price chart area and could be horizontally and vertically aligned.
+        ///<h3>Dependency Property Information</h3>
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="LegendVerticalAlignmentProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         /// <seealso cref = "DefaultLegendVerticalAlignment">DefaultLegendVerticalAlignment</seealso>
         /// <seealso cref = "LegendHorizontalAlignment">LegendHorizontalAlignment</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public VerticalAlignment LegendVerticalAlignment
         {
             get { return (VerticalAlignment)GetValue(LegendVerticalAlignmentProperty); }
@@ -363,6 +694,8 @@ namespace FancyCandles
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         /// <seealso cref = "DefaultLegendMargin">DefaultLegendMargin</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public Thickness LegendMargin
         {
             get { return (Thickness)GetValue(LegendMarginProperty); }
@@ -393,6 +726,8 @@ namespace FancyCandles
         ///</remarks>
         ///<seealso cref = "DefaultPriceChartTopMargin">DefaultPriceChartTopMargin</seealso>
         ///<seealso cref = "PriceChartBottomMargin">PriceChartBottomMargin</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public double PriceChartTopMargin
         {
             get { return (double)GetValue(PriceChartTopMarginProperty); }
@@ -419,6 +754,8 @@ namespace FancyCandles
         ///</remarks>
         ///<seealso cref = "DefaultPriceChartBottomMargin">DefaultPriceChartBottomMargin</seealso>
         ///<seealso cref = "PriceChartTopMargin">PriceChartTopMargin</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public double PriceChartBottomMargin
         {
             get { return (double)GetValue(PriceChartBottomMarginProperty); }
@@ -448,6 +785,8 @@ namespace FancyCandles
         ///<seealso cref = "BearishCandleFill">BearishCandleFill</seealso>
         ///<seealso cref = "BearishCandleStroke">BearishCandleStroke</seealso>
         ///<seealso cref = "BullishCandleStroke">BullishCandleStroke</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush BullishCandleFill
         {
             get { return (Brush)GetValue(BullishCandleFillProperty); }
@@ -477,6 +816,8 @@ namespace FancyCandles
         ///<seealso cref = "BullishCandleFill">BearishCandleFill</seealso>
         ///<seealso cref = "BullishCandleStroke">BearishCandleStroke</seealso>
         ///<seealso cref = "BearishCandleStroke">BullishCandleStroke</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush BearishCandleFill
         {
             get { return (Brush)GetValue(BearishCandleFillProperty); }
@@ -506,6 +847,8 @@ namespace FancyCandles
         ///<seealso cref = "BearishCandleStroke">BearishCandleStroke</seealso>
         ///<seealso cref = "BearishCandleFill">BearishCandleFill</seealso>
         ///<seealso cref = "BullishCandleFill">BullishCandleFill</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush BullishCandleStroke
         {
             get { return (Brush)GetValue(BullishCandleStrokeProperty); }
@@ -535,6 +878,8 @@ namespace FancyCandles
         ///<seealso cref = "BullishCandleStroke">BullishCandleStroke</seealso>
         ///<seealso cref = "BullishCandleFill">BullishCandleFill</seealso>
         ///<seealso cref = "BearishCandleFill">BearishCandleFill</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush BearishCandleStroke
         {
             get { return (Brush)GetValue(BearishCandleStrokeProperty); }
@@ -655,6 +1000,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="IsVolumePanelVisibleProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public bool IsVolumePanelVisible
         {
             get { return (bool)GetValue(IsVolumePanelVisibleProperty); }
@@ -680,6 +1027,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="VolumeBarWidthToCandleWidthRatioProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public double VolumeBarWidthToCandleWidthRatio
         {
             get { return (double)GetValue(VolumeBarWidthToCandleWidthRatioProperty); }
@@ -711,6 +1060,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="VolumeHistogramTopMarginProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public double VolumeHistogramTopMargin
         {
             get { return (double)GetValue(VolumeHistogramTopMarginProperty); }
@@ -734,6 +1085,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="VolumeHistogramBottomMarginProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public double VolumeHistogramBottomMargin
         {
             get { return (double)GetValue(VolumeHistogramBottomMarginProperty); }
@@ -758,6 +1111,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="BullishVolumeBarFillProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush BullishVolumeBarFill
         {
             get { return (Brush)GetValue(BullishVolumeBarFillProperty); }
@@ -783,6 +1138,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="BearishVolumeBarFillProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush BearishVolumeBarFill
         {
             get { return (Brush)GetValue(BearishVolumeBarFillProperty); }
@@ -835,6 +1192,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="PriceTickFontSizeProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public double PriceTickFontSize
         {
             get { return (double)GetValue(PriceTickFontSizeProperty); }
@@ -945,6 +1304,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="TimeTickFontSizeProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public double TimeTickFontSize
         {
             get { return (double)GetValue(TimeTickFontSizeProperty); }
@@ -987,6 +1348,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="HorizontalGridlinesPenProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public Pen HorizontalGridlinesPen
         {
             get { return (Pen)GetValue(HorizontalGridlinesPenProperty); }
@@ -1017,6 +1380,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="VerticalGridlinesPenProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public Pen VerticalGridlinesPen
         {
             get { return (Pen)GetValue(VerticalGridlinesPenProperty); }
@@ -1048,6 +1413,8 @@ namespace FancyCandles
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         ///<seealso cref = "IsVerticalGridlinesEnabled">IsHorizontalGridlinesEnabled</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public bool IsHorizontalGridlinesEnabled
         {
             get { return (bool)GetValue(IsHorizontalGridlinesEnabledProperty); }
@@ -1072,6 +1439,8 @@ namespace FancyCandles
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         ///<seealso cref = "IsHorizontalGridlinesEnabled">IsHorizontalGridlinesEnabled</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public bool IsVerticalGridlinesEnabled
         {
             get { return (bool)GetValue(IsVerticalGridlinesEnabledProperty); }
@@ -1097,6 +1466,8 @@ namespace FancyCandles
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         ///<seealso cref = "IsVerticalGridlinesEnabled">IsHorizontalGridlinesEnabled</seealso>
+        [UndoableProperty]
+        [JsonProperty]
         public bool HideMinorVerticalGridlines
         {
             get { return (bool)GetValue(HideMinorVerticalGridlinesProperty); }
@@ -1123,6 +1494,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="CrossLinesBrushProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush CrossLinesBrush
         {
             get { return (Brush)GetValue(CrossLinesBrushProperty); }
@@ -1147,6 +1520,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="IsCrossLinesVisibleProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public bool IsCrossLinesVisible
         {
             get { return (bool)GetValue(IsCrossLinesVisibleProperty); }
@@ -1171,6 +1546,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="DefaultIsCrossPriceVisible"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public bool IsCrossPriceVisible
         {
             get { return (bool)GetValue(IsCrossPriceVisibleProperty); }
@@ -1193,6 +1570,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="CrossPriceForegroundProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush CrossPriceForeground
         {
             get { return (Brush)GetValue(CrossPriceForegroundProperty); }
@@ -1215,6 +1594,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="CrossPriceBackgroundProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush CrossPriceBackground
         {
             get { return (Brush)GetValue(CrossPriceBackgroundProperty); }
@@ -1276,6 +1657,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="ScrollBarBackgroundProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush ScrollBarBackground
         {
             get { return (Brush)GetValue(ScrollBarBackgroundProperty); }
@@ -1297,6 +1680,8 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="ScrollBarHeightProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public double ScrollBarHeight
         {
             get { return (double)GetValue(ScrollBarHeightProperty); }
@@ -1371,6 +1756,8 @@ namespace FancyCandles
                 new_obsCollection.CollectionChanged += thisCandleChart.OnCandlesSourceCollectionChanged;
             }
 
+            thisCandleChart.SetCandlesSourceForAll_OverlayIndicators();
+
             if (thisCandleChart.IsLoaded)
             {
                 thisCandleChart.ReCalc_TimeFrame();
@@ -1430,7 +1817,7 @@ namespace FancyCandles
         }
 
         // Просматривает CandlesSource и возвращает предполагаемый таймфрейм в минутах
-        void ReCalc_TimeFrame()
+        private void ReCalc_TimeFrame()
         {
             if (CandlesSource == null) return;
 
@@ -1478,7 +1865,7 @@ namespace FancyCandles
             }
         }
 
-        void ReCalc_VisibleCandlesExtremums()
+        private void ReCalc_VisibleCandlesExtremums()
         {
             int end_i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - 1;
             double maxH = double.MinValue;
@@ -1497,7 +1884,7 @@ namespace FancyCandles
             VisibleCandlesExtremums = new CandleExtremums(minL, maxH, minV, maxV);
         }
 
-        void ReCalc_VisibleCandlesExtremums_AfterOneCandleChanged(int changedCandle_i)
+        private void ReCalc_VisibleCandlesExtremums_AfterOneCandleChanged(int changedCandle_i)
         {
             ICandle cndl = CandlesSource[changedCandle_i];
             double newPriceL = Math.Min(cndl.L, VisibleCandlesExtremums.PriceLow);
@@ -1561,7 +1948,7 @@ namespace FancyCandles
 
         // Пересчитывает VisibleCandlesRange.Count таким образом, чтобы по возможности сохранить индекс последней видимой свечи 
         // и соответствовать текущим значениям CandleWidth и CandleGap.
-        void ReCalc_VisibleCandlesRange()
+        private void ReCalc_VisibleCandlesRange()
         {
             if (priceChartContainer.ActualWidth == 0 || CandlesSource == null)
             {
@@ -1750,6 +2137,39 @@ namespace FancyCandles
                 OnPropertyChanged();
             }
         }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        ///<summary>Gets or sets the folder with an assemblies containing user's add-in technical indicators.</summary>
+        ///<value>The path to the folder containing user's add-in technical indicators. The default value is empty string.</value>
+        ///<remarks>
+        ///<para>Adding your own technical indicator classes, derived from <see cref="OverlayIndicator"/>, to Startup project of your solution 
+        ///is not the only way to add new indicators to your application.</para>
+        ///<para>You or even users of your application can add a new add-in indicator by creating it in a separate solution. You have to do the following:</para>
+        ///<list type="bullet">
+        ///<item><term>Add a new indicator class derived from <see cref="OverlayIndicator"/> in a new project inside a new solution and build an assembly.</term></item>
+        ///<item><term>Locate the assembly file containing the new indicator class in some folder, usually below your main application root directory.</term></item>
+        ///<item><term>Specify the aforementioned folder path in the <see cref="AddInIndicatorsFolder"/> of your application.</term></item>
+        ///</list>
+        ///The path can be full or relative to the <see href="https://docs.microsoft.com/en-us/dotnet/api/system.appdomain.basedirectory?view=netframework-4.7.2">BaseDirectory</see> of your application.
+        ///<para>For example, it could look like this:
+        ///<code>&lt;fc:CandleChart AddInIndicatorsAssemblyPath="AddInIndicators"/&gt;</code>
+        ///In the example above, folder "AddInIndicators" must be located inside the base folder of your application. There can be multiple assembly files in this folder. 
+        ///All of them will be found by the <see cref="CandleChart"/> element.</para>
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="AddInIndicatorsFolderProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///</remarks>
+        ///<seealso href="https://gellerda.github.io/FancyCandles/articles/creating_overlay_indicator.html">Creating your own overlay technical indicator</seealso>
+        ///<seealso cref="OverlayIndicators"/>
+        public string AddInIndicatorsFolder
+        {
+            get { return (string)GetValue(AddInIndicatorsFolderProperty); }
+            set { SetValue(AddInIndicatorsFolderProperty, value); }
+        }
+
+        /// <summary>Identifies the <see cref="AddInIndicatorsFolder"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty AddInIndicatorsFolderProperty =
+            DependencyProperty.Register("AddInIndicatorsFolder", typeof(string), typeof(CandleChart), new PropertyMetadata(""));
         //----------------------------------------------------------------------------------------------------------------------------------
         private void OnPanelCandlesContainerSizeChanged(object sender, SizeChangedEventArgs e)
         {

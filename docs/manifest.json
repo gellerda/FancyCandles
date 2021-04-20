@@ -9,7 +9,7 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.CandleChart.html",
-          "hash": "i/ylVpwTCyiFPyYwHVZznQ=="
+          "hash": "w5oA4RKtAKB4tbFOWWJg2w=="
         }
       },
       "is_incremental": true,
@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.CandleExtremums.html",
-          "hash": "qIQNkp8VSKICMzvE3Tet7A=="
+          "hash": "wEIsJ0L2m0st3Jc4uQumQQ=="
         }
       },
       "is_incremental": true,
@@ -33,7 +33,43 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.ICandle.html",
-          "hash": "02ZgafgTd138DGepJ9wigw=="
+          "hash": "1n8lbKUc1rBjaKmOXPIkJQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/FancyCandles.Indicators.OverlayIndicator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/FancyCandles.Indicators.OverlayIndicator.html",
+          "hash": "2zsiqusw51ayGYPH7k4ibA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/FancyCandles.Indicators.SimpleMovingAverage.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/FancyCandles.Indicators.SimpleMovingAverage.html",
+          "hash": "vWMBO5+y6h5fFDsTd0UxEQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/FancyCandles.Indicators.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/FancyCandles.Indicators.html",
+          "hash": "AgQoK8fCLJ3/vWC+AvPC+A=="
         }
       },
       "is_incremental": true,
@@ -45,7 +81,7 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.IntRange.html",
-          "hash": "FePEUM7rb3b3UugHagi0yg=="
+          "hash": "9QXN5J35u5A19x0INc8H3A=="
         }
       },
       "is_incremental": true,
@@ -57,7 +93,7 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.html",
-          "hash": "Y1rZsB+gFENaFUnm95/w6g=="
+          "hash": "pNzfF5twoM8h+v1jyanalg=="
         }
       },
       "is_incremental": true,
@@ -69,7 +105,7 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "xlPH2QA//thQ2PKrX/nWfg=="
+          "hash": "jSd7Rh8TxHFWBaWdceYJCQ=="
         }
       },
       "is_incremental": true,
@@ -81,7 +117,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "kkfoMqSz6x1lAfaJp+J+cA=="
+          "hash": "12OtfnsqP3Nc1gUMZ5kGUw=="
         }
       },
       "is_incremental": false,
@@ -93,7 +129,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/adding_fancycandles_to_project.html",
-          "hash": "tCrMgjnImAGyxptDyXfhVA=="
+          "hash": "j+wFN2r2rqdVSIPd2xgJuA=="
         }
       },
       "is_incremental": true,
@@ -105,7 +141,19 @@
       "output": {
         ".html": {
           "relative_path": "articles/creating_candlestick_chart.html",
-          "hash": "ocm2WUhRCJarjqeUjey9Rg=="
+          "hash": "G+2QedS43kYDgrkfOkXE6Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/creating_overlay_indicator.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/creating_overlay_indicator.html",
+          "hash": "926LYs0sLSwODXq0PDLUMQ=="
         }
       },
       "is_incremental": true,
@@ -120,7 +168,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/overview.html",
-          "hash": "JWKFQAh1jnND1Z1VaIIW1w=="
+          "hash": "Q1+lbiUQ5P2cCNyUPnK51A=="
         }
       },
       "is_incremental": true,
@@ -132,7 +180,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/populating_candlestick_chart.html",
-          "hash": "qrDEbwKYCF2SjP0CNP6ZQg=="
+          "hash": "F/j3mWx1FuawMVSSvSye2A=="
         }
       },
       "is_incremental": true,
@@ -144,7 +192,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "Ybwxp/TdVEo9295grJEJjQ=="
+          "hash": "mIs38ohJ4n2nxOuykOPbZQ=="
         }
       },
       "is_incremental": false,
@@ -156,7 +204,7 @@
       "output": {
         ".html": {
           "relative_path": "download/download_doc.html",
-          "hash": "OS5VmxSXDfRZTjfAUxBYZg=="
+          "hash": "IUxagnyIDKiELzlfmqZxrQ=="
         }
       },
       "is_incremental": true,
@@ -169,6 +217,17 @@
         ".html": {
           "relative_path": "download/toc.html",
           "hash": "8P7wPVQhNqCWmBr05YVqEQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/add_in_overlay_indicator.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/add_in_overlay_indicator.png"
         }
       },
       "is_incremental": false,
@@ -334,7 +393,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "GjTsN1WcjscC+OmcbGpktA=="
+          "hash": "RUk9fBqQ0N5LZeh7WPneFA=="
         }
       },
       "is_incremental": true,
@@ -365,14 +424,14 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 7,
-          "skipped_file_count": 7
+          "total_file_count": 8,
+          "skipped_file_count": 8
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 5,
-          "skipped_file_count": 5
+          "total_file_count": 8,
+          "skipped_file_count": 8
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
