@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FancyCandles", "FancyCandles\FancyCandles.csproj", "{F24D1444-A396-4881-AC6B-D438B97025EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FancyPrimitives", "..\FancyPrimitives\FancyPrimitives.csproj", "{CEFE18E3-E073-4CC7-8CB9-C277C8D5B76F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CandleChartExample", "CandleChartExample\CandleChartExample.csproj", "{40164624-5C89-47CA-84EA-6C9831676D5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{F24D1444-A396-4881-AC6B-D438B97025EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F24D1444-A396-4881-AC6B-D438B97025EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F24D1444-A396-4881-AC6B-D438B97025EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEFE18E3-E073-4CC7-8CB9-C277C8D5B76F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEFE18E3-E073-4CC7-8CB9-C277C8D5B76F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEFE18E3-E073-4CC7-8CB9-C277C8D5B76F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEFE18E3-E073-4CC7-8CB9-C277C8D5B76F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40164624-5C89-47CA-84EA-6C9831676D5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40164624-5C89-47CA-84EA-6C9831676D5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40164624-5C89-47CA-84EA-6C9831676D5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40164624-5C89-47CA-84EA-6C9831676D5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

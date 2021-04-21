@@ -26,9 +26,7 @@ Candlestick chart control contains a collection of built-in technical indicators
 Look at [FancyCandles Demo](https://www.microsoft.com/store/apps/9NQ2C465CS0C) app to see the FancyCandles candlestick chart control in action. Moreover, you can use this app as a simplistic interactive documentation - change class properties from the list, and see how they affect the appearance and behavior of the control. The easiest and most effective way to learn about the features and functionality of our product!
 
 ## Documentation and Quick start
-You can read the [documentation online](https://gellerda.github.io/FancyCandles/) or [download a local version](https://gellerda.github.io/FancyCandles/download/download_doc.html).
-
-The [Getting started](https://gellerda.github.io/FancyCandles/articles/creating_candlestick_chart.html) section of the documentation is the best way to take the initial steps.
+You can read the [documentation online](https://gellerda.github.io/FancyCandles/). The [Getting started](https://gellerda.github.io/FancyCandles/articles/creating_candlestick_chart.html) section of the documentation is the best way to take the initial steps.
 
 ## Got questions?
 If you have any questions or suggestions, don't hesitate to submit a new GitHub issue.
