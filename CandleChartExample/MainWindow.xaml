@@ -9,10 +9,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
         
         <fc:CandleChart CandlesSource="{Binding Path=.}"
-                        VolumeBarWidthToCandleWidthRatio="0.5">
-            
+                        VolumeBarWidthToCandleWidthRatio="0.5" 
+                        Grid.Row="0">
             <fc:CandleChart.OverlayIndicators>
                 <local:ObservableOverlayIndicatorCollection>
                     <fci:SimpleMovingAverage N="7">
@@ -28,8 +33,12 @@
                     </fci:ExponentialMovingAverage>
                 </local:ObservableOverlayIndicatorCollection>
             </fc:CandleChart.OverlayIndicators>
-            
         </fc:CandleChart>
-        
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Button Width="150" Margin="10" Click="OnChangeLastCandle">Change Last Candle</Button>
+            <Button Width="150" Margin="10" Click="OnAddNewCandle">Add New Candle</Button>
+        </StackPanel>
+
     </Grid>
 </Window>

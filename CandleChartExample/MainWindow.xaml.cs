@@ -17,27 +17,50 @@ using FancyCandles;
 
 namespace CandleChartExample
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         ObservableCollection<ICandle> candles = new ObservableCollection<ICandle>();
-
+        //-----------------------------------------------------------------------------------------------------------------
         public MainWindow()
         {
             InitializeComponent();
 
-            DateTime t0 = new DateTime(2019, 6, 11, 23, 40, 0);
             for (int i = 0; i < 500; i++)
-            {
-                double p0 = Math.Round(Math.Sin(0.3 * i) + 0.1 * i, 3);
-                double p1 = Math.Round(Math.Sin(0.3 * i + 1) + 0.1 * i, 3);
-                candles.Add(new Candle(t0.AddMinutes(i * 5),
-                            100 + p0, 101 + p0, 99 + p0, 100 + p1, i));
-            }
+                candles.Add(CalculateCandle(i));
 
             DataContext = candles;
         }
+        //-----------------------------------------------------------------------------------------------------------------
+        private Candle CalculateCandle(int i)
+        {
+            DateTime t0 = new DateTime(2019, 6, 11, 23, 40, 0);
+            double p0 = Math.Round(Math.Sin(0.3 * i) + 0.1 * i, 3);
+            double p1 = Math.Round(Math.Sin(0.3 * i + 1) + 0.1 * i, 3);
+            return new Candle(t0.AddMinutes(i * 5), 100 + p0, 101 + p0, 99 + p0, 100 + p1, i);
+        }
+        //-----------------------------------------------------------------------------------------------------------------
+        private void OnChangeLastCandle(object sender, RoutedEventArgs e)
+        {
+            int N = candles.Count;
+            Candle lastCandle = (Candle)candles[N - 1];
+
+            // lastCandle.C += 1; - You can't do this way! This will cause no changes in the chart.
+
+            double newC = lastCandle.C + 1;
+            double newH = Math.Max(newC, lastCandle.H);
+            double newL = Math.Min(newC, lastCandle.L);
+            Candle newCandle = new Candle(lastCandle.t, lastCandle.O, newH, newL, newC, lastCandle.V); // You must create a new Candle instance!
+
+            candles[N - 1] = newCandle; // This is correct!
+        }
+        //-----------------------------------------------------------------------------------------------------------------
+        private void OnAddNewCandle(object sender, RoutedEventArgs e)
+        {
+            int N = candles.Count;
+            candles.Add(CalculateCandle(N));
+        }
+        //-----------------------------------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------------
     }
 }
