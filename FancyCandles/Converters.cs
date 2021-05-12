@@ -29,6 +29,19 @@ using System.Reflection;
 namespace FancyCandles
 {
     //*******************************************************************************************************************************************************************
+    class CandleProviderSecCatalogIsNotEmptyConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (value != null && ((ICandleProvider)value).SecCatalog.Count>0);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    //*******************************************************************************************************************************************************************
     class TypeToStaticNamePropertyConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -1,0 +1,30 @@
+﻿<Window x:Class="FancyCandles.SelectCandleSourceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FancyCandles"
+        mc:Ignorable="d"
+        Title="SelectCandleSourceWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        
+        <ListView x:Name="secList" Grid.Row="0" 
+                  ItemsSource="{Binding Path=CandleProvider.SecCatalog}" >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=ClassCode}">Class</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=SecCode}" Width="100">Sec</GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0 5 10 5" HorizontalAlignment="Right">
+            <Button x:Name="buttonOk" Width="80" Margin="0 0 10 0" HorizontalAlignment="Right" Click="OkButton_Click" Padding="15 3">Ok</Button>
+            <Button x:Name="buttonCancel" Width="80" HorizontalAlignment="Right" IsCancel="True" Click="CancelButton_Click" Padding="15 3">Cancel</Button>
+        </StackPanel>
+    </Grid>
+</Window>

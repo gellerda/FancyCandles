@@ -60,10 +60,10 @@ namespace FancyCandles
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
         public static readonly DependencyProperty CandlesSourceProperty
-             = DependencyProperty.Register("CandlesSource", typeof(ObservableCollection<ICandle>), typeof(VolumeChartElement), new FrameworkPropertyMetadata(null));
-        public ObservableCollection<ICandle> CandlesSource
+             = DependencyProperty.Register("CandlesSource", typeof(IList<ICandle>), typeof(VolumeChartElement), new FrameworkPropertyMetadata(null));
+        public IList<ICandle> CandlesSource
         {
-            get { return (ObservableCollection<ICandle>)GetValue(CandlesSourceProperty); }
+            get { return (IList<ICandle>)GetValue(CandlesSourceProperty); }
             set { SetValue(CandlesSourceProperty, value); }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -188,7 +188,7 @@ namespace FancyCandles
                 if (cndl.V > 0L)
                     drawingContext.DrawRectangle(cndlBrush, null, new Rect(volumeBarLeftX, wnd_V, volumeBarWidth, RenderSize.Height - wnd_V));
                 else
-                    drawingContext.DrawLine(cndlPen, new Point(volumeBarLeftX, 0.0), new Point(volumeBarLeftX + volumeBarWidth, 0.0));
+                    drawingContext.DrawLine(cndlPen, new Point(volumeBarLeftX, RenderSize.Height), new Point(volumeBarLeftX + volumeBarWidth, RenderSize.Height));
             }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------

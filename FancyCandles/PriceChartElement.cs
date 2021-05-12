@@ -129,10 +129,10 @@ namespace FancyCandles
         }        
         //---------------------------------------------------------------------------------------------------------------------------------------
         public static readonly DependencyProperty CandlesSourceProperty
-            = DependencyProperty.Register("CandlesSource", typeof(ObservableCollection<ICandle>), typeof(PriceChartElement), new UIPropertyMetadata(null));
-        public ObservableCollection<ICandle> CandlesSource
+            = DependencyProperty.Register("CandlesSource", typeof(IList<ICandle>), typeof(PriceChartElement), new UIPropertyMetadata(null));
+        public IList<ICandle> CandlesSource
         {
-            get { return (ObservableCollection<ICandle>)GetValue(CandlesSourceProperty); }
+            get { return (IList<ICandle>)GetValue(CandlesSourceProperty); }
             set { SetValue(CandlesSourceProperty, value); }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------

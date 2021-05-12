@@ -65,8 +65,10 @@
     <Compile Include="Converters.cs" />
     <Compile Include="DateTimeMilestones.cs" />
     <Compile Include="ICandleExtensionMethods.cs" />
+    <Compile Include="ICandleProvider.cs" />
     <Compile Include="Indicators\ExponentialMovingAverage.cs" />
     <Compile Include="Indicators\SimpleMovingAverage.cs" />
+    <Compile Include="ISecInfo.cs" />
     <Compile Include="MyAttributes.cs" />
     <Compile Include="MyDateAndTime.cs" />
     <Compile Include="MyWpfMath.cs" />
@@ -76,6 +78,9 @@
       <DependentUpon>CandleChartPropertiesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PriceTicksElement.cs" />
+    <Compile Include="SelectCandleSourceWindow.xaml.cs">
+      <DependentUpon>SelectCandleSourceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimeTick.cs" />
     <Compile Include="TimeTicksElement.cs" />
     <Compile Include="VolumeChartElement.cs" />
@@ -88,6 +93,10 @@
       <DependentUpon>CandleChart.xaml</DependentUpon>
     </Compile>
     <Page Include="CandleChartPropertiesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SelectCandleSourceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

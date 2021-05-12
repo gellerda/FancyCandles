@@ -46,6 +46,7 @@
         <local:CandleExtremumsToPriceExtremumsPointConverter x:Key="candleExtremumsToPriceExtremumsPointConverter"/>
         <local:CandleDrawingParametersToPointConverter x:Key="candleDrawingParametersToPointConverter"/>
         <local:CandleDrawingParametersConverter x:Key="candleDrawingParametersConverter"/>
+        <local:CandleProviderSecCatalogIsNotEmptyConverter x:Key="candleProviderSecCatalogIsNotEmptyConverter"/>
 
         <Style x:Key="rowSpanPriceChartIfVolumeDisabled">
             <Style.Triggers>
@@ -88,9 +89,10 @@
             <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent">
                 <Rectangle.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Settings" Click="OpenCandleChartPropertiesWindow"></MenuItem>
-                        <MenuItem Header="Load Settings" Click="OpenLoadSettingsDialog"></MenuItem>
-                        <MenuItem Header="Save Settings As" Click="OpenSaveSettingsAsDialog"></MenuItem>
+                        <MenuItem Header="Settings" Click="OpenCandleChartPropertiesWindow"/>
+                        <MenuItem Header="Load Settings" Click="OpenLoadSettingsDialog"/>
+                        <MenuItem Header="Save Settings As" Click="OpenSaveSettingsAsDialog"/>
+                        <!-- <MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandleProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/> -->
                     </ContextMenu>
                 </Rectangle.ContextMenu>
             </Rectangle>

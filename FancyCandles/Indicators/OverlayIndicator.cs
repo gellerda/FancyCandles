@@ -75,26 +75,26 @@ namespace FancyCandles.Indicators
         [JsonProperty]
         public string TypeName { get { return GetType().FullName; } }
         //---------------------------------------------------------------------------------------------------------------------------------------
-        private ObservableCollection<ICandle> candlesSource;
+        private IList<ICandle> candlesSource;
         /// <summary>Gets or sets the underlying candle data collection.</summary>
         ///<value>The underlying candle data collection.</value>
         ///<remarks>
         ///Each overlay indicator calculation is based on an underlying price data series. Usually you need to set the <see cref="OverlayIndicator.CandlesSource"/> property to the same collection that you use for the <see cref="CandleChart.CandlesSource"/> property of the underlying <see cref="CandleChart"/> object.
         ///</remarks>
-        public ObservableCollection<ICandle> CandlesSource 
+        public IList<ICandle> CandlesSource 
         {
             get { return candlesSource; }
             set
             {
                 if (candlesSource == value) return;
 
-                if (candlesSource!=null)
-                    candlesSource.CollectionChanged -= OnCandlesSourceChanged;
+                if (candlesSource!=null && candlesSource is INotifyCollectionChanged)
+                    ((INotifyCollectionChanged)candlesSource).CollectionChanged -= OnCandlesSourceChanged;
 
                 candlesSource = value;
 
-                if (candlesSource != null)
-                    candlesSource.CollectionChanged += OnCandlesSourceChanged;
+                if (candlesSource != null && candlesSource is INotifyCollectionChanged)
+                    ((INotifyCollectionChanged)candlesSource).CollectionChanged += OnCandlesSourceChanged;
 
                 ReCalcAllIndicatorValues();
             }

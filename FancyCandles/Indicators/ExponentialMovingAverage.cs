@@ -91,6 +91,9 @@ namespace FancyCandles.Indicators
         //---------------------------------------------------------------------------------------------------------------------------------------
         private double CalcIndicatorValue(int candle_i)
         {
+            if (candle_i == 0)
+                return CandlesSource[0].C;
+
             double ema = CandlesSource[candle_i].C * Smoothing + GetIndicatorValue(candle_i - 1) * (1 - Smoothing);
             return ema;
         }
@@ -98,7 +101,7 @@ namespace FancyCandles.Indicators
         protected override void ReCalcAllIndicatorValues()
         {
             indicatorValues = new List<double>();
-            if (CandlesSource == null) return;
+            if (CandlesSource == null || CandlesSource.Count==0) return;
 
             indicatorValues.Add(CandlesSource[0].C);
             for (int candle_i = 1; candle_i < CandlesSource.Count; candle_i++)
@@ -107,13 +110,13 @@ namespace FancyCandles.Indicators
         //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnLastCandleChanged()
         {
-            if (CandlesSource.Count < 2) return;
+            //if (CandlesSource.Count == 1) return;
             indicatorValues[indicatorValues.Count - 1] = CalcIndicatorValue(CandlesSource.Count - 1);
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnNewCandleAdded()
         {
-            if (CandlesSource.Count < 2) return;
+            //if (CandlesSource.Count == 1) return;
             indicatorValues.Add(CalcIndicatorValue(CandlesSource.Count - 1));
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -131,7 +134,7 @@ namespace FancyCandles.Indicators
         public override void OnRender(DrawingContext drawingContext, IntRange visibleCandlesRange, CandleExtremums visibleCandlesExtremums,
                                       double candleWidth, double gapBetweenCandles, double RenderHeight)
         {
-            if (visibleCandlesRange.Count < 0 || visibleCandlesRange.Start_i < 0) return;
+            if (visibleCandlesRange.Count < 2 || visibleCandlesRange.Start_i < 0) return;
 
             double candleWidthPlusGap = candleWidth + gapBetweenCandles;
             double range = visibleCandlesExtremums.PriceHigh - visibleCandlesExtremums.PriceLow;

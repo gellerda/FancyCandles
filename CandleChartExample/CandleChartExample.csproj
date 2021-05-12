@@ -101,13 +101,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Downloads\ggg\FancyCandles\FancyCandles\FancyCandles.csproj">
-      <Project>{f24d1444-a396-4881-ac6b-d438b97025ec}</Project>
-      <Name>FancyCandles</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\FancyPrimitives\FancyPrimitives.csproj">
       <Project>{cefe18e3-e073-4cc7-8cb9-c277c8d5b76f}</Project>
       <Name>FancyPrimitives</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FancyCandles\FancyCandles.csproj">
+      <Project>{f24d1444-a396-4881-ac6b-d438b97025ec}</Project>
+      <Name>FancyCandles</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

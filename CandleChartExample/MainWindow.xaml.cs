@@ -19,32 +19,54 @@ namespace CandleChartExample
 {
     public partial class MainWindow : Window
     {
-        ObservableCollection<ICandle> candles = new ObservableCollection<ICandle>();
+        private double freq;
+        private ObservableCollection<ICandle> candles;
+        //-----------------------------------------------------------------------------------------------------------------
+        public ReadOnlyObservableCollection<ICandle> ReadOnlyCandles
+        {
+            get { return (ReadOnlyObservableCollection<ICandle>)GetValue(ReadOnlyCandlesProperty); }
+            set { SetValue(ReadOnlyCandlesProperty, value); }
+        }
+        public static readonly DependencyProperty ReadOnlyCandlesProperty =
+            DependencyProperty.Register("ReadOnlyCandles", typeof(ReadOnlyObservableCollection<ICandle>), typeof(MainWindow), new PropertyMetadata(null));
         //-----------------------------------------------------------------------------------------------------------------
         public MainWindow()
         {
             InitializeComponent();
 
-            for (int i = 0; i < 500; i++)
-                candles.Add(CalculateCandle(i));
+            freq = 0.3;
+            candles = GenerateCandleCollection(500, freq);
+            ReadOnlyCandles = new ReadOnlyObservableCollection<ICandle>(candles);
 
-            DataContext = candles;
+            DataContext = this;
         }
         //-----------------------------------------------------------------------------------------------------------------
-        private Candle CalculateCandle(int i)
+        private ObservableCollection<ICandle> GenerateCandleCollection(int candlesCount, double freq)
+        {
+            ObservableCollection<ICandle> newCandles = new ObservableCollection<ICandle>();
+
+            for (int i = 0; i < candlesCount; i++)
+                newCandles.Add(CalculateCandle(i, freq));
+
+            return newCandles;
+        }
+        //-----------------------------------------------------------------------------------------------------------------
+        private Candle CalculateCandle(int i, double freq)
         {
             DateTime t0 = new DateTime(2019, 6, 11, 23, 40, 0);
-            double p0 = Math.Round(Math.Sin(0.3 * i) + 0.1 * i, 3);
-            double p1 = Math.Round(Math.Sin(0.3 * i + 1) + 0.1 * i, 3);
-            return new Candle(t0.AddMinutes(i * 5), 100 + p0, 101 + p0, 99 + p0, 100 + p1, i);
+            double p0 = Math.Round(Math.Sin(freq * i) + 0.1 * i, 3);
+            double p1 = Math.Round(Math.Sin(freq * i + 1) + 0.1 * i, 3);
+            return new Candle(t0.AddMinutes(i * 5), 100 + p0, 101 + p0, 99 + p0, 100 + p1, (i%3 == 0)?0:i);
         }
         //-----------------------------------------------------------------------------------------------------------------
         private void OnChangeLastCandle(object sender, RoutedEventArgs e)
         {
             int N = candles.Count;
+            if (N == 0) return;
+
             Candle lastCandle = (Candle)candles[N - 1];
 
-            // lastCandle.C += 1; - You can't do this way! This will cause no changes in the chart.
+            // lastCandle.C += 1; - You can't do it this way! This will cause no changes in the chart.
 
             double newC = lastCandle.C + 1;
             double newH = Math.Max(newC, lastCandle.H);
@@ -57,7 +79,28 @@ namespace CandleChartExample
         private void OnAddNewCandle(object sender, RoutedEventArgs e)
         {
             int N = candles.Count;
-            candles.Add(CalculateCandle(N));
+            candles.Add(CalculateCandle(N,freq));
+        }
+        //-----------------------------------------------------------------------------------------------------------------
+        private void OnReplaceCandlesBySmallerOne(object sender, RoutedEventArgs e)
+        {
+            freq = 0.8;
+            candles = GenerateCandleCollection(30, freq);
+            ReadOnlyCandles = new ReadOnlyObservableCollection<ICandle>(candles);
+        }
+        //-----------------------------------------------------------------------------------------------------------------
+        private void OnReplaceCandlesByBiggerOne(object sender, RoutedEventArgs e)
+        {
+            freq = 0.8;
+            candles = GenerateCandleCollection(800, freq);
+            ReadOnlyCandles = new ReadOnlyObservableCollection<ICandle>(candles);
+        }
+        //-----------------------------------------------------------------------------------------------------------------
+        private void OnReplaceCandlesByEmptyOne(object sender, RoutedEventArgs e)
+        {
+            freq = 0.8;
+            candles = GenerateCandleCollection(0, freq);
+            ReadOnlyCandles = new ReadOnlyObservableCollection<ICandle>(candles);
         }
         //-----------------------------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------------------------

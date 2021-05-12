@@ -237,6 +237,7 @@ namespace FancyCandles
         /// <summary>Default constructor.</summary>
         public CandleChart()
         {
+            timeFrame = 5;
             InitialCandleWidth = DefaultInitialCandleWidth;
             InitialCandleGap = DefaultInitialCandleGap;
 
@@ -262,6 +263,17 @@ namespace FancyCandles
                 ObservableCollection<OverlayIndicator> new_overlayIndicators = DeserializeOverlayIndicatorsFromJson(overlayIndicatorArrayJson);
                 OverlayIndicators = new_overlayIndicators;
                 UndoRecordedUndoableProperties();
+            }
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        private void OpenSelectCandleSourceWindow(object sender, RoutedEventArgs e)
+        {
+            SelectCandleSourceWindow popup = new SelectCandleSourceWindow(this);
+            if (popup.ShowDialog() == true)
+            {
+            }
+            else
+            {
             }
         }
         //----------------------------------------------------------------------------------------------------------------------------------
@@ -1265,7 +1277,7 @@ namespace FancyCandles
         ///<value>The default value for the <see cref="GapBetweenPriceTickLabels"/> property: <c>0.0</c>.</value>
         public static double DefaultGapBetweenPriceTickLabels { get { return 0.0; } }
         //----------------------------------------------------------------------------------------------------------------------------------
-        int maxNumberOfCharsInPrice = 0;
+        private int maxNumberOfCharsInPrice = 0;
         /// <summary>Gets the maximal number of chars in a price for the current candle collection.</summary>
         ///<value>The maximal number of chars in a price for the current candle collection.</value>
         ///<remarks>
@@ -1287,9 +1299,43 @@ namespace FancyCandles
         void ReCalc_MaxNumberOfCharsInPrice()
         {
             if (CandlesSource == null) return;
-            int charsInPrice = CandlesSource.Select(c => c.H.ToString().Length).Max();
-            int charsInVolume = IsVolumePanelVisible ? CandlesSource.Select(c => c.V.ToString().Length).Max() : 0;
-            MaxNumberOfCharsInPrice = Math.Max(charsInPrice, charsInVolume);
+
+            if (CandlesSource.Count == 0)
+                MaxNumberOfCharsInPrice = 0;
+            else
+            {
+                int charsInPrice = CandlesSource.Select(c => c.H.ToString().Length).Max();
+                int charsInVolume = IsVolumePanelVisible ? CandlesSource.Select(c => c.V.ToString().Length).Max() : 0;
+                MaxNumberOfCharsInPrice = Math.Max(charsInPrice, charsInVolume);
+            }
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        private int maxNumberOfDigitsAfterPointInPrice = 0;
+        /// <summary>Gets the maximum number of fractional digits in a price and volume for the current candle collection.</summary>
+        ///<value>The maximum number of fractional digits in a price and volume for the current candle collection.</value>
+        ///<remarks>
+        ///This property is recalculated every time the <see cref="CandlesSource"/> property is changed.
+        ///</remarks>
+        public int MaxNumberOfDigitsAfterPointInPrice
+        {
+            get { return maxNumberOfDigitsAfterPointInPrice; }
+            private set
+            {
+                if (value == maxNumberOfDigitsAfterPointInPrice) return;
+                maxNumberOfDigitsAfterPointInPrice = value;
+                OnPropertyChanged();
+            }
+        }
+
+        // Просматривает CandlesSource и пересчитывает maxNumberOfCharsInPrice
+        void ReCalc_MaxNumberOfDigitsAfterPointInPrice()
+        {
+            if (CandlesSource == null) return;
+
+            if (CandlesSource.Count == 0)
+                MaxNumberOfDigitsAfterPointInPrice = 0;
+            else
+                MaxNumberOfDigitsAfterPointInPrice = CandlesSource.Select(c => c.H.ToString().Length - c.H.ToString().LastIndexOf(',') - 1).Max();
         }
 
         #endregion **********************************************************************************************************************************************
@@ -1609,42 +1655,6 @@ namespace FancyCandles
         ///<summary>Gets the default value for the CrossPriceBackground property.</summary>
         ///<value>The default <see cref="Brush"/> value for the <see cref="CrossPriceBackground"/> property: <c>#FFE8EDFF</c>.</value>
         public static Brush DefaultCrossPriceBackground { get { return (Brush)(new SolidColorBrush(Color.FromArgb(255, 232, 237, 255))).GetCurrentValueAsFrozen(); } } // #FFE8EDFF
-        //----------------------------------------------------------------------------------------------------------------------------------
-        int maxNumberOfDigitsAfterPointInPrice = 0;
-        /// <summary>Gets the maximum number of fractional digits in a price and volume for the current candle collection.</summary>
-        ///<value>The maximum number of fractional digits in a price and volume for the current candle collection.</value>
-        ///<remarks>
-        ///This property is recalculated every time the <see cref="CandlesSource"/> property is changed.
-        ///</remarks>
-        public int MaxNumberOfDigitsAfterPointInPrice
-        {
-            get { return maxNumberOfDigitsAfterPointInPrice; }
-            private set
-            {
-                if (value == maxNumberOfDigitsAfterPointInPrice) return;
-                maxNumberOfDigitsAfterPointInPrice = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // Просматривает CandlesSource и пересчитывает maxNumberOfCharsInPrice
-        void ReCalc_MaxNumberOfDigitsAfterPointInPrice()
-        {
-            if (CandlesSource == null) return;
-
-            int max_n = 0;
-            for (int i = 0; i < CandlesSource.Count; i++)
-            {
-                string str = CandlesSource[i].H.ToString();
-                int point_i = str.LastIndexOf(',');
-                if (point_i >= 0)
-                {
-                    int n = str.Length - point_i - 1;
-                    if (n > max_n) max_n = n;
-                }
-            }
-            MaxNumberOfDigitsAfterPointInPrice = max_n;
-        }
 
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
@@ -1698,6 +1708,14 @@ namespace FancyCandles
 
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
+        public ICandleProvider CandleProvider
+        {
+            get { return (ICandleProvider)GetValue(CandleProviderProperty); }
+            set { SetValue(CandleProviderProperty, value); }
+        }
+        public static readonly DependencyProperty CandleProviderProperty =
+            DependencyProperty.Register("CandleProvider", typeof(ICandleProvider), typeof(CandleChart), new PropertyMetadata(null));
+
         /// <summary>Gets or sets the data source for the candles of this chart.</summary>
         ///<value>The data source for the candles of this chart. The default value is null.</value>
         ///<remarks>
@@ -1705,28 +1723,27 @@ namespace FancyCandles
         ///<tr><td>Identifier field</td><td><see cref="CandlesSourceProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
-        public ObservableCollection<ICandle> CandlesSource
+        public IList<ICandle> CandlesSource
         {
-            get { return (ObservableCollection<ICandle>)GetValue(CandlesSourceProperty); }
+            get { return (IList<ICandle>)GetValue(CandlesSourceProperty); }
             set { SetValue(CandlesSourceProperty, value); }
         }
         /// <summary>Identifies the <see cref="CandlesSource"/> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
         public static readonly DependencyProperty CandlesSourceProperty =
-            DependencyProperty.Register("CandlesSource", typeof(ObservableCollection<ICandle>), typeof(CandleChart), new UIPropertyMetadata(null, OnCandlesSourceChanged, CoerceCandlesSource));
+            DependencyProperty.Register("CandlesSource", typeof(IList<ICandle>), typeof(CandleChart), new UIPropertyMetadata(null, OnCandlesSourceChanged, CoerceCandlesSource));
 
         DateTime lastCenterCandleDateTime;
         private static object CoerceCandlesSource(DependencyObject objWithOldDP, object newDPValue)
         {
-            CandleChart thisCandleChart = (CandleChart)objWithOldDP; // Содержит старое значение для изменяемого свойства.
-            ObservableCollection<ICandle> newValue = (ObservableCollection<ICandle>)newDPValue;
+            CandleChart thisCandleChart = (CandleChart)objWithOldDP;
 
             IntRange vcRange = thisCandleChart.VisibleCandlesRange;
             if (IntRange.IsUndefined(vcRange))
                 thisCandleChart.lastCenterCandleDateTime = DateTime.MinValue;
             else
             {
-                if (thisCandleChart.CandlesSource != null && (vcRange.Start_i + vcRange.Count) < thisCandleChart.CandlesSource.Count)
+                if (thisCandleChart.CandlesSource != null && (vcRange.Start_i + vcRange.Count) < thisCandleChart.CandlesSource.Count())
                 {
                     int centralCandle_i = (2 * vcRange.Start_i + vcRange.Count) / 2;
                     thisCandleChart.lastCenterCandleDateTime = thisCandleChart.CandlesSource[centralCandle_i].t;
@@ -1735,10 +1752,9 @@ namespace FancyCandles
                     thisCandleChart.lastCenterCandleDateTime = DateTime.MaxValue;
             }
 
-            return newValue;
+            return newDPValue;
         }
 
-        // Заменили коллекцию CandlesSource на новую:
         static void OnCandlesSourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             CandleChart thisCandleChart = obj as CandleChart;
@@ -1746,14 +1762,16 @@ namespace FancyCandles
 
             if (e.OldValue != null)
             {
-                ObservableCollection<ICandle> old_obsCollection = (ObservableCollection<ICandle>)e.OldValue;
-                old_obsCollection.CollectionChanged -= thisCandleChart.OnCandlesSourceCollectionChanged;
+                INotifyCollectionChanged oldCandlesSource = e.OldValue as INotifyCollectionChanged;
+                if (oldCandlesSource != null)
+                    oldCandlesSource.CollectionChanged -= thisCandleChart.OnCandlesSourceCollectionChanged;
             }
 
             if (e.NewValue != null)
             {
-                ObservableCollection<ICandle> new_obsCollection = (ObservableCollection<ICandle>)e.NewValue;
-                new_obsCollection.CollectionChanged += thisCandleChart.OnCandlesSourceCollectionChanged;
+                INotifyCollectionChanged newCandlesSource = e.NewValue as INotifyCollectionChanged;
+                if (newCandlesSource != null)
+                    newCandlesSource.CollectionChanged += thisCandleChart.OnCandlesSourceCollectionChanged;
             }
 
             thisCandleChart.SetCandlesSourceForAll_OverlayIndicators();
@@ -1764,23 +1782,36 @@ namespace FancyCandles
                 thisCandleChart.ReCalc_MaxNumberOfCharsInPrice();
                 thisCandleChart.ReCalc_MaxNumberOfDigitsAfterPointInPrice();
 
-                if (thisCandleChart.lastCenterCandleDateTime != DateTime.MinValue)
-                    thisCandleChart.SetVisibleCandlesRangeCenter(thisCandleChart.lastCenterCandleDateTime);
-                else
-                    thisCandleChart.ReCalc_VisibleCandlesRange();
+                DateTime old_lastCenterCandleDateTime = thisCandleChart.lastCenterCandleDateTime;
+                thisCandleChart.ReCalc_VisibleCandlesRange();
+
+                if (old_lastCenterCandleDateTime != DateTime.MinValue)
+                    thisCandleChart.SetVisibleCandlesRangeCenter(old_lastCenterCandleDateTime);
+                //else
+                  //  thisCandleChart.ReCalc_VisibleCandlesRange();
 
                 //thisCandleChart.ReCalc_FinishedCandlesExtremums();
                 thisCandleChart.ReCalc_VisibleCandlesExtremums();
             }
         }
 
-        // Произошли изменения содержимого коллекции CandlesSource:
         private void OnCandlesSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             //different kind of changes that may have occurred in collection
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                if (e.NewStartingIndex == (CandlesSource.Count - 1))
+                if (CandlesSource.Count < 20)
+                {
+                    ReCalc_TimeFrame();
+                    ReCalc_MaxNumberOfCharsInPrice();
+                    ReCalc_MaxNumberOfDigitsAfterPointInPrice();
+                }
+
+                int maxVisibleCandlesCount = (int)(priceChartContainer.ActualWidth / (CandleWidth + CandleGap));
+
+                if (CandlesSource.Count< maxVisibleCandlesCount)
+                    VisibleCandlesRange = new IntRange(0, CandlesSource.Count);
+                else if (e.NewStartingIndex == (CandlesSource.Count - 1))
                 {
                     //if (CandlesSource.Count > 1)
                     //    ReCalc_FinishedCandlesExtremums_AfterNewFinishedCandleAdded(CandlesSource[CandlesSource.Count - 2]);
@@ -1867,6 +1898,9 @@ namespace FancyCandles
 
         private void ReCalc_VisibleCandlesExtremums()
         {
+            if (IntRange.IsUndefined(VisibleCandlesRange)) 
+                return;
+
             int end_i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - 1;
             double maxH = double.MinValue;
             double minL = double.MaxValue;
@@ -1957,7 +1991,13 @@ namespace FancyCandles
             }
 
             int newCount = (int)(priceChartContainer.ActualWidth / (CandleWidth + CandleGap));
-            if (newCount > CandlesSource.Count) newCount = CandlesSource.Count;
+
+            if (newCount > CandlesSource.Count)
+            {
+                VisibleCandlesRange = new IntRange(0, CandlesSource.Count);
+                return;
+            }
+
             int new_start_i = IntRange.IsUndefined(VisibleCandlesRange) ? (CandlesSource.Count - newCount) : VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - newCount;
             if (new_start_i < 0) new_start_i = 0;
             if (new_start_i + newCount > CandlesSource.Count)
@@ -1973,6 +2013,16 @@ namespace FancyCandles
         ///<param name="visibleCandlesRangeCenter">Central visible candle should have its <c>t</c> property equal to this parameter (or close to it as much as possible).</param>
         public void SetVisibleCandlesRangeCenter(DateTime visibleCandlesRangeCenter)
         {
+            int maxVisibleCandlesCount = (int)(priceChartContainer.ActualWidth / (CandleWidth + CandleGap));
+            if (CandlesSource.Count < maxVisibleCandlesCount)
+            {
+                VisibleCandlesRange = new IntRange(0, CandlesSource.Count);
+                return;
+            }
+
+            if (IntRange.IsUndefined(VisibleCandlesRange))
+                return;
+
             ICandle cndl = CandlesSource[VisibleCandlesRange.Count / 2];
             if (visibleCandlesRangeCenter < cndl.t) //MyDateAndTime.YYMMDDHHMM_to_Datetime(cndl.YYMMDD, cndl.HHMM))
             {
