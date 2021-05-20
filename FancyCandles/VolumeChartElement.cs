@@ -29,6 +29,7 @@ using System.Globalization;
 using System.ComponentModel;
 using System.Runtime.CompilerServices; // [CallerMemberName]
 using System.Diagnostics;
+using System.Globalization;
 
 namespace FancyCandles
 {
@@ -58,6 +59,14 @@ namespace FancyCandles
                     bearishBarPen.Freeze();
             }
         }
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        public CultureInfo Culture
+        {
+            get { return (CultureInfo)GetValue(CultureProperty); }
+            set { SetValue(CultureProperty, value); }
+        }
+        public static readonly DependencyProperty CultureProperty =
+            DependencyProperty.Register("Culture", typeof(CultureInfo), typeof(VolumeChartElement), new FrameworkPropertyMetadata(CultureInfo.CurrentCulture) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         public static readonly DependencyProperty CandlesSourceProperty
              = DependencyProperty.Register("CandlesSource", typeof(IList<ICandle>), typeof(VolumeChartElement), new FrameworkPropertyMetadata(null));
@@ -185,8 +194,9 @@ namespace FancyCandles
                 double wnd_V = (1.0 - cndl.V / (double)VisibleCandlesExtremums.VolumeHigh) * RenderSize.Height;
 
                 double volumeBarLeftX = halfDWidth + i * (volumeBarWidth + volumeBarGap);
-                if (cndl.V > 0L)
-                    drawingContext.DrawRectangle(cndlBrush, null, new Rect(volumeBarLeftX, wnd_V, volumeBarWidth, RenderSize.Height - wnd_V));
+                double barHeight = RenderSize.Height - wnd_V;
+                if (cndl.V > 0L && barHeight >= 1.0)
+                    drawingContext.DrawRectangle(cndlBrush, null, new Rect(volumeBarLeftX, wnd_V, volumeBarWidth, barHeight));
                 else
                     drawingContext.DrawLine(cndlPen, new Point(volumeBarLeftX, RenderSize.Height), new Point(volumeBarLeftX + volumeBarWidth, RenderSize.Height));
             }
@@ -194,11 +204,14 @@ namespace FancyCandles
         //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
+            char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
+
             Point mousePos = e.GetPosition(this);
             //Vector uv = new Vector(mousePos.X/ RenderSize.Width, mousePos.Y / RenderSize.Height);
             int cndl_i = VisibleCandlesRange.Start_i + (int)(mousePos.X / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap));
             ICandle cndl = CandlesSource[cndl_i];
-            string tooltipText = $"{cndl.t.ToString("d.MM.yyyy H:mm")}\nV={cndl.V}";
+            string tooltipText = $"{cndl.t.ToString("g", Culture)}\nV= {cndl.V.MyToString(Culture, decimalSeparator, decimalSeparatorArray)}";
             ((ToolTip)ToolTip).Content = tooltipText;
         }
         //---------------------------------------------------------------------------------------------------------------------------------------

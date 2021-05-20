@@ -47,6 +47,14 @@ namespace FancyCandles
             }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
+        public CultureInfo Culture
+        {
+            get { return (CultureInfo)GetValue(CultureProperty); }
+            set { SetValue(CultureProperty, value); }
+        }
+        public static readonly DependencyProperty CultureProperty =
+            DependencyProperty.Register("Culture", typeof(CultureInfo), typeof(PriceTicksElement), new FrameworkPropertyMetadata(CultureInfo.CurrentCulture) { AffectsRender = true });
+        //---------------------------------------------------------------------------------------------------------------------------------------
         public Pen GridlinesPen
         {
             get { return (Pen)GetValue(GridlinesPenProperty); }
@@ -151,7 +159,7 @@ namespace FancyCandles
         //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnRender(DrawingContext drawingContext)
         {
-            double textHeight = (new FormattedText("123", CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
+            double textHeight = (new FormattedText("123", Culture, FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
             double halfTextHeight = textHeight / 2.0;
             double candlePanelWidth = ActualWidth - PriceAxisWidth;
             double tick_text_X = candlePanelWidth + TICK_LINE_WIDTH + TICK_LEFT_MARGIN;
@@ -164,9 +172,13 @@ namespace FancyCandles
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             double chartHeight_candlesLHRange_Ratio = chartHeight / (VisibleCandlesExtremums.PriceHigh - VisibleCandlesExtremums.PriceLow);
 
+            string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
+            char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
+
             void DrawPriceTick(double price)
             {
-                FormattedText priceTickFormattedText = new FormattedText(price.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                string s = price.MyToString(Culture, decimalSeparator, decimalSeparatorArray);
+                FormattedText priceTickFormattedText = new FormattedText(s, Culture, FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double y = ChartTopMargin + (VisibleCandlesExtremums.PriceHigh - price) * chartHeight_candlesLHRange_Ratio;
                 drawingContext.DrawText(priceTickFormattedText, new Point(tick_text_X, y - halfTextHeight));
                 drawingContext.DrawLine(axisTickPen, new Point(candlePanelWidth, y), new Point(tick_line_endX, y));

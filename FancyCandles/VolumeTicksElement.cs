@@ -36,6 +36,14 @@ namespace FancyCandles
                 new FrameworkPropertyMetadata(defaultPen, null, CoerceGridlinesPen) { AffectsRender = true });
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
+        public CultureInfo Culture
+        {
+            get { return (CultureInfo)GetValue(CultureProperty); }
+            set { SetValue(CultureProperty, value); }
+        }
+        public static readonly DependencyProperty CultureProperty =
+            DependencyProperty.Register("Culture", typeof(CultureInfo), typeof(VolumeTicksElement), new FrameworkPropertyMetadata(CultureInfo.CurrentCulture) { AffectsRender = true });
+        //---------------------------------------------------------------------------------------------------------------------------------------
         public VolumeTicksElement()
         {
             if (axisTickPen == null)
@@ -159,7 +167,7 @@ namespace FancyCandles
         {
             if (VisibleCandlesExtremums.VolumeHigh == long.MinValue) return;
 
-            double textHeight = (new FormattedText("123", CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
+            double textHeight = (new FormattedText("123", Culture, FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
             double halfTextHeight = textHeight / 2.0;
             double volumeHistogramPanelWidth = ActualWidth - PriceAxisWidth;
             double tick_text_X = volumeHistogramPanelWidth + TICK_LINE_WIDTH + TICK_LEFT_MARGIN;
@@ -173,9 +181,13 @@ namespace FancyCandles
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             double chartHeight_candlesLHRange_Ratio = chartHeight / VisibleCandlesExtremums.VolumeHigh;
 
+            string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
+            char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
+
             void DrawPriceTick(long volume)
             {
-                FormattedText priceTickFormattedText = new FormattedText(volume.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                string s = volume.MyToString(Culture, decimalSeparator, decimalSeparatorArray);
+                FormattedText priceTickFormattedText = new FormattedText(s, Culture, FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double y = ChartTopMargin + (VisibleCandlesExtremums.VolumeHigh - volume) * chartHeight_candlesLHRange_Ratio;
                 drawingContext.DrawText(priceTickFormattedText, new Point(tick_text_X, y - halfTextHeight));
                 drawingContext.DrawLine(axisTickPen, new Point(volumeHistogramPanelWidth, y), new Point(tick_line_endX, y));

@@ -9,7 +9,7 @@ namespace FancyCandles
 {
     public interface ICandleProvider
     {
-        List<ISecInfo> SecCatalog { get; }
+        List<ISecurityInfo> SecCatalog { get; }
         ReadOnlyObservableCollection<ICandle> GetCandleSource(int secCatalog_i, int timeFrameInMinutes);
     }
 }

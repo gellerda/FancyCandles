@@ -92,13 +92,14 @@
                         <MenuItem Header="Settings" Click="OpenCandleChartPropertiesWindow"/>
                         <MenuItem Header="Load Settings" Click="OpenLoadSettingsDialog"/>
                         <MenuItem Header="Save Settings As" Click="OpenSaveSettingsAsDialog"/>
-                        <!-- <MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandleProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/> -->
+                        <!-- <MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandleProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/>-->
                     </ContextMenu>
                 </Rectangle.ContextMenu>
             </Rectangle>
 
             <local:PriceChartElement x:Name="priceChart" 
                 CandlesSource="{Binding ElementName=thisUserControl, Path=CandlesSource, Mode=OneWay}"
+                Culture="{Binding ElementName=thisUserControl, Path=Culture, Mode=OneWay}"
                 Indicators="{Binding ElementName=thisUserControl, Path=OverlayIndicators,Mode=OneWay}"
                 VisibleCandlesRange="{Binding ElementName=thisUserControl, Path=VisibleCandlesRange, Mode=OneWay}"
                 VisibleCandlesExtremums="{Binding ElementName=thisUserControl, Path=VisibleCandlesExtremums, Mode=OneWay}"
@@ -194,12 +195,14 @@
                         <MenuItem Header="Settings" Click="OpenCandleChartPropertiesWindow"></MenuItem>
                         <MenuItem Header="Load Settings" Click="OpenLoadSettingsDialog"></MenuItem>
                         <MenuItem Header="Save Settings As" Click="OpenSaveSettingsAsDialog"></MenuItem>
+                        <!-- <MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandleProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/> -->
                     </ContextMenu>
                 </Rectangle.ContextMenu>
             </Rectangle>
 
             <local:VolumeChartElement 
                 CandlesSource="{Binding ElementName=thisUserControl, Path=CandlesSource, Mode=OneWay}"
+                Culture="{Binding ElementName=thisUserControl, Path=Culture, Mode=OneWay}"
                 VisibleCandlesRange="{Binding ElementName=thisUserControl, Path=VisibleCandlesRange, Mode=OneWay}"
                 VisibleCandlesExtremums="{Binding ElementName=thisUserControl, Path=VisibleCandlesExtremums, Mode=OneWay}"
                 VolumeBarWidthToCandleWidthRatio="{Binding ElementName=thisUserControl, Path=VolumeBarWidthToCandleWidthRatio, Mode=OneWay}"
@@ -258,6 +261,7 @@
         <!-- Вертикальная шкала с метками цены: -->
         <local:PriceTicksElement Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch"
                                  Style="{StaticResource rowSpanPriceChartIfVolumeDisabled}"
+                                 Culture="{Binding Path=Culture, Mode=OneWay}"
                                  AxisTickColor="{Binding Path=AxisTickColor, Mode=OneWay}"
                                  GapBetweenTickLabels="{Binding Path=GapBetweenPriceTickLabels, Mode=OneWay}"
                                  ChartBottomMargin="{Binding Path=PriceChartBottomMargin, Mode=OneWay}"
@@ -270,6 +274,8 @@
         <!-- ============================================================================================================================================================== -->
         <!-- Вертикальная шкала с метками объема: -->
         <local:VolumeTicksElement Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch"
+                                  Culture="{Binding Path=Culture, Mode=OneWay}"
+                                  AxisTickColor="{Binding Path=AxisTickColor, Mode=OneWay}"
                                   GapBetweenTickLabels="{Binding Path=GapBetweenPriceTickLabels, Mode=OneWay}"
                                   ChartBottomMargin="{Binding Path=VolumeHistogramBottomMargin, Mode=OneWay}"
                                   ChartTopMargin="{Binding Path=VolumeHistogramTopMargin, Mode=OneWay}"
@@ -284,6 +290,7 @@
         <local:TimeTicksElement Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"
                                 TimeAxisHeight="{Binding Path=TimeAxisHeight, Mode=OneWay}"
                                 CandlesSource="{Binding Path=CandlesSource, Mode=OneWay}"
+                                AxisTickColor="{Binding Path=AxisTickColor, Mode=OneWay}"
                                 TimeFrame="{Binding Path=TimeFrame, Mode=OneWay}"
                                 VisibleCandlesRange="{Binding Path=VisibleCandlesRange, Mode=OneWay}"
                                 IsGridlinesEnabled="{Binding Path=IsVerticalGridlinesEnabled, Mode=OneWay}"
@@ -328,7 +335,8 @@
                         <Binding Path="VisibleCandlesExtremums" Mode="OneWay"/>
                         <Binding Path="PriceChartTopMargin" Mode="OneWay"/>
                         <Binding Path="PriceChartBottomMargin" Mode="OneWay"/>
-                        <Binding Path="MaxNumberOfDigitsAfterPointInPrice" Mode="OneWay"/>
+                        <Binding Path="MaxNumberOfFractionalDigitsInPrice" Mode="OneWay"/>
+                        <Binding Path="Culture" Mode="OneWay"/>
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
@@ -360,6 +368,7 @@
                         <Binding Path="VisibleCandlesExtremums" Mode="OneWay"/>
                         <Binding Path="VolumeHistogramTopMargin" Mode="OneWay"/>
                         <Binding Path="VolumeHistogramBottomMargin" Mode="OneWay"/>
+                        <Binding Path="Culture" Mode="OneWay"/>
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>

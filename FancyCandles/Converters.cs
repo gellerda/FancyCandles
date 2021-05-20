@@ -166,7 +166,8 @@ namespace FancyCandles
         // values[2] - CandleExtremums visibleCandlesExtremums
         // values[3] - double PriceChartTopMargin
         // values[4] - double PriceChartBottomMargin
-        // values[5] - int MaxNumberOfDigitsAfterPointInPrice
+        // values[5] - int MaxNumberOfFractionalDigitsInPrice
+        // values[6] - CultureInfo candleChartCulture
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values == null || values.Length < 6 || (values[0]).GetType() != typeof(Point) || (values[1]).GetType() != typeof(double) || (values[2]).GetType() != typeof(CandleExtremums)
@@ -179,8 +180,14 @@ namespace FancyCandles
             double priceHigh = ((CandleExtremums)values[2]).PriceHigh;
             double chartTopMargin = (double)values[3];
             double chartBottomMargin = (double)values[4];
-            int maxNumberOfDigitsAfterPointInPrice = (int)values[5];
-            return Math.Round((priceHigh - (currentMousePosition.Y - chartTopMargin) / (ChartAreaHeight - chartTopMargin - chartBottomMargin) * (priceHigh - priceLow)), maxNumberOfDigitsAfterPointInPrice).ToString();
+            int maxNumberOfFractionalDigitsInPrice = (int)values[5];
+
+            CultureInfo candleChartCulture = (CultureInfo)values[6];
+            string decimalSeparator = candleChartCulture.NumberFormat.NumberDecimalSeparator;
+            char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
+
+            double price = Math.Round((priceHigh - (currentMousePosition.Y - chartTopMargin) / (ChartAreaHeight - chartTopMargin - chartBottomMargin) * (priceHigh - priceLow)), maxNumberOfFractionalDigitsInPrice);
+            return price.MyToString(candleChartCulture, decimalSeparator, decimalSeparatorArray);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -194,6 +201,7 @@ namespace FancyCandles
         // values[2] - CandleExtremums visibleCandlesExtremums
         // values[3] - double VolumeHistogramTopMargin
         // values[4] - double VolumeHistogramBottomMargin
+        // values[5] - CultureInfo candleChartCulture
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values == null || values.Length < 5 || (values[0]).GetType() != typeof(Point) || (values[1]).GetType() != typeof(double) || (values[2]).GetType() != typeof(CandleExtremums)
@@ -205,7 +213,13 @@ namespace FancyCandles
             CandleExtremums visibleCandlesExtremums = (CandleExtremums)values[2];
             double volumeHistogramTopMargin = (double)values[3];
             double volumeHistogramBottomMargin = (double)values[4];
-            return ((long)((visibleCandlesExtremums.VolumeHigh - (currentMousePosition.Y - volumeHistogramTopMargin) / (volumeHistogramHeight - volumeHistogramTopMargin - volumeHistogramBottomMargin) * visibleCandlesExtremums.VolumeHigh))).ToString();
+
+            CultureInfo candleChartCulture = (CultureInfo)values[5];
+            string decimalSeparator = candleChartCulture.NumberFormat.NumberDecimalSeparator;
+            char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
+
+            long volume = ((long)((visibleCandlesExtremums.VolumeHigh - (currentMousePosition.Y - volumeHistogramTopMargin) / (volumeHistogramHeight - volumeHistogramTopMargin - volumeHistogramBottomMargin) * visibleCandlesExtremums.VolumeHigh)));
+            return volume.MyToString(candleChartCulture, decimalSeparator, decimalSeparatorArray);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

@@ -228,8 +228,7 @@ namespace FancyCandles
         private void OnUserControlLoaded(object sender, RoutedEventArgs e)
         {
             ReCalc_TimeFrame();
-            ReCalc_MaxNumberOfCharsInPrice();
-            ReCalc_MaxNumberOfDigitsAfterPointInPrice();
+            ReCalc_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice();
             CandleGap = InitialCandleGap;
             CandleWidth = InitialCandleWidth;
         }
@@ -1295,8 +1294,25 @@ namespace FancyCandles
             }
         }
 
+        private int maxNumberOfFractionalDigitsInPrice = 0;
+        /// <summary>Gets the maximum number of fractional digits in a price and volume for the current candle collection.</summary>
+        ///<value>The maximum number of fractional digits in a price and volume for the current candle collection.</value>
+        ///<remarks>
+        ///This property is recalculated every time the <see cref="CandlesSource"/> property is changed.
+        ///</remarks>
+        public int MaxNumberOfFractionalDigitsInPrice
+        {
+            get { return maxNumberOfFractionalDigitsInPrice; }
+            private set
+            {
+                if (value == maxNumberOfFractionalDigitsInPrice) return;
+                maxNumberOfFractionalDigitsInPrice = value;
+                OnPropertyChanged();
+            }
+        }
+
         // Просматривает CandlesSource и пересчитывает maxNumberOfCharsInPrice
-        void ReCalc_MaxNumberOfCharsInPrice()
+        private void ReCalc_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice()
         {
             if (CandlesSource == null) return;
 
@@ -1305,39 +1321,38 @@ namespace FancyCandles
             else
             {
                 int charsInPrice = CandlesSource.Select(c => c.H.ToString().Length).Max();
-                int charsInVolume = IsVolumePanelVisible ? CandlesSource.Select(c => c.V.ToString().Length).Max() : 0;
+
+                int charsInVolume = 0;
+                if (IsVolumePanelVisible)
+                    charsInVolume = CandlesSource.Select(c => c.V.ToString().Length).Max();
+
                 MaxNumberOfCharsInPrice = Math.Max(charsInPrice, charsInVolume);
             }
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        private int maxNumberOfDigitsAfterPointInPrice = 0;
-        /// <summary>Gets the maximum number of fractional digits in a price and volume for the current candle collection.</summary>
-        ///<value>The maximum number of fractional digits in a price and volume for the current candle collection.</value>
-        ///<remarks>
-        ///This property is recalculated every time the <see cref="CandlesSource"/> property is changed.
-        ///</remarks>
-        public int MaxNumberOfDigitsAfterPointInPrice
-        {
-            get { return maxNumberOfDigitsAfterPointInPrice; }
-            private set
-            {
-                if (value == maxNumberOfDigitsAfterPointInPrice) return;
-                maxNumberOfDigitsAfterPointInPrice = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // Просматривает CandlesSource и пересчитывает maxNumberOfCharsInPrice
-        void ReCalc_MaxNumberOfDigitsAfterPointInPrice()
-        {
-            if (CandlesSource == null) return;
 
             if (CandlesSource.Count == 0)
-                MaxNumberOfDigitsAfterPointInPrice = 0;
+                MaxNumberOfFractionalDigitsInPrice = 0;
             else
-                MaxNumberOfDigitsAfterPointInPrice = CandlesSource.Select(c => c.H.ToString().Length - c.H.ToString().LastIndexOf(',') - 1).Max();
+                MaxNumberOfFractionalDigitsInPrice = CandlesSource.Select(c => c.H.NumberOfFractionalDigits()).Max();
         }
 
+        private void Update_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice(ICandle newCandle)
+        {
+            int L1 = newCandle.H.ToString().Length;
+
+            int L2 = 0;
+            if (IsVolumePanelVisible)
+                L2 = newCandle.V.ToString().Length;
+
+            int L = Math.Max(L1, L2);
+
+            if (L > MaxNumberOfCharsInPrice)
+                MaxNumberOfCharsInPrice = L;
+
+            int FL = newCandle.H.NumberOfFractionalDigits();
+            if (FL > MaxNumberOfFractionalDigitsInPrice)
+                MaxNumberOfFractionalDigitsInPrice = FL;
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
         #region PROPERTIES OF THE TIME AXIS *********************************************************************************************************************
@@ -1708,6 +1723,18 @@ namespace FancyCandles
 
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
+        /// <summary>Gets or sets the specific culture that will be used to draw price, volume, date and time values.</summary>
+        ///<value>The specific culture that will be used to draw price, volume, date and time values. The default is <see href="https://docs.microsoft.com/en-us/dotnet/api/system.globalization.cultureinfo.currentculture?view=netframework-4.7.2">CultureInfo.CurrentCulture</see>.</value>
+        public CultureInfo Culture
+        {
+            get { return (CultureInfo)GetValue(CultureProperty); }
+            set { SetValue(CultureProperty, value); }
+        }
+        /// <summary>Identifies the <see cref="Culture"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty CultureProperty =
+            DependencyProperty.Register("Culture", typeof(CultureInfo), typeof(CandleChart), new PropertyMetadata(CultureInfo.CurrentCulture));        
+        //----------------------------------------------------------------------------------------------------------------------------------
         public ICandleProvider CandleProvider
         {
             get { return (ICandleProvider)GetValue(CandleProviderProperty); }
@@ -1779,8 +1806,7 @@ namespace FancyCandles
             if (thisCandleChart.IsLoaded)
             {
                 thisCandleChart.ReCalc_TimeFrame();
-                thisCandleChart.ReCalc_MaxNumberOfCharsInPrice();
-                thisCandleChart.ReCalc_MaxNumberOfDigitsAfterPointInPrice();
+                thisCandleChart.ReCalc_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice();
 
                 DateTime old_lastCenterCandleDateTime = thisCandleChart.lastCenterCandleDateTime;
                 thisCandleChart.ReCalc_VisibleCandlesRange();
@@ -1800,11 +1826,12 @@ namespace FancyCandles
             //different kind of changes that may have occurred in collection
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
+                ICandle newCandle = CandlesSource[e.NewStartingIndex];
+                Update_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice(newCandle);
+
                 if (CandlesSource.Count < 20)
                 {
                     ReCalc_TimeFrame();
-                    ReCalc_MaxNumberOfCharsInPrice();
-                    ReCalc_MaxNumberOfDigitsAfterPointInPrice();
                 }
 
                 int maxVisibleCandlesCount = (int)(priceChartContainer.ActualWidth / (CandleWidth + CandleGap));
@@ -1822,6 +1849,9 @@ namespace FancyCandles
             }
             if (e.Action == NotifyCollectionChangedAction.Replace)
             {
+                ICandle newCandle = CandlesSource[e.NewStartingIndex];
+                Update_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice(newCandle);
+
                 int vc_i = e.NewStartingIndex - VisibleCandlesRange.Start_i; // VisibleCandles index.
                 if (vc_i >= 0 && vc_i < VisibleCandlesRange.Count)
                     ReCalc_VisibleCandlesExtremums_AfterOneCandleChanged(e.NewStartingIndex);
@@ -1909,6 +1939,7 @@ namespace FancyCandles
             for (int i = VisibleCandlesRange.Start_i; i <= end_i; i++)
             {
                 ICandle cndl = CandlesSource[i];
+                if (cndl.H == 0.0 || cndl.L == 0) continue;
                 if (cndl.H > maxH) maxH = cndl.H;
                 if (cndl.L < minL) minL = cndl.L;
                 if (cndl.V < minV) minV = cndl.V;
@@ -1921,6 +1952,9 @@ namespace FancyCandles
         private void ReCalc_VisibleCandlesExtremums_AfterOneCandleChanged(int changedCandle_i)
         {
             ICandle cndl = CandlesSource[changedCandle_i];
+
+            if (cndl.H == 0.0 || cndl.L == 0) return;
+
             double newPriceL = Math.Min(cndl.L, VisibleCandlesExtremums.PriceLow);
             double newPriceH = Math.Max(cndl.H, VisibleCandlesExtremums.PriceHigh);
             long newVolL = Math.Min(cndl.V, VisibleCandlesExtremums.VolumeLow);

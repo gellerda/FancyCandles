@@ -27,6 +27,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Collections.Generic;
 using FancyCandles.Indicators;
+using System.Globalization;
 
 namespace FancyCandles
 {
@@ -57,6 +58,14 @@ namespace FancyCandles
                     bearishCandleStrokePen.Freeze();
             }
         }
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        public CultureInfo Culture
+        {
+            get { return (CultureInfo)GetValue(CultureProperty); }
+            set { SetValue(CultureProperty, value); }
+        }
+        public static readonly DependencyProperty CultureProperty =
+            DependencyProperty.Register("Culture", typeof(CultureInfo), typeof(PriceChartElement), new FrameworkPropertyMetadata(CultureInfo.CurrentCulture) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         //private Brush transparentFrozenBrush = (Brush)(new SolidColorBrush(Colors.Transparent)).GetCurrentValueAsFrozen();
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -292,11 +301,14 @@ namespace FancyCandles
         //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
+            char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
+
             Point mousePos = e.GetPosition(this);
             //Vector uv = new Vector(mousePos.X/ RenderSize.Width, mousePos.Y / RenderSize.Height);
             int cndl_i = VisibleCandlesRange.Start_i + (int)(mousePos.X / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap));
             ICandle cndl = CandlesSource[cndl_i];
-            string tooltipText = $"{cndl.t.ToString("d.MM.yyyy H:mm")}\nO={cndl.O}\nH={cndl.H}\nL={cndl.L}\nC={cndl.C}\nV={cndl.V}";
+            string tooltipText = $"{cndl.t.ToString("g", Culture)}\nO= {cndl.O.MyToString(Culture, decimalSeparator, decimalSeparatorArray)}\nH= {cndl.H.MyToString(Culture, decimalSeparator, decimalSeparatorArray)}\nL= {cndl.L.MyToString(Culture, decimalSeparator, decimalSeparatorArray)}\nC= {cndl.C.MyToString(Culture, decimalSeparator, decimalSeparatorArray)}\nV= {cndl.V.MyToString(Culture, decimalSeparator, decimalSeparatorArray)}";
             ((ToolTip)ToolTip).Content = tooltipText;
         }
         //---------------------------------------------------------------------------------------------------------------------------------------

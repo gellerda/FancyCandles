@@ -68,9 +68,10 @@
     <Compile Include="ICandleProvider.cs" />
     <Compile Include="Indicators\ExponentialMovingAverage.cs" />
     <Compile Include="Indicators\SimpleMovingAverage.cs" />
-    <Compile Include="ISecInfo.cs" />
+    <Compile Include="ISecurityInfo.cs" />
     <Compile Include="MyAttributes.cs" />
     <Compile Include="MyDateAndTime.cs" />
+    <Compile Include="MyNumberFormatting.cs" />
     <Compile Include="MyWpfMath.cs" />
     <Compile Include="PriceChartElement.cs" />
     <Compile Include="Indicators\OverlayIndicator.cs" />

@@ -8,21 +8,50 @@
         Title="SelectCandleSourceWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        
-        <ListView x:Name="secList" Grid.Row="0" 
-                  ItemsSource="{Binding Path=CandleProvider.SecCatalog}" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=ClassCode}">Class</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=SecCode}" Width="100">Sec</GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0 5 10 5" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="0">
+            <Label Content="Find by:"/>
+            
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <Label Content="Ticker"/>
+                    <TextBox x:Name="tickerFilterText" Margin="0 0 0 10"
+                             Width="60"
+                             Text="{Binding Path=TickerFilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            
+                <StackPanel>
+                    <Label Content="Name"/>
+                    <TextBox x:Name="nameFilterText" Margin="0 0 0 10"
+                             Width="210"
+                             Text="{Binding Path=NameFilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" x:Name="secListContainer" Height="Auto">
+            <ListView x:Name="secList"
+                      MaxHeight="{Binding ElementName=secListContainer, Path=ActualHeight}"
+                      ItemsSource="{Binding Path=SecsView}" 
+                      VerticalContentAlignment="Top"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Ticker}" Width="{Binding ElementName=tickerFilterText, Path=Width, Mode=TwoWay}">Ticker</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=SecurityName}" Width="{Binding ElementName=nameFilterText, Path=Width, Mode=TwoWay}">Name</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=SecurityType}" Width="60">Type</GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" 
+                    Orientation="Horizontal" HorizontalAlignment="Right"
+                    Margin="0 5 10 5">
             <Button x:Name="buttonOk" Width="80" Margin="0 0 10 0" HorizontalAlignment="Right" Click="OkButton_Click" Padding="15 3">Ok</Button>
             <Button x:Name="buttonCancel" Width="80" HorizontalAlignment="Right" IsCancel="True" Click="CancelButton_Click" Padding="15 3">Cancel</Button>
         </StackPanel>
