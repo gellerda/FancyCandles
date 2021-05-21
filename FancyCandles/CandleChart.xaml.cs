@@ -1169,14 +1169,16 @@ namespace FancyCandles
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
         #region COMMON PROPERTIES FOR THE PRICE AXIS AND THE TIME AXIS*******************************************************************************************
-        ///<summary>Gets or sets a color of lines, ticks and its labels for the time axis, the price axis and the volume axis.</summary>
-        ///<value>The color of lines, ticks and its labels for the time axis, the price axis and the volume axis. The default is determined by the <see cref="DefaultAxisTickColor"/> value.</value>
+        ///<summary>Gets or sets the color of lines, ticks and its labels for the time, price and volume axises.</summary>
+        ///<value>The color of lines, ticks and its labels for the time, price and volume axises. The default is determined by the <see cref="DefaultAxisTickColor"/> value.</value>
         ///<remarks> 
         ///<h3>Dependency Property Information</h3>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
         ///<tr><td>Identifier field</td><td><see cref="AxisTickColorProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
         public Brush AxisTickColor
         {
             get { return (Brush)GetValue(AxisTickColorProperty); }

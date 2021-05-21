@@ -113,6 +113,11 @@
                     </Grid.ColumnDefinitions>
                     
                     <StackPanel Grid.Column="0" VerticalAlignment="Top" Margin="5 10 0 0">
+                        <StackPanel Style="{StaticResource settingsItem}" ToolTip="The color of lines, ticks and its labels for the time, price and volume axises.">
+                            <TextBlock Style="{StaticResource horizontalCaption}">Time and Price scales foreground:</TextBlock>
+                            <fp:StandardColorPicker SelectedColor="{Binding AxisTickColor, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                        </StackPanel>
+
                         <StackPanel Style="{StaticResource settingsItem}" ToolTip="Horizontal time scale below the chart, that shows time.">
                             <TextBlock Style="{StaticResource horizontalCaption}">Time scale font size:</TextBlock>
                             <fp:EditableDoubleComboBox MinValue="0" VerticalAlignment="Bottom"
@@ -173,6 +178,15 @@
                             </StackPanel>
                         </GroupBox>
                     
+                    </StackPanel>
+
+                    <!-- Vertical separation line -->
+                    <Line Grid.Column="1" Margin="0 10 0 10"
+                          X1="0" X2="0" Y1="0" 
+                          Y2="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Grid}}, Path=ActualHeight}" 
+                          StrokeThickness="1" Stroke="LightSteelBlue"/>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="5 10 0 0">
                         <GroupBox Header="Gridlines">
                             <StackPanel>
                                 <StackPanel Style="{StaticResource settingsItem}" ToolTip="Enable horizontal gridlines.">
@@ -184,7 +198,7 @@
                                     <TextBlock Style="{StaticResource horizontalCaption}">Vertical:</TextBlock>
                                     <CheckBox IsChecked="{Binding IsVerticalGridlinesEnabled, Mode=TwoWay}"/>
                                 </StackPanel>
-                            
+
                                 <StackPanel Style="{StaticResource settingsItem}" ToolTip="Hide minor vertical gridlines.">
                                     <TextBlock Style="{StaticResource horizontalCaption}">Hide minor vertical:</TextBlock>
                                     <CheckBox IsChecked="{Binding HideMinorVerticalGridlines, Mode=TwoWay}"/>
@@ -201,15 +215,7 @@
                                 </StackPanel>
                             </StackPanel>
                         </GroupBox>
-                    </StackPanel>
 
-                    <!-- Vertical separation line -->
-                    <Line Grid.Column="1" Margin="0 10 0 10"
-                          X1="0" X2="0" Y1="0" 
-                          Y2="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Grid}}, Path=ActualHeight}" 
-                          StrokeThickness="1" Stroke="LightSteelBlue"/>
-
-                    <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="5 10 0 0">
                         <GroupBox Header="Cross">
                             <StackPanel>
                                 <StackPanel Style="{StaticResource settingsItem}" ToolTip="Show cross lines.">
