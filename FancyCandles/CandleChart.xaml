@@ -266,7 +266,7 @@
                                  TickLabelFontFamily="{Binding Path=AxisTickLabelFontFamily, Mode=OneWay}"
                                  TickLabelFontSize="{Binding Path=PriceAxisTickLabelFontSize, Mode=OneWay}"
                                  TickColor="{Binding Path=AxisTickColor, Mode=OneWay}"
-                                 IsCurrentPriceLabelShown="{Binding Path=IsCurrentPriceLabelShown, Mode=OneWay}"
+                                 IsCurrentPriceLabelVisible="{Binding Path=IsCurrentPriceLabelVisible, Mode=OneWay}"
                                  CurrentPriceLabelBackground="{Binding Path=CurrentPriceLabelBackground, Mode=OneWay}"
                                  CurrentPriceLabelForeground="{Binding Path=CurrentPriceLabelForeground, Mode=OneWay}"
                                  GapBetweenTickLabels="{Binding Path=GapBetweenPriceTickLabels, Mode=OneWay}"

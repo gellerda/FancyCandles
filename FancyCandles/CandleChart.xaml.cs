@@ -165,7 +165,7 @@ namespace FancyCandles
         private double currentPrice;
         /// <summary>Gets the current price value - the closing price of the last candle.</summary>
         ///<value>The current price value - the closing price of the last candle.</value>
-        ///<seealso cref = "IsCurrentPriceLabelShown">IsCurrentPriceLabelShown</seealso>
+        ///<seealso cref = "IsCurrentPriceLabelVisible">IsCurrentPriceLabelVisible</seealso>
         public double CurrentPrice
         {
             get { return currentPrice; }
@@ -181,21 +181,21 @@ namespace FancyCandles
         ///<value>A value indicating whether the current price is shown on the price scale. The default value is <c>true</c>.</value>
         ///<remarks>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-        ///<tr><td>Identifier field</td><td><see cref="IsCurrentPriceLabelShownProperty"/></td></tr> 
+        ///<tr><td>Identifier field</td><td><see cref="IsCurrentPriceLabelVisibleProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         ///<seealso cref = "CurrentPrice">CurrentPrice</seealso>
         [UndoableProperty]
         [JsonProperty]
-        public bool IsCurrentPriceLabelShown
+        public bool IsCurrentPriceLabelVisible
         {
-            get { return (bool)GetValue(IsCurrentPriceLabelShownProperty); }
-            set { SetValue(IsCurrentPriceLabelShownProperty, value); }
+            get { return (bool)GetValue(IsCurrentPriceLabelVisibleProperty); }
+            set { SetValue(IsCurrentPriceLabelVisibleProperty, value); }
         }
-        /// <summary>Identifies the <see cref="IsCurrentPriceLabelShown"/> dependency property.</summary>
+        /// <summary>Identifies the <see cref="IsCurrentPriceLabelVisible"/> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty IsCurrentPriceLabelShownProperty =
-            DependencyProperty.Register("IsCurrentPriceLabelShown", typeof(bool), typeof(CandleChart), new PropertyMetadata(true));
+        public static readonly DependencyProperty IsCurrentPriceLabelVisibleProperty =
+            DependencyProperty.Register("IsCurrentPriceLabelVisible", typeof(bool), typeof(CandleChart), new PropertyMetadata(true));
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the background of the price chart and volume diagram areas.</summary>
         ///<value>The background of the price chart and volume diagram areas. The default is determined by the <see cref="DefaultChartAreaBackground"/> values.</value>

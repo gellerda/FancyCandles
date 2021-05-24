@@ -63,13 +63,13 @@ namespace FancyCandles
         public static readonly DependencyProperty CurrentPriceProperty =
             DependencyProperty.Register("CurrentPrice", typeof(double), typeof(PriceTicksElement), new FrameworkPropertyMetadata(0.0) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
-        public bool IsCurrentPriceLabelShown
+        public bool IsCurrentPriceLabelVisible
         {
-            get { return (bool)GetValue(IsCurrentPriceLabelShownProperty); }
-            set { SetValue(IsCurrentPriceLabelShownProperty, value); }
+            get { return (bool)GetValue(IsCurrentPriceLabelVisibleProperty); }
+            set { SetValue(IsCurrentPriceLabelVisibleProperty, value); }
         }
-        public static readonly DependencyProperty IsCurrentPriceLabelShownProperty =
-            DependencyProperty.Register("IsCurrentPriceLabelShown", typeof(bool), typeof(PriceTicksElement), new FrameworkPropertyMetadata(true) { AffectsRender = true });
+        public static readonly DependencyProperty IsCurrentPriceLabelVisibleProperty =
+            DependencyProperty.Register("IsCurrentPriceLabelVisible", typeof(bool), typeof(PriceTicksElement), new FrameworkPropertyMetadata(true) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         private Pen currentPriceLabelForegroundPen;
 
@@ -310,7 +310,7 @@ namespace FancyCandles
                 next_tick = theMostRoundPrice - step_i * stepInRubles;
             }
 
-            if (IsCurrentPriceLabelShown && CurrentPrice >= VisibleCandlesExtremums.PriceLow && CurrentPrice <= VisibleCandlesExtremums.PriceHigh)
+            if (IsCurrentPriceLabelVisible && CurrentPrice >= VisibleCandlesExtremums.PriceLow && CurrentPrice <= VisibleCandlesExtremums.PriceHigh)
                 DrawCurrentPrice();
 
             // Горизонтальные линии на всю ширину разделяющая и окаймляющая панели времени и даты:

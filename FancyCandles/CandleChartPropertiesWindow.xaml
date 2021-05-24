@@ -466,7 +466,7 @@
                         <StackPanel>
                             <StackPanel Style="{StaticResource settingsItem}" ToolTip="Show the current price (the closing price of the last candle) label on the price scale.">
                                 <TextBlock Style="{StaticResource horizontalCaption}">Show the current price:</TextBlock>
-                                <CheckBox IsChecked="{Binding IsCurrentPriceLabelShown, Mode=TwoWay}"/>
+                                <CheckBox IsChecked="{Binding IsCurrentPriceLabelVisible, Mode=TwoWay}"/>
                             </StackPanel>
 
                             <StackPanel Style="{StaticResource settingsItem}" ToolTip="The foreground color of the current price label and its border">
