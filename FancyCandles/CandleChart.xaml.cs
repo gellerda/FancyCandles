@@ -1399,8 +1399,8 @@ namespace FancyCandles
         {
             get
             {
-                double priceTextWidth = (new FormattedText(new string('A', MaxNumberOfCharsInPrice), Culture, FlowDirection.LeftToRight, new Typeface(AxisTickLabelFontFamily.ToString()), PriceAxisTickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Width;
-                return priceTextWidth + PriceTicksElement.TICK_LINE_WIDTH + 2 * PriceTicksElement.TICK_HORIZ_MARGIN;
+                FormattedText txt = new FormattedText(new string('9', MaxNumberOfCharsInPrice), Culture, FlowDirection.LeftToRight, new Typeface(AxisTickLabelFontFamily.ToString()), PriceAxisTickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                return txt.Width + PriceTicksElement.TICK_LINE_WIDTH + 2 * PriceTicksElement.TICK_HORIZ_MARGIN;
             }
         }
         //----------------------------------------------------------------------------------------------------------------------------------
