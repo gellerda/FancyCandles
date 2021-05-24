@@ -36,6 +36,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using Microsoft.Win32;
 using FancyCandles.Indicators;
+using System.Windows.Media;
 
 namespace FancyCandles
 {
@@ -97,6 +98,293 @@ namespace FancyCandles
         public static readonly double ToolTipFontSize = 9.0;
 #pragma warning restore CS1591
 
+        //----------------------------------------------------------------------------------------------------------------------------------
+        private void OnUserControlLoaded(object sender, RoutedEventArgs e)
+        {
+            ReCalc_TimeFrame();
+            ReCalc_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice();
+            CandleGap = InitialCandleGap;
+            CandleWidth = InitialCandleWidth;
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        /// <summary>Default constructor.</summary>
+        public CandleChart()
+        {
+            timeFrame = 5;
+            InitialCandleWidth = DefaultInitialCandleWidth;
+            InitialCandleGap = DefaultInitialCandleGap;
+
+            InitializeComponent();
+
+            VisibleCandlesRange = IntRange.Undefined;
+            VisibleCandlesExtremums = new CandleExtremums(0.0, 0.0, 0L, 0L);
+            Loaded += new RoutedEventHandler(OnUserControlLoaded);
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        private void OpenCandleChartPropertiesWindow(object sender, RoutedEventArgs e)
+        {
+            string overlayIndicatorArrayJson = SerializeToJson(OverlayIndicators);
+            RecordAllUndoableProperties();
+
+            CandleChartPropertiesWindow popup = new CandleChartPropertiesWindow(this);
+            if (popup.ShowDialog() == true)
+            {
+                ClearUndoablePropertyRecords();
+            }
+            else
+            {
+                ObservableCollection<OverlayIndicator> new_overlayIndicators = DeserializeOverlayIndicatorsFromJson(overlayIndicatorArrayJson);
+                OverlayIndicators = new_overlayIndicators;
+                UndoRecordedUndoableProperties();
+            }
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        private void OpenSelectCandleSourceWindow(object sender, RoutedEventArgs e)
+        {
+            SelectCandleSourceWindow popup = new SelectCandleSourceWindow(this);
+            if (popup.ShowDialog() == true)
+            {
+            }
+            else
+            {
+            }
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        /// <summary>Gets or sets the specific culture that will be used to draw price, volume, date and time values.</summary>
+        ///<value>The specific culture that will be used to draw price, volume, date and time values. The default is <see href="https://docs.microsoft.com/en-us/dotnet/api/system.globalization.cultureinfo.currentculture?view=netframework-4.7.2">CultureInfo.CurrentCulture</see>.</value>
+        public CultureInfo Culture
+        {
+            get { return (CultureInfo)GetValue(CultureProperty); }
+            set { SetValue(CultureProperty, value); }
+        }
+        /// <summary>Identifies the <see cref="Culture"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty CultureProperty =
+            DependencyProperty.Register("Culture", typeof(CultureInfo), typeof(CandleChart), new PropertyMetadata(CultureInfo.CurrentCulture));
+        //----------------------------------------------------------------------------------------------------------------------------------
+        private double currentPrice;
+        /// <summary>Gets the current price value - the closing price of the last candle.</summary>
+        ///<value>The current price value - the closing price of the last candle.</value>
+        ///<seealso cref = "IsCurrentPriceLabelShown">IsCurrentPriceLabelShown</seealso>
+        public double CurrentPrice
+        {
+            get { return currentPrice; }
+            private set
+            {
+                if (value == currentPrice) return;
+                currentPrice = value;
+                OnPropertyChanged();
+            }
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        /// <summary>Gets or sets a value indicating whether the current price is shown on the price scale.</summary>
+        ///<value>A value indicating whether the current price is shown on the price scale. The default value is <c>true</c>.</value>
+        ///<remarks>
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="IsCurrentPriceLabelShownProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///</remarks>
+        ///<seealso cref = "CurrentPrice">CurrentPrice</seealso>
+        [UndoableProperty]
+        [JsonProperty]
+        public bool IsCurrentPriceLabelShown
+        {
+            get { return (bool)GetValue(IsCurrentPriceLabelShownProperty); }
+            set { SetValue(IsCurrentPriceLabelShownProperty, value); }
+        }
+        /// <summary>Identifies the <see cref="IsCurrentPriceLabelShown"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty IsCurrentPriceLabelShownProperty =
+            DependencyProperty.Register("IsCurrentPriceLabelShown", typeof(bool), typeof(CandleChart), new PropertyMetadata(true));
+        //----------------------------------------------------------------------------------------------------------------------------------
+        /// <summary>Gets or sets the background of the price chart and volume diagram areas.</summary>
+        ///<value>The background of the price chart and volume diagram areas. The default is determined by the <see cref="DefaultChartAreaBackground"/> values.</value>
+        ///<remarks>
+        ///This background is not applied to the horizontal and vertical axis areas, which contain tick marks and labels.
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="ChartAreaBackgroundProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
+        public Brush ChartAreaBackground
+        {
+            get { return (Brush)GetValue(ChartAreaBackgroundProperty); }
+            set { SetValue(ChartAreaBackgroundProperty, value); }
+        }
+        /// <summary>Identifies the <see cref="ChartAreaBackground"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty ChartAreaBackgroundProperty =
+            DependencyProperty.Register("ChartAreaBackground", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultChartAreaBackground));
+
+        ///<summary>Gets the default value for the ChartAreaBackground property.</summary>
+        ///<value>The default value for the <see cref="ChartAreaBackground"/> property: <c>#FFFFFDE9</c>.</value>
+        public static Brush DefaultChartAreaBackground { get { return (Brush)Brushes.Cornsilk.GetCurrentValueAsFrozen(); } }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        /// <summary>Gets or sets the fill brush for the rectangle, that covers this chart control if it has been disabled.</summary>
+        ///<value>The fill brush for the rectangle, that covers this chart control if it has been disabled. The default is determined by the <see cref="DefaultDisabledFill"/>values.</value>
+        ///<remarks>
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="DisabledFillProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
+        public Brush DisabledFill
+        {
+            get { return (Brush)GetValue(DisabledFillProperty); }
+            set { SetValue(DisabledFillProperty, value); }
+        }
+        /// <summary>Identifies the <see cref="DisabledFill"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty DisabledFillProperty =
+            DependencyProperty.Register("DisabledFill", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultDisabledFill));
+
+        ///<summary>Gets the default value for the DisabledFill property.</summary>
+        ///<value>The default value for the <see cref="DisabledFill"/> property: <c>#CCAAAAAA</c>.</value>
+        public static Brush DefaultDisabledFill { get { return (Brush)(new SolidColorBrush(Color.FromArgb(204, 170, 170, 170))).GetCurrentValueAsFrozen(); } } // #CCAAAAAA
+        //----------------------------------------------------------------------------------------------------------------------------------
+        #region SERIALIZE AND DESEREALIZE FROM JSON ******************************************************************************************************************
+
+        private class CandleChartContractResolver : DefaultContractResolver
+        {
+            protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+            {
+                IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);
+
+                if (type == typeof(Pen))
+                    properties = properties.Where(p => (p.PropertyName == "Thickness" || p.PropertyName == "Brush")).ToList();
+
+                return properties;
+            }
+        }
+
+        private string SerializeToJson(object objToSerialize)
+        {
+            return JsonConvert.SerializeObject(objToSerialize, Formatting.Indented,
+                                               new JsonSerializerSettings { ContractResolver = new CandleChartContractResolver() });
+        }
+
+        private ObservableCollection<OverlayIndicator> DeserializeOverlayIndicatorsFromJson(string overlayIndicatorsJsonString)
+        {
+            JArray indicators = JArray.Parse(overlayIndicatorsJsonString);
+            return DeserializeOverlayIndicatorsFromJson(indicators);
+        }
+
+        private ObservableCollection<OverlayIndicator> DeserializeOverlayIndicatorsFromJson(JArray overlayIndicatorsJArray)
+        {
+            MethodInfo getMethodInfo = typeof(JToken).GetMethod(nameof(JToken.ToObject), Type.EmptyTypes);
+            ObservableCollection<OverlayIndicator> new_overlayIndicators = new ObservableCollection<OverlayIndicator>();
+            for (int i = 0; i < overlayIndicatorsJArray.Count; i++)
+            {
+                Type overlayIndicatorType = FindOverlayIndicatorType(overlayIndicatorsJArray[i]["TypeName"].ToString());
+                MethodInfo getMethodTInfo = getMethodInfo.MakeGenericMethod(overlayIndicatorType);
+                OverlayIndicator overlayIndicator = (OverlayIndicator)getMethodTInfo.Invoke(overlayIndicatorsJArray[i], null);
+                new_overlayIndicators.Add(overlayIndicator);
+            }
+
+            return new_overlayIndicators;
+        }
+
+        private void RestoreFromJson(string candleChartJson)
+        {
+            JObject candleChartJToken = JObject.Parse(candleChartJson);
+            JArray overlayIndicatorsJArray = (JArray)candleChartJToken["OverlayIndicators"];
+            OverlayIndicators = DeserializeOverlayIndicatorsFromJson(overlayIndicatorsJArray);
+            candleChartJToken.Remove("OverlayIndicators");
+
+            MethodInfo getMethodInfo = typeof(JToken).GetMethod(nameof(JToken.ToObject), Type.EmptyTypes);
+            foreach (JProperty property in candleChartJToken.Properties())
+            {
+                PropertyInfo propertyInfo = typeof(CandleChart).GetProperty(property.Name);
+                Type propertyType = propertyInfo.PropertyType;
+                MethodInfo getMethodTInfo = getMethodInfo.MakeGenericMethod(propertyType);
+                object propertyValue = getMethodTInfo.Invoke(property.Value, null);
+                FancyPrimitives.MyUtility.SetProperty(this, property.Name, propertyValue, out _);
+            }
+        }
+
+        private Type FindOverlayIndicatorType(string overlayIndicatorTypeName)
+        {
+            Type overlayIndicatorType = Type.GetType(overlayIndicatorTypeName);
+            if (overlayIndicatorType != null)
+                return overlayIndicatorType;
+
+            overlayIndicatorType = Assembly.GetEntryAssembly().GetType(overlayIndicatorTypeName);
+            if (overlayIndicatorType != null)
+                return overlayIndicatorType;
+
+            string fullAddInIndicatorsFolder = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, AddInIndicatorsFolder);
+            var allowedExtensions = new[] { ".dll", ".exe" };
+            List<string> addInAssemblyFileNames;
+            try
+            {
+                addInAssemblyFileNames = Directory.GetFiles(fullAddInIndicatorsFolder).Where(file => allowedExtensions.Any(file.ToLower().EndsWith)).ToList();
+            }
+            catch
+            {
+                addInAssemblyFileNames = new List<string>();
+            }
+
+            foreach (string addInAssemblyFileName in addInAssemblyFileNames)
+            {
+                string asmPath = System.IO.Path.Combine(fullAddInIndicatorsFolder, addInAssemblyFileName);
+                Assembly asm = Assembly.LoadFile(asmPath);
+                overlayIndicatorType = asm.GetType(overlayIndicatorTypeName);
+                if (overlayIndicatorType != null)
+                    return overlayIndicatorType;
+            }
+
+            return null;
+        }
+
+        #endregion **********************************************************************************************************************************************
+        //----------------------------------------------------------------------------------------------------------------------------------
+        #region LOAD AND SAVE SETTINGS *******************************************************************************************************************************
+
+        private void OpenSaveSettingsAsDialog(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Chart Settings (*.chs)|*.chs";
+            //openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            if (saveFileDialog.ShowDialog() == true)
+                SaveSettingsAs(saveFileDialog.FileName);
+        }
+
+        private void OpenLoadSettingsDialog(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Chart Settings (*.chs)|*.chs";
+            //openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            if (openFileDialog.ShowDialog() == true)
+                LoadSettings(openFileDialog.FileName);
+        }
+
+        ///<summary>Loads and sets chart settings from the specified file.</summary>
+        ///<param name="pathToSettingsFile">The Path to the file containing chart settings.</param>
+        ///<remarks></remarks>
+        ///<seealso cref = "SaveSettingsAs">SaveSettingsAs()</seealso>
+        public void LoadSettings(string pathToSettingsFile)
+        {
+            string jsonCandleChart = File.ReadAllText(pathToSettingsFile);
+            RestoreFromJson(jsonCandleChart);
+        }
+
+        ///<summary>Saves current chart settings to the specified file.</summary>
+        ///<param name="pathToSettingsFile">The Path to the file to save settings to.</param>
+        ///<remarks></remarks>
+        ///<seealso cref = "LoadSettings">LoadSettings()</seealso>
+        public void SaveSettingsAs(string pathToSettingsFile)
+        {
+            string jsonCandleChart = SerializeToJson(this);
+            File.WriteAllText(pathToSettingsFile, jsonCandleChart);
+        }
+
+        #endregion **********************************************************************************************************************************************
+        //----------------------------------------------------------------------------------------------------------------------------------
+        #region OVERLAY INDICATORS *******************************************************************************************************************************
         /// <summary>Gets or sets the collection of technical overlay indicators attached to the price chart.</summary>
         ///<value>The collection of technical overlay indicators attached to the price chart. The default is empty collection.</value>
         ///<remarks>
@@ -117,7 +405,7 @@ namespace FancyCandles
         /// <summary>Identifies the <see cref="OverlayIndicators"/> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
         public static readonly DependencyProperty OverlayIndicatorsProperty =
-            DependencyProperty.Register("OverlayIndicators", typeof(ObservableCollection<OverlayIndicator>), typeof(CandleChart), 
+            DependencyProperty.Register("OverlayIndicators", typeof(ObservableCollection<OverlayIndicator>), typeof(CandleChart),
                 new UIPropertyMetadata(new ObservableCollection<OverlayIndicator>(), OnOverlayIndicatorsChanged));
 
         private static void OnOverlayIndicatorsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
@@ -194,7 +482,7 @@ namespace FancyCandles
                   (moveOverlayIndicatorRightCommand = new FancyPrimitives.RelayCommand(overlayIndicator_i =>
                   {
                       int old_i = (int)overlayIndicator_i;
-                      if (old_i == (OverlayIndicators.Count-1)) return;
+                      if (old_i == (OverlayIndicators.Count - 1)) return;
                       OverlayIndicators.Move(old_i, old_i + 1);
                   }));
             }
@@ -225,235 +513,41 @@ namespace FancyCandles
             }
         }
         //----------------------------------------------------------------------------------------------------------------------------------
-        private void OnUserControlLoaded(object sender, RoutedEventArgs e)
-        {
-            ReCalc_TimeFrame();
-            ReCalc_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice();
-            CandleGap = InitialCandleGap;
-            CandleWidth = InitialCandleWidth;
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        /// <summary>Default constructor.</summary>
-        public CandleChart()
-        {
-            timeFrame = 5;
-            InitialCandleWidth = DefaultInitialCandleWidth;
-            InitialCandleGap = DefaultInitialCandleGap;
-
-            InitializeComponent();
-
-            VisibleCandlesRange = IntRange.Undefined;
-            VisibleCandlesExtremums = new CandleExtremums(0.0, 0.0, 0L, 0L);
-            Loaded += new RoutedEventHandler(OnUserControlLoaded);
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        private void OpenCandleChartPropertiesWindow(object sender, RoutedEventArgs e)
-        {
-            string overlayIndicatorArrayJson = SerializeToJson(OverlayIndicators);
-            RecordAllUndoableProperties();
-
-            CandleChartPropertiesWindow popup = new CandleChartPropertiesWindow(this);
-            if (popup.ShowDialog() == true)
-            {
-                ClearUndoablePropertyRecords();
-            }
-            else
-            {
-                ObservableCollection<OverlayIndicator> new_overlayIndicators = DeserializeOverlayIndicatorsFromJson(overlayIndicatorArrayJson);
-                OverlayIndicators = new_overlayIndicators;
-                UndoRecordedUndoableProperties();
-            }
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        private void OpenSelectCandleSourceWindow(object sender, RoutedEventArgs e)
-        {
-            SelectCandleSourceWindow popup = new SelectCandleSourceWindow(this);
-            if (popup.ShowDialog() == true)
-            {
-            }
-            else
-            {
-            }
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        private void OpenSaveSettingsAsDialog(object sender, RoutedEventArgs e)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Chart Settings (*.chs)|*.chs";
-            //openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            if (saveFileDialog.ShowDialog() == true)
-                SaveSettingsAs(saveFileDialog.FileName);
-        }
-
-        private void OpenLoadSettingsDialog(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Chart Settings (*.chs)|*.chs";
-            //openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            if (openFileDialog.ShowDialog() == true)
-                LoadSettings(openFileDialog.FileName);
-        }
-
-        ///<summary>Loads and sets chart settings from the specified file.</summary>
-        ///<param name="pathToSettingsFile">The Path to the file containing chart settings.</param>
-        ///<remarks></remarks>
-        ///<seealso cref = "SaveSettingsAs">SaveSettingsAs()</seealso>
-        public void LoadSettings(string pathToSettingsFile)
-        {
-            string jsonCandleChart = File.ReadAllText(pathToSettingsFile);
-            RestoreFromJson(jsonCandleChart);
-        }
-
-        ///<summary>Saves current chart settings to the specified file.</summary>
-        ///<param name="pathToSettingsFile">The Path to the file to save settings to.</param>
-        ///<remarks></remarks>
-        ///<seealso cref = "LoadSettings">LoadSettings()</seealso>
-        public void SaveSettingsAs(string pathToSettingsFile)
-        {
-            string jsonCandleChart = SerializeToJson(this);
-            File.WriteAllText(pathToSettingsFile, jsonCandleChart);
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        private class CandleChartContractResolver : DefaultContractResolver
-        {
-            protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
-            {
-                IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);
-
-                if (type == typeof(Pen))
-                    properties = properties.Where(p => (p.PropertyName == "Thickness" || p.PropertyName == "Brush")).ToList();
-
-                return properties;
-            }
-        }
-
-        private string SerializeToJson(object objToSerialize)
-        {
-            return JsonConvert.SerializeObject(objToSerialize, Formatting.Indented,
-                                               new JsonSerializerSettings { ContractResolver = new CandleChartContractResolver() });
-        }
-
-        private ObservableCollection<OverlayIndicator> DeserializeOverlayIndicatorsFromJson(string overlayIndicatorsJsonString)
-        {
-            JArray indicators = JArray.Parse(overlayIndicatorsJsonString);
-            return DeserializeOverlayIndicatorsFromJson(indicators);
-        }
-
-        private ObservableCollection<OverlayIndicator> DeserializeOverlayIndicatorsFromJson(JArray overlayIndicatorsJArray)
-        {
-            MethodInfo getMethodInfo = typeof(JToken).GetMethod(nameof(JToken.ToObject), Type.EmptyTypes);
-            ObservableCollection<OverlayIndicator> new_overlayIndicators = new ObservableCollection<OverlayIndicator>();
-            for (int i = 0; i < overlayIndicatorsJArray.Count; i++)
-            {
-                Type overlayIndicatorType = FindOverlayIndicatorType(overlayIndicatorsJArray[i]["TypeName"].ToString());
-                MethodInfo getMethodTInfo = getMethodInfo.MakeGenericMethod(overlayIndicatorType);
-                OverlayIndicator overlayIndicator = (OverlayIndicator)getMethodTInfo.Invoke(overlayIndicatorsJArray[i], null);
-                new_overlayIndicators.Add(overlayIndicator);
-            }
-
-            return new_overlayIndicators;
-        }
-
-        private void RestoreFromJson(string candleChartJson)
-        {
-            JObject candleChartJToken = JObject.Parse(candleChartJson);
-            JArray overlayIndicatorsJArray = (JArray)candleChartJToken["OverlayIndicators"];
-            OverlayIndicators = DeserializeOverlayIndicatorsFromJson(overlayIndicatorsJArray);
-            candleChartJToken.Remove("OverlayIndicators");
-
-            MethodInfo getMethodInfo = typeof(JToken).GetMethod(nameof(JToken.ToObject), Type.EmptyTypes);
-            foreach (JProperty property in candleChartJToken.Properties())
-            {
-                PropertyInfo propertyInfo = typeof(CandleChart).GetProperty(property.Name);
-                Type propertyType = propertyInfo.PropertyType;
-                MethodInfo getMethodTInfo = getMethodInfo.MakeGenericMethod(propertyType);
-                object propertyValue = getMethodTInfo.Invoke(property.Value, null);
-                FancyPrimitives.MyUtility.SetProperty(this, property.Name, propertyValue, out _);
-            }
-        }
-
-        private Type FindOverlayIndicatorType(string overlayIndicatorTypeName)
-        {
-            Type overlayIndicatorType = Type.GetType(overlayIndicatorTypeName);
-            if (overlayIndicatorType != null) 
-                return overlayIndicatorType;
-
-            overlayIndicatorType = Assembly.GetEntryAssembly().GetType(overlayIndicatorTypeName);
-            if (overlayIndicatorType != null) 
-                return overlayIndicatorType;
-
-            string fullAddInIndicatorsFolder = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, AddInIndicatorsFolder);
-            var allowedExtensions = new[] { ".dll", ".exe" };
-            List<string> addInAssemblyFileNames;
-            try
-            {
-                addInAssemblyFileNames = Directory.GetFiles(fullAddInIndicatorsFolder).Where(file => allowedExtensions.Any(file.ToLower().EndsWith)).ToList();
-            }
-            catch
-            {
-                addInAssemblyFileNames = new List<string>();
-            }
-
-            foreach (string addInAssemblyFileName in addInAssemblyFileNames)
-            {
-                string asmPath = System.IO.Path.Combine(fullAddInIndicatorsFolder, addInAssemblyFileName);
-                Assembly asm = Assembly.LoadFile(asmPath);
-                overlayIndicatorType = asm.GetType(overlayIndicatorTypeName);
-                if (overlayIndicatorType != null) 
-                    return overlayIndicatorType;
-            }
-
-            return null;
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        /// <summary>Gets or sets the background of the price chart and volume diagram areas.</summary>
-        ///<value>The background of the price chart and volume diagram areas. The default is determined by the <see cref="DefaultChartAreaBackground"/> values.</value>
+        ///<summary>Gets or sets the folder with an assemblies containing user's add-in technical indicators.</summary>
+        ///<value>The path to the folder containing user's add-in technical indicators. The default value is empty string.</value>
         ///<remarks>
-        ///This background is not applied to the horizontal and vertical axis areas, which contain tick marks and labels.
+        ///<para>Adding your own technical indicator classes, derived from <see cref="OverlayIndicator"/>, to Startup project of your solution 
+        ///is not the only way to add new indicators to your application.</para>
+        ///<para>You or even users of your application can add a new add-in indicator by creating it in a separate solution. You have to do the following:</para>
+        ///<list type="bullet">
+        ///<item><term>Add a new indicator class derived from <see cref="OverlayIndicator"/> in a new project inside a new solution and build an assembly.</term></item>
+        ///<item><term>Locate the assembly file containing the new indicator class in some folder, usually below your main application root directory.</term></item>
+        ///<item><term>Specify the aforementioned folder path in the <see cref="AddInIndicatorsFolder"/> of your application.</term></item>
+        ///</list>
+        ///The path can be full or relative to the <see href="https://docs.microsoft.com/en-us/dotnet/api/system.appdomain.basedirectory?view=netframework-4.7.2">BaseDirectory</see> of your application.
+        ///<para>For example, it could look like this:
+        ///<code>&lt;fc:CandleChart AddInIndicatorsAssemblyPath="AddInIndicators"/&gt;</code>
+        ///In the example above, folder "AddInIndicators" must be located inside the base folder of your application. There can be multiple assembly files in this folder. 
+        ///All of them will be found by the <see cref="CandleChart"/> element.</para>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-        ///<tr><td>Identifier field</td><td><see cref="ChartAreaBackgroundProperty"/></td></tr> 
+        ///<tr><td>Identifier field</td><td><see cref="AddInIndicatorsFolderProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
-        [UndoableProperty]
-        [JsonProperty]
-        public Brush ChartAreaBackground
+        ///<seealso href="https://gellerda.github.io/FancyCandles/articles/creating_overlay_indicator.html">Creating your own overlay technical indicator</seealso>
+        ///<seealso cref="OverlayIndicators"/>
+        public string AddInIndicatorsFolder
         {
-            get { return (Brush)GetValue(ChartAreaBackgroundProperty); }
-            set { SetValue(ChartAreaBackgroundProperty, value); }
+            get { return (string)GetValue(AddInIndicatorsFolderProperty); }
+            set { SetValue(AddInIndicatorsFolderProperty, value); }
         }
-        /// <summary>Identifies the <see cref="ChartAreaBackground"/> dependency property.</summary>
-        /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty ChartAreaBackgroundProperty =
-            DependencyProperty.Register("ChartAreaBackground", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultChartAreaBackground));
 
-        ///<summary>Gets the default value for the ChartAreaBackground property.</summary>
-        ///<value>The default value for the <see cref="ChartAreaBackground"/> property: <c>#FFFFFDE9</c>.</value>
-        public static Brush DefaultChartAreaBackground { get { return (Brush)Brushes.Cornsilk.GetCurrentValueAsFrozen(); } }
+        /// <summary>Identifies the <see cref="AddInIndicatorsFolder"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty AddInIndicatorsFolderProperty =
+            DependencyProperty.Register("AddInIndicatorsFolder", typeof(string), typeof(CandleChart), new PropertyMetadata(""));
         //----------------------------------------------------------------------------------------------------------------------------------
-        /// <summary>Gets or sets the fill brush for the rectangle, that covers this chart control if it has been disabled.</summary>
-        ///<value>The fill brush for the rectangle, that covers this chart control if it has been disabled. The default is determined by the <see cref="DefaultDisabledFill"/>values.</value>
-        ///<remarks>
-        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-        ///<tr><td>Identifier field</td><td><see cref="DisabledFillProperty"/></td></tr> 
-        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
-        ///</remarks>
-        [UndoableProperty]
-        [JsonProperty]
-        public Brush DisabledFill
-        {
-            get { return (Brush)GetValue(DisabledFillProperty); }
-            set { SetValue(DisabledFillProperty, value); }
-        }
-        /// <summary>Identifies the <see cref="DisabledFill"/> dependency property.</summary>
-        /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty DisabledFillProperty =
-            DependencyProperty.Register("DisabledFill", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultDisabledFill));
 
-        ///<summary>Gets the default value for the DisabledFill property.</summary>
-        ///<value>The default value for the <see cref="DisabledFill"/> property: <c>#CCAAAAAA</c>.</value>
-        public static Brush DefaultDisabledFill { get { return (Brush)(new SolidColorBrush(Color.FromArgb(204, 170, 170, 170))).GetCurrentValueAsFrozen(); } } // #CCAAAAAA
+        #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
         #region UNDO FUNCTIONALITY *******************************************************************************************************************************
         private Dictionary<string, Object> undoablePropertyRecords = new Dictionary<string, object>(); // <PropertyName, PropertyValue>
@@ -1192,40 +1286,109 @@ namespace FancyCandles
         ///<summary>Gets the default value for the <see cref="AxisTickColor">AxisTickColor</see> property.</summary>
         ///<value>The default value for the <see cref="AxisTickColor"/> property: <c>Brushes.Black</c>.</value>
         public static Brush DefaultAxisTickColor { get { return (Brush)(new SolidColorBrush(Colors.Black)).GetCurrentValueAsFrozen(); } }
-        #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
-        #region PROPERTIES OF THE PRICE AXIS (AND OF THE VOLUME AXIS, WHICH DOESN'T HAVE ITS OWN PROPERTIES) ****************************************************
-        //----------------------------------------------------------------------------------------------------------------------------------
-        ///<summary>Gets or sets the font size of the tick labels for the price and volume axis.</summary>
-        ///<value>The font size of the tick labels for the price and volume axis. The default is determined by the <see cref="DefaultPriceTickFontSize"/> value.</value>
-        ///<remarks>
-        /// The volume axis doesn't have its own appearance properties. Therefore, the volume axis appearance depends on price axis properties. 
+        ///<summary>Gets or sets the font family of the time axis tick labels.</summary>
+        ///<value>The font family of the time axis tick labels. The default is <see href="https://docs.microsoft.com/en-us/dotnet/api/system.windows.systemfonts.messagefontfamily?view=netframework-4.7.2">SystemFonts.MessageFontFamily</see>.</value>
+        ///<remarks> 
         ///<h3>Dependency Property Information</h3>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-        ///<tr><td>Identifier field</td><td><see cref="PriceTickFontSizeProperty"/></td></tr> 
+        ///<tr><td>Identifier field</td><td><see cref="AxisTickLabelFontFamilyProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         [UndoableProperty]
         [JsonProperty]
-        public double PriceTickFontSize
+        public FontFamily AxisTickLabelFontFamily
         {
-            get { return (double)GetValue(PriceTickFontSizeProperty); }
-            set { SetValue(PriceTickFontSizeProperty, value); }
+            get { return (FontFamily)GetValue(AxisTickLabelFontFamilyProperty); }
+            set { SetValue(AxisTickLabelFontFamilyProperty, value); }
         }
-        /// <summary>Identifies the <see cref="PriceTickFontSize">PriceTickFontSize</see> dependency property.</summary>
+        /// <summary>Identifies the <see cref="AxisTickLabelFontFamily">AxisTickLabelFontFamily</see> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty PriceTickFontSizeProperty =
-            DependencyProperty.RegisterAttached("PriceTickFontSize", typeof(double), typeof(CandleChart), new FrameworkPropertyMetadata(DefaultPriceTickFontSize, FrameworkPropertyMetadataOptions.Inherits, OnPriceTickFontSizeChanged));
-        static void OnPriceTickFontSizeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        public static readonly DependencyProperty AxisTickLabelFontFamilyProperty =
+            DependencyProperty.Register("AxisTickLabelFontFamily", typeof(FontFamily), typeof(CandleChart), new PropertyMetadata(SystemFonts.MessageFontFamily));
+
+        #endregion **********************************************************************************************************************************************
+        //----------------------------------------------------------------------------------------------------------------------------------
+        #region PROPERTIES OF THE PRICE AXIS (AND OF THE VOLUME AXIS, WHICH DOESN'T HAVE ITS OWN PROPERTIES) ****************************************************
+        //----------------------------------------------------------------------------------------------------------------------------------
+        /// <summary>Gets or sets the foreground for the current price label on the price axis.</summary>
+        ///<value>The foreground for the current price label on the price axis. The default is determined by the <see cref="DefaultCurrentPriceLabelForeground"/>values.</value>
+        ///<remarks>
+        ///The price (or volume) value label locates on the price (or volume) axis area.
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="CurrentPriceLabelForegroundProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
+        public Brush CurrentPriceLabelForeground
+        {
+            get { return (Brush)GetValue(CurrentPriceLabelForegroundProperty); }
+            set { SetValue(CurrentPriceLabelForegroundProperty, value); }
+        }
+        /// <summary>Identifies the <see cref="CurrentPriceLabelForeground"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty CurrentPriceLabelForegroundProperty =
+            DependencyProperty.Register("CurrentPriceLabelForeground", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultCurrentPriceLabelForeground));
+
+        ///<summary>Gets the default value for the CurrentPriceLabelForeground property.</summary>
+        ///<value>The default value for the <see cref="CurrentPriceLabelForeground"/> property: <c>Brushes.Red</c>.</value>
+        public static Brush DefaultCurrentPriceLabelForeground { get { return (Brush)(new SolidColorBrush(Colors.Red)).GetCurrentValueAsFrozen(); } }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        /// <summary>Gets or sets the background for the current price label on the price axis.</summary>
+        ///<value>The background for the current price label on the price axis. The default is determined by the <see cref="DefaultCurrentPriceLabelBackground"/>values.</value>
+        ///<remarks>
+        ///The price (or volume) value label locates on the price (or volume) axis area.
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="CurrentPriceLabelBackgroundProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
+        public Brush CurrentPriceLabelBackground
+        {
+            get { return (Brush)GetValue(CurrentPriceLabelBackgroundProperty); }
+            set { SetValue(CurrentPriceLabelBackgroundProperty, value); }
+        }
+        /// <summary>Identifies the <see cref="CurrentPriceLabelBackground"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty CurrentPriceLabelBackgroundProperty =
+            DependencyProperty.Register("CurrentPriceLabelBackground", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultCurrentPriceLabelBackground));
+
+        ///<summary>Gets the default value for the CurrentPriceLabelBackground property.</summary>
+        ///<value>The default <see cref="Brush"/> value for the <see cref="CurrentPriceLabelBackground"/> property: <c>#FFE8EDFF</c>.</value>
+        public static Brush DefaultCurrentPriceLabelBackground { get { return (Brush)(new SolidColorBrush(Color.FromArgb(255, 232, 237, 255))).GetCurrentValueAsFrozen(); } } // #FFE8EDFF
+        //----------------------------------------------------------------------------------------------------------------------------------
+        ///<summary>Gets or sets the font size of the tick labels for the price and volume axis.</summary>
+        ///<value>The font size of the tick labels for the price and volume axis. The default is determined by the <see cref="DefaultPriceAxisTickLabelFontSize"/> value.</value>
+        ///<remarks>
+        /// The volume axis doesn't have its own appearance properties. Therefore, the volume axis appearance depends on price axis properties. 
+        ///<h3>Dependency Property Information</h3>
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="PriceAxisTickLabelFontSizeProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
+        public double PriceAxisTickLabelFontSize
+        {
+            get { return (double)GetValue(PriceAxisTickLabelFontSizeProperty); }
+            set { SetValue(PriceAxisTickLabelFontSizeProperty, value); }
+        }
+        /// <summary>Identifies the <see cref="PriceAxisTickLabelFontSize">PriceAxisTickLabelFontSize</see> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty PriceAxisTickLabelFontSizeProperty =
+            DependencyProperty.RegisterAttached("PriceAxisTickLabelFontSize", typeof(double), typeof(CandleChart), new FrameworkPropertyMetadata(DefaultPriceAxisTickLabelFontSize, FrameworkPropertyMetadataOptions.Inherits, OnPriceAxisTickLabelFontSizeChanged));
+        static void OnPriceAxisTickLabelFontSizeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             CandleChart thisCandleChart = obj as CandleChart;
             thisCandleChart?.OnPropertyChanged("PriceAxisWidth");
-            thisCandleChart?.OnPropertyChanged("PriceTickTextHeight");
+            thisCandleChart?.OnPropertyChanged("PriceAxisTickLabelHeight");
         }
 
-        ///<summary>Gets the default value for the <see cref="PriceTickFontSize">PriceTickFontSize</see> property.</summary>
-        ///<value>The default value for the <see cref="PriceTickFontSize"/> property: <c>11.0</c>.</value>
-        public static double DefaultPriceTickFontSize { get { return 11.0; } }
+        ///<summary>Gets the default value for the <see cref="PriceAxisTickLabelFontSize">PriceAxisTickLabelFontSize</see> property.</summary>
+        ///<value>The default value for the <see cref="PriceAxisTickLabelFontSize"/> property: <c>11.0</c>.</value>
+        public static double DefaultPriceAxisTickLabelFontSize { get { return 11.0; } }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets the width of the price and volume axis area.</summary>
         ///<value>The width of the price and volume axis area, which contains the ticks and its labels.</value>
@@ -1236,8 +1399,8 @@ namespace FancyCandles
         {
             get
             {
-                double priceTextWidth = (new FormattedText(new string('A', MaxNumberOfCharsInPrice), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Width;
-                return priceTextWidth + PriceTicksElement.TICK_LINE_WIDTH + PriceTicksElement.TICK_LEFT_MARGIN + PriceTicksElement.TICK_RIGHT_MARGIN;
+                double priceTextWidth = (new FormattedText(new string('A', MaxNumberOfCharsInPrice), Culture, FlowDirection.LeftToRight, new Typeface(AxisTickLabelFontFamily.ToString()), PriceAxisTickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Width;
+                return priceTextWidth + PriceTicksElement.TICK_LINE_WIDTH + 2 * PriceTicksElement.TICK_HORIZ_MARGIN;
             }
         }
         //----------------------------------------------------------------------------------------------------------------------------------
@@ -1246,11 +1409,11 @@ namespace FancyCandles
         ///<remarks>
         /// The volume tick label has the same height as the price tick label.
         ///</remarks>
-        public double PriceTickTextHeight
+        public double PriceAxisTickLabelHeight
         {
             get
             {
-                return (new FormattedText("123", CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
+                return (new FormattedText("1,23", Culture, FlowDirection.LeftToRight, new Typeface(AxisTickLabelFontFamily.ToString()), PriceAxisTickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
             }
         }
         //----------------------------------------------------------------------------------------------------------------------------------
@@ -1269,7 +1432,7 @@ namespace FancyCandles
             get { return (double)GetValue(GapBetweenPriceTickLabelsProperty); }
             set { SetValue(GapBetweenPriceTickLabelsProperty, value); }
         }
-        /// <summary>Identifies the <see cref="GapBetweenPriceTickLabels">PriceTickFontSize</see> dependency property.</summary>
+        /// <summary>Identifies the <see cref="GapBetweenPriceTickLabels">PriceAxisTickLabelFontSize</see> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
         public static readonly DependencyProperty GapBetweenPriceTickLabelsProperty =
             DependencyProperty.RegisterAttached("GapBetweenPriceTickLabels", typeof(double), typeof(CandleChart), new FrameworkPropertyMetadata(DefaultGapBetweenPriceTickLabels, FrameworkPropertyMetadataOptions.Inherits));
@@ -1322,11 +1485,14 @@ namespace FancyCandles
                 MaxNumberOfCharsInPrice = 0;
             else
             {
-                int charsInPrice = CandlesSource.Select(c => c.H.ToString().Length).Max();
+                string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
+                char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
+
+                int charsInPrice = CandlesSource.Select(c => c.H.MyToString(Culture,decimalSeparator,decimalSeparatorArray).Length).Max();
 
                 int charsInVolume = 0;
                 if (IsVolumePanelVisible)
-                    charsInVolume = CandlesSource.Select(c => c.V.ToString().Length).Max();
+                    charsInVolume = CandlesSource.Select(c => c.V.MyToString(Culture, decimalSeparator, decimalSeparatorArray).Length).Max();
 
                 MaxNumberOfCharsInPrice = Math.Max(charsInPrice, charsInVolume);
             }
@@ -1339,11 +1505,14 @@ namespace FancyCandles
 
         private void Update_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice(ICandle newCandle)
         {
-            int L1 = newCandle.H.ToString().Length;
+            string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
+            char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
+
+            int L1 = newCandle.H.MyToString(Culture, decimalSeparator, decimalSeparatorArray).Length;
 
             int L2 = 0;
             if (IsVolumePanelVisible)
-                L2 = newCandle.V.ToString().Length;
+                L2 = newCandle.V.MyToString(Culture, decimalSeparator, decimalSeparatorArray).Length;
 
             int L = Math.Max(L1, L2);
 
@@ -1360,33 +1529,33 @@ namespace FancyCandles
         #region PROPERTIES OF THE TIME AXIS *********************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
         ///<summary>Gets or sets the font size of the tick labels for the time axis.</summary>
-        ///<value>The font size of the tick labels for the time (and date) axis. The default is determined by the <see cref="DefaultTimeTickFontSize"/> value.</value>
+        ///<value>The font size of the tick labels for the time (and date) axis. The default is determined by the <see cref="DefaultTimeAxisTickLabelFontSize"/> value.</value>
         ///<remarks>
         ///<h3>Dependency Property Information</h3>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-        ///<tr><td>Identifier field</td><td><see cref="TimeTickFontSizeProperty"/></td></tr> 
+        ///<tr><td>Identifier field</td><td><see cref="TimeAxisTickLabelFontSizeProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         [UndoableProperty]
         [JsonProperty]
-        public double TimeTickFontSize
+        public double TimeAxisTickLabelFontSize
         {
-            get { return (double)GetValue(TimeTickFontSizeProperty); }
-            set { SetValue(TimeTickFontSizeProperty, value); }
+            get { return (double)GetValue(TimeAxisTickLabelFontSizeProperty); }
+            set { SetValue(TimeAxisTickLabelFontSizeProperty, value); }
         }
-        /// <summary>Identifies the <see cref="TimeTickFontSize">TimeTickFontSize</see> dependency property.</summary>
+        /// <summary>Identifies the <see cref="TimeAxisTickLabelFontSize">TimeAxisTickLabelFontSize</see> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty TimeTickFontSizeProperty =
-            DependencyProperty.RegisterAttached("TimeTickFontSize", typeof(double), typeof(CandleChart), new FrameworkPropertyMetadata(DefaultTimeTickFontSize, FrameworkPropertyMetadataOptions.Inherits, OnTimeTickFontSizeChanged));
+        public static readonly DependencyProperty TimeAxisTickLabelFontSizeProperty =
+            DependencyProperty.RegisterAttached("TimeAxisTickLabelFontSize", typeof(double), typeof(CandleChart), new FrameworkPropertyMetadata(DefaultTimeAxisTickLabelFontSize, FrameworkPropertyMetadataOptions.Inherits, OnTimeTickFontSizeChanged));
         static void OnTimeTickFontSizeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             CandleChart thisCandleChart = obj as CandleChart;
             thisCandleChart?.OnPropertyChanged("TimeAxisHeight");
         }
 
-        ///<summary>Gets the default value for the <see cref="TimeTickFontSize">TimeTickFontSize</see> property.</summary>
-        ///<value>The default value for the <see cref="TimeTickFontSize"/> property: <c>10.0</c>.</value>
-        public static double DefaultTimeTickFontSize { get { return 10.0; } }
+        ///<summary>Gets the default value for the <see cref="TimeAxisTickLabelFontSize">TimeAxisTickLabelFontSize</see> property.</summary>
+        ///<value>The default value for the <see cref="TimeAxisTickLabelFontSize"/> property: <c>10.0</c>.</value>
+        public static double DefaultTimeAxisTickLabelFontSize { get { return 10.0; } }
         //----------------------------------------------------------------------------------------------------------------------------------
         ///<summary>Gets the height of the time axis area.</summary>
         ///<value>The height of the time axis area, which contains the time and date ticks with its labels.</value>
@@ -1394,7 +1563,7 @@ namespace FancyCandles
         {
             get
             {
-                double timeTextHeight = (new FormattedText("1Ajl", CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
+                double timeTextHeight = (new FormattedText("1Ajl", Culture, FlowDirection.LeftToRight, new Typeface(AxisTickLabelFontFamily.ToString()), TimeAxisTickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
                 return 2 * timeTextHeight + 4.0;
             }
         }
@@ -1578,7 +1747,7 @@ namespace FancyCandles
         ///<remarks>
         ///The cross lines locates inside the price chart (or volume histogram) area and pass through the current mouse position. 
         ///You can separately set up the visibility for the cross lines and for the correspondent price (or volume) label by setting the 
-        ///<see cref="IsCrossLinesVisible"/> and <see cref="IsCrossPriceVisible"/> properties respectively.
+        ///<see cref="IsCrossLinesVisible"/> and <see cref="IsCrossPriceLabelVisible"/> properties respectively.
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
         ///<tr><td>Identifier field</td><td><see cref="IsCrossLinesVisibleProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
@@ -1600,78 +1769,78 @@ namespace FancyCandles
         public static bool DefaultIsCrossLinesVisible { get { return true; } }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the visibility of the cross price (or volume) label.</summary>
-        ///<value>The visibility of the cross price (or volume) label: Visible if <c>True</c>; Hidden if <c>False</c>. The default is determined by the <see cref="DefaultIsCrossPriceVisible"/> values.</value>
+        ///<value>The visibility of the cross price (or volume) label: Visible if <c>True</c>; Hidden if <c>False</c>. The default is determined by the <see cref="DefaultIsCrossPriceLabelVisible"/> values.</value>
         ///<remarks>
         ///The cross price (or volume) label locates inside the price (or volume) axis area. 
         ///You can separately set up the visibility for the cross lines and for the correspondent price (or volume) label by setting the 
-        ///<see cref="IsCrossLinesVisible"/> and <see cref="IsCrossPriceVisible"/> properties respectively.
+        ///<see cref="IsCrossLinesVisible"/> and <see cref="IsCrossPriceLabelVisible"/> properties respectively.
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-        ///<tr><td>Identifier field</td><td><see cref="DefaultIsCrossPriceVisible"/></td></tr> 
+        ///<tr><td>Identifier field</td><td><see cref="DefaultIsCrossPriceLabelVisible"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         [UndoableProperty]
         [JsonProperty]
-        public bool IsCrossPriceVisible
+        public bool IsCrossPriceLabelVisible
         {
-            get { return (bool)GetValue(IsCrossPriceVisibleProperty); }
-            set { SetValue(IsCrossPriceVisibleProperty, value); }
+            get { return (bool)GetValue(IsCrossPriceLabelVisibleProperty); }
+            set { SetValue(IsCrossPriceLabelVisibleProperty, value); }
         }
-        /// <summary>Identifies the <see cref="IsCrossPriceVisible"/> dependency property.</summary>
+        /// <summary>Identifies the <see cref="IsCrossPriceLabelVisible"/> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty IsCrossPriceVisibleProperty =
-            DependencyProperty.Register("IsCrossPriceVisible", typeof(bool), typeof(CandleChart), new PropertyMetadata(DefaultIsCrossPriceVisible));
+        public static readonly DependencyProperty IsCrossPriceLabelVisibleProperty =
+            DependencyProperty.Register("IsCrossPriceLabelVisible", typeof(bool), typeof(CandleChart), new PropertyMetadata(DefaultIsCrossPriceLabelVisible));
 
         ///<summary>Gets the default value for the IsCrossLinesVisible property.</summary>
         ///<value>The default value for the <see cref="IsCrossLinesVisible"/> property: <c>true</c>.</value>
-        public static bool DefaultIsCrossPriceVisible { get { return true; } }
+        public static bool DefaultIsCrossPriceLabelVisible { get { return true; } }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the foreground for the price (or volume) label of the cross.</summary>
-        ///<value>The foreground for the price or volume label of the cross. The default is determined by the <see cref="DefaultCrossPriceForeground"/>values.</value>
+        ///<value>The foreground for the price or volume label of the cross. The default is determined by the <see cref="DefaultCrossPriceLabelForeground"/>values.</value>
         ///<remarks>
         ///The price (or volume) value label locates on the price (or volume) axis area.
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-        ///<tr><td>Identifier field</td><td><see cref="CrossPriceForegroundProperty"/></td></tr> 
+        ///<tr><td>Identifier field</td><td><see cref="CrossPriceLabelForegroundProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         [UndoableProperty]
         [JsonProperty]
-        public Brush CrossPriceForeground
+        public Brush CrossPriceLabelForeground
         {
-            get { return (Brush)GetValue(CrossPriceForegroundProperty); }
-            set { SetValue(CrossPriceForegroundProperty, value); }
+            get { return (Brush)GetValue(CrossPriceLabelForegroundProperty); }
+            set { SetValue(CrossPriceLabelForegroundProperty, value); }
         }
-        /// <summary>Identifies the <see cref="CrossPriceForeground"/> dependency property.</summary>
+        /// <summary>Identifies the <see cref="CrossPriceLabelForeground"/> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty CrossPriceForegroundProperty =
-            DependencyProperty.Register("CrossPriceForeground", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultCrossPriceForeground));
+        public static readonly DependencyProperty CrossPriceLabelForegroundProperty =
+            DependencyProperty.Register("CrossPriceLabelForeground", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultCrossPriceLabelForeground));
 
-        ///<summary>Gets the default value for the CrossPriceForeground property.</summary>
-        ///<value>The default value for the <see cref="CrossPriceForeground"/> property: <c>Brushes.Red</c>.</value>
-        public static Brush DefaultCrossPriceForeground { get { return (Brush)(new SolidColorBrush(Colors.Red)).GetCurrentValueAsFrozen(); } }
+        ///<summary>Gets the default value for the CrossPriceLabelForeground property.</summary>
+        ///<value>The default value for the <see cref="CrossPriceLabelForeground"/> property: <c>Brushes.Red</c>.</value>
+        public static Brush DefaultCrossPriceLabelForeground { get { return (Brush)(Brushes.Black).GetCurrentValueAsFrozen(); } }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the background for the price or volume label of the cross.</summary>
-        ///<value>The background for the price or volume label of the cross. The default is determined by the <see cref="DefaultCrossPriceBackground"/>values.</value>
+        ///<value>The background for the price or volume label of the cross. The default is determined by the <see cref="DefaultCrossPriceLabelBackground"/>values.</value>
         ///<remarks>
         ///The price (or volume) value label locates on the price (or volume) axis area.
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-        ///<tr><td>Identifier field</td><td><see cref="CrossPriceBackgroundProperty"/></td></tr> 
+        ///<tr><td>Identifier field</td><td><see cref="CrossPriceLabelBackgroundProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
         [UndoableProperty]
         [JsonProperty]
-        public Brush CrossPriceBackground
+        public Brush CrossPriceLabelBackground
         {
-            get { return (Brush)GetValue(CrossPriceBackgroundProperty); }
-            set { SetValue(CrossPriceBackgroundProperty, value); }
+            get { return (Brush)GetValue(CrossPriceLabelBackgroundProperty); }
+            set { SetValue(CrossPriceLabelBackgroundProperty, value); }
         }
-        /// <summary>Identifies the <see cref="CrossPriceBackground"/> dependency property.</summary>
+        /// <summary>Identifies the <see cref="CrossPriceLabelBackground"/> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty CrossPriceBackgroundProperty =
-            DependencyProperty.Register("CrossPriceBackground", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultCrossPriceBackground));
+        public static readonly DependencyProperty CrossPriceLabelBackgroundProperty =
+            DependencyProperty.Register("CrossPriceLabelBackground", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultCrossPriceLabelBackground));
 
-        ///<summary>Gets the default value for the CrossPriceBackground property.</summary>
-        ///<value>The default <see cref="Brush"/> value for the <see cref="CrossPriceBackground"/> property: <c>#FFE8EDFF</c>.</value>
-        public static Brush DefaultCrossPriceBackground { get { return (Brush)(new SolidColorBrush(Color.FromArgb(255, 232, 237, 255))).GetCurrentValueAsFrozen(); } } // #FFE8EDFF
+        ///<summary>Gets the default value for the CrossPriceLabelBackground property.</summary>
+        ///<value>The default <see cref="Brush"/> value for the <see cref="CrossPriceLabelBackground"/> property: <c>#FFE8EDFF</c>.</value>
+        public static Brush DefaultCrossPriceLabelBackground { get { return (Brush)(Brushes.Gainsboro).GetCurrentValueAsFrozen(); } } // #FFE8EDFF
 
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
@@ -1725,18 +1894,6 @@ namespace FancyCandles
 
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
-        /// <summary>Gets or sets the specific culture that will be used to draw price, volume, date and time values.</summary>
-        ///<value>The specific culture that will be used to draw price, volume, date and time values. The default is <see href="https://docs.microsoft.com/en-us/dotnet/api/system.globalization.cultureinfo.currentculture?view=netframework-4.7.2">CultureInfo.CurrentCulture</see>.</value>
-        public CultureInfo Culture
-        {
-            get { return (CultureInfo)GetValue(CultureProperty); }
-            set { SetValue(CultureProperty, value); }
-        }
-        /// <summary>Identifies the <see cref="Culture"/> dependency property.</summary>
-        /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty CultureProperty =
-            DependencyProperty.Register("Culture", typeof(CultureInfo), typeof(CandleChart), new PropertyMetadata(CultureInfo.CurrentCulture));        
-        //----------------------------------------------------------------------------------------------------------------------------------
         public ICandleProvider CandleProvider
         {
             get { return (ICandleProvider)GetValue(CandleProviderProperty); }
@@ -1744,7 +1901,7 @@ namespace FancyCandles
         }
         public static readonly DependencyProperty CandleProviderProperty =
             DependencyProperty.Register("CandleProvider", typeof(ICandleProvider), typeof(CandleChart), new PropertyMetadata(null));
-
+        //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the data source for the candles of this chart.</summary>
         ///<value>The data source for the candles of this chart. The default value is null.</value>
         ///<remarks>
@@ -1805,10 +1962,16 @@ namespace FancyCandles
 
             thisCandleChart.SetCandlesSourceForAll_OverlayIndicators();
 
+            if (thisCandleChart.CandlesSource == null || thisCandleChart.CandlesSource.Count == 0)
+                thisCandleChart.CurrentPrice = 0;
+            else
+                thisCandleChart.CurrentPrice = thisCandleChart.CandlesSource[thisCandleChart.CandlesSource.Count - 1].C;
+
             if (thisCandleChart.IsLoaded)
             {
                 thisCandleChart.ReCalc_TimeFrame();
                 thisCandleChart.ReCalc_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice();
+
 
                 DateTime old_lastCenterCandleDateTime = thisCandleChart.lastCenterCandleDateTime;
                 thisCandleChart.ReCalc_VisibleCandlesRange();
@@ -1832,11 +1995,12 @@ namespace FancyCandles
                 Update_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice(newCandle);
 
                 if (CandlesSource.Count < 20)
-                {
                     ReCalc_TimeFrame();
-                }
 
                 int maxVisibleCandlesCount = (int)(priceChartContainer.ActualWidth / (CandleWidth + CandleGap));
+
+                if (e.NewStartingIndex == (CandlesSource.Count - 1))
+                    CurrentPrice = CandlesSource[CandlesSource.Count - 1].C;
 
                 if (CandlesSource.Count< maxVisibleCandlesCount)
                     VisibleCandlesRange = new IntRange(0, CandlesSource.Count);
@@ -1853,6 +2017,9 @@ namespace FancyCandles
             {
                 ICandle newCandle = CandlesSource[e.NewStartingIndex];
                 Update_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice(newCandle);
+
+                if (e.NewStartingIndex == (CandlesSource.Count-1))
+                    CurrentPrice = CandlesSource[CandlesSource.Count - 1].C;
 
                 int vc_i = e.NewStartingIndex - VisibleCandlesRange.Start_i; // VisibleCandles index.
                 if (vc_i >= 0 && vc_i < VisibleCandlesRange.Count)
@@ -2223,39 +2390,6 @@ namespace FancyCandles
                 OnPropertyChanged();
             }
         }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        ///<summary>Gets or sets the folder with an assemblies containing user's add-in technical indicators.</summary>
-        ///<value>The path to the folder containing user's add-in technical indicators. The default value is empty string.</value>
-        ///<remarks>
-        ///<para>Adding your own technical indicator classes, derived from <see cref="OverlayIndicator"/>, to Startup project of your solution 
-        ///is not the only way to add new indicators to your application.</para>
-        ///<para>You or even users of your application can add a new add-in indicator by creating it in a separate solution. You have to do the following:</para>
-        ///<list type="bullet">
-        ///<item><term>Add a new indicator class derived from <see cref="OverlayIndicator"/> in a new project inside a new solution and build an assembly.</term></item>
-        ///<item><term>Locate the assembly file containing the new indicator class in some folder, usually below your main application root directory.</term></item>
-        ///<item><term>Specify the aforementioned folder path in the <see cref="AddInIndicatorsFolder"/> of your application.</term></item>
-        ///</list>
-        ///The path can be full or relative to the <see href="https://docs.microsoft.com/en-us/dotnet/api/system.appdomain.basedirectory?view=netframework-4.7.2">BaseDirectory</see> of your application.
-        ///<para>For example, it could look like this:
-        ///<code>&lt;fc:CandleChart AddInIndicatorsAssemblyPath="AddInIndicators"/&gt;</code>
-        ///In the example above, folder "AddInIndicators" must be located inside the base folder of your application. There can be multiple assembly files in this folder. 
-        ///All of them will be found by the <see cref="CandleChart"/> element.</para>
-        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
-        ///<tr><td>Identifier field</td><td><see cref="AddInIndicatorsFolderProperty"/></td></tr> 
-        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
-        ///</remarks>
-        ///<seealso href="https://gellerda.github.io/FancyCandles/articles/creating_overlay_indicator.html">Creating your own overlay technical indicator</seealso>
-        ///<seealso cref="OverlayIndicators"/>
-        public string AddInIndicatorsFolder
-        {
-            get { return (string)GetValue(AddInIndicatorsFolderProperty); }
-            set { SetValue(AddInIndicatorsFolderProperty, value); }
-        }
-
-        /// <summary>Identifies the <see cref="AddInIndicatorsFolder"/> dependency property.</summary>
-        /// <value><see cref="DependencyProperty"/></value>
-        public static readonly DependencyProperty AddInIndicatorsFolderProperty =
-            DependencyProperty.Register("AddInIndicatorsFolder", typeof(string), typeof(CandleChart), new PropertyMetadata(""));
         //----------------------------------------------------------------------------------------------------------------------------------
         private void OnPanelCandlesContainerSizeChanged(object sender, SizeChangedEventArgs e)
         {

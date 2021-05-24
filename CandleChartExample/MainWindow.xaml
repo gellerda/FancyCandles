@@ -7,17 +7,18 @@
         xmlns:fc="clr-namespace:FancyCandles;assembly=FancyCandles"
         xmlns:fci="clr-namespace:FancyCandles.Indicators;assembly=FancyCandles"        
         mc:Ignorable="d"
-        Title="MainWindow" Height="550" Width="800">
+        Title="MainWindow" Height="600" Width="800">
     <Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="140"/>
+            <RowDefinition Height="200"/>
         </Grid.RowDefinitions>
 
         <fc:CandleChart CandlesSource="{Binding Path=ReadOnlyCandles}"
                         VolumeBarWidthToCandleWidthRatio="0.5" 
-                        Grid.Row="0">
+                        Grid.Row="0"
+                        >
             <fc:CandleChart.OverlayIndicators>
                 <local:ObservableOverlayIndicatorCollection>
                     <fci:SimpleMovingAverage N="7">
@@ -44,6 +45,8 @@
             <Button Width="280" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesBySmallerOne">Replace the Candle Collection by a Smaller One</Button>
             <Button Width="280" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesByBiggerOne">Replace the Candle Collection by a Bigger One</Button>
             <Button Width="280" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesByEmptyOne">Replace the Candle Collection by an Empty One</Button>
+            <Button Width="280" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesByDailyOne">Replace the Candle Collection by a Daily One</Button>
+            <Button Width="280" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesByWeeklyOne">Replace the Candle Collection by a Weekly One</Button>
         </StackPanel>
 
     </Grid>

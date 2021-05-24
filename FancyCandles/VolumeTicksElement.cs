@@ -46,11 +46,11 @@ namespace FancyCandles
         //---------------------------------------------------------------------------------------------------------------------------------------
         public VolumeTicksElement()
         {
-            if (axisTickPen == null)
+            if (tickPen == null)
             {
-                axisTickPen = new Pen(CandleChart.DefaultAxisTickColor, 1.0);
-                if (!axisTickPen.IsFrozen)
-                    axisTickPen.Freeze();
+                tickPen = new Pen(CandleChart.DefaultAxisTickColor, 1.0);
+                if (!tickPen.IsFrozen)
+                    tickPen.Freeze();
             }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -108,32 +108,43 @@ namespace FancyCandles
         public static readonly DependencyProperty ChartTopMarginProperty
             = DependencyProperty.Register("ChartTopMargin", typeof(double), typeof(VolumeTicksElement), new FrameworkPropertyMetadata(15.0) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
-        public double PriceTickFontSize
+        private Typeface currentTypeFace = new Typeface(SystemFonts.MessageFontFamily.ToString());
+
+        public FontFamily TickLabelFontFamily
         {
-            get { return (double)GetValue(PriceTickFontSizeProperty); }
-            set { SetValue(PriceTickFontSizeProperty, value); }
+            get { return (FontFamily)GetValue(TickLabelFontFamilyProperty); }
+            set { SetValue(TickLabelFontFamilyProperty, value); }
         }
-        public static readonly DependencyProperty PriceTickFontSizeProperty 
-            = CandleChart.PriceTickFontSizeProperty.AddOwner(typeof(VolumeTicksElement),
-                new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.Inherits, new PropertyChangedCallback(OnPriceTickFontSizeChanged)) { AffectsRender = true });
-        private static void OnPriceTickFontSizeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        public static readonly DependencyProperty TickLabelFontFamilyProperty =
+            DependencyProperty.Register("TickLabelFontFamily", typeof(FontFamily), typeof(VolumeTicksElement), new FrameworkPropertyMetadata(SystemFonts.MessageFontFamily, OnTickLabelFontFamilyChanged));
+
+        static void OnTickLabelFontFamilyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            //VolumeTicksElement thisElement = (VolumeTicksElement)obj;
-            //thisElement.InvalidateMeasure();
+            VolumeTicksElement thisElement = obj as VolumeTicksElement;
+            if (thisElement == null) return;
+            thisElement.currentTypeFace = new Typeface(thisElement.TickLabelFontFamily.ToString());
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
-        private Pen axisTickPen;
-
-        public Brush AxisTickColor
+        public double TickLabelFontSize
         {
-            get { return (Brush)GetValue(AxisTickColorProperty); }
-            set { SetValue(AxisTickColorProperty, value); }
+            get { return (double)GetValue(TickLabelFontSizeProperty); }
+            set { SetValue(TickLabelFontSizeProperty, value); }
         }
-        public static readonly DependencyProperty AxisTickColorProperty
-            = DependencyProperty.Register("AxisTickColor", typeof(Brush), typeof(VolumeTicksElement),
-                new FrameworkPropertyMetadata(CandleChart.DefaultAxisTickColor, null, CoerceAxisTickColor) { AffectsRender = true });
+        public static readonly DependencyProperty TickLabelFontSizeProperty
+            = DependencyProperty.Register("TickLabelFontSize", typeof(double), typeof(VolumeTicksElement), new FrameworkPropertyMetadata(9.0) { AffectsRender = true });
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        private Pen tickPen;
 
-        private static object CoerceAxisTickColor(DependencyObject objWithOldDP, object newDPValue)
+        public Brush TickColor
+        {
+            get { return (Brush)GetValue(TickColorProperty); }
+            set { SetValue(TickColorProperty, value); }
+        }
+        public static readonly DependencyProperty TickColorProperty
+            = DependencyProperty.Register("TickColor", typeof(Brush), typeof(VolumeTicksElement),
+                new FrameworkPropertyMetadata(CandleChart.DefaultAxisTickColor, null, CoerceTickColor) { AffectsRender = true });
+
+        private static object CoerceTickColor(DependencyObject objWithOldDP, object newDPValue)
         {
             VolumeTicksElement thisElement = (VolumeTicksElement)objWithOldDP;
             Brush newBrushValue = (Brush)newDPValue;
@@ -142,7 +153,7 @@ namespace FancyCandles
             {
                 Pen p = new Pen(newBrushValue, 1.0);
                 p.Freeze();
-                thisElement.axisTickPen = p;
+                thisElement.tickPen = p;
                 return newDPValue;
             }
             else
@@ -150,7 +161,7 @@ namespace FancyCandles
                 Brush b = (Brush)newBrushValue.GetCurrentValueAsFrozen();
                 Pen p = new Pen(b, 1.0);
                 p.Freeze();
-                thisElement.axisTickPen = p;
+                thisElement.tickPen = p;
                 return b;
             }
         }
@@ -167,7 +178,7 @@ namespace FancyCandles
         {
             if (VisibleCandlesExtremums.VolumeHigh == long.MinValue) return;
 
-            double textHeight = (new FormattedText("123", Culture, FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
+            double textHeight = (new FormattedText("123", Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
             double halfTextHeight = textHeight / 2.0;
             double volumeHistogramPanelWidth = ActualWidth - PriceAxisWidth;
             double tick_text_X = volumeHistogramPanelWidth + TICK_LINE_WIDTH + TICK_LEFT_MARGIN;
@@ -187,10 +198,10 @@ namespace FancyCandles
             void DrawPriceTick(long volume)
             {
                 string s = volume.MyToString(Culture, decimalSeparator, decimalSeparatorArray);
-                FormattedText priceTickFormattedText = new FormattedText(s, Culture, FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                FormattedText priceTickFormattedText = new FormattedText(s, Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, TickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double y = ChartTopMargin + (VisibleCandlesExtremums.VolumeHigh - volume) * chartHeight_candlesLHRange_Ratio;
                 drawingContext.DrawText(priceTickFormattedText, new Point(tick_text_X, y - halfTextHeight));
-                drawingContext.DrawLine(axisTickPen, new Point(volumeHistogramPanelWidth, y), new Point(tick_line_endX, y));
+                drawingContext.DrawLine(tickPen, new Point(volumeHistogramPanelWidth, y), new Point(tick_line_endX, y));
 
                 if (IsGridlinesEnabled && GridlinesPen != null)
                     drawingContext.DrawLine(GridlinesPen, new Point(0, y), new Point(volumeHistogramPanelWidth, y));

@@ -121,7 +121,7 @@
                         <StackPanel Style="{StaticResource settingsItem}" ToolTip="Horizontal time scale below the chart, that shows time.">
                             <TextBlock Style="{StaticResource horizontalCaption}">Time scale font size:</TextBlock>
                             <fp:EditableDoubleComboBox MinValue="0" VerticalAlignment="Bottom"
-                                                       Text="{Binding TimeTickFontSize, Converter={StaticResource symStringToNumberConverter}, Mode=TwoWay}">
+                                                       Text="{Binding TimeAxisTickLabelFontSize, Converter={StaticResource symStringToNumberConverter}, Mode=TwoWay}">
                                     <ComboBoxItem Content="8"/>
                                     <ComboBoxItem Content="9"/>
                                     <ComboBoxItem Content="10"/>
@@ -139,7 +139,7 @@
                         <StackPanel Style="{StaticResource settingsItem}" ToolTip="Vertical scale on the right of the chart, that shows price, volume and other indicator values.">
                             <TextBlock Style="{StaticResource horizontalCaption}">Price scale font size:</TextBlock>
                             <fp:EditableDoubleComboBox MinValue="0" IsSynchronizedWithCurrentItem="False" VerticalAlignment="Bottom"
-                                                       Text="{Binding PriceTickFontSize, Converter={StaticResource symStringToNumberConverter}, Mode=TwoWay}">
+                                                       Text="{Binding PriceAxisTickLabelFontSize, Converter={StaticResource symStringToNumberConverter}, Mode=TwoWay}">
                                 <ComboBoxItem Content="8"/>
                                 <ComboBoxItem Content="9"/>
                                 <ComboBoxItem Content="10"/>
@@ -230,17 +230,17 @@
                                 
                                 <StackPanel Style="{StaticResource settingsItem}" ToolTip="Show cross price or cross volume on the vertical scale.">
                                     <TextBlock Style="{StaticResource horizontalCaption}">Cross price:</TextBlock>
-                                    <CheckBox IsChecked="{Binding IsCrossPriceVisible, Mode=TwoWay}"/>
+                                    <CheckBox IsChecked="{Binding IsCrossPriceLabelVisible, Mode=TwoWay}"/>
                                 </StackPanel>
 
                                 <StackPanel Style="{StaticResource settingsItem}">
                                     <TextBlock Style="{StaticResource horizontalCaption}">Cross price color:</TextBlock>
-                                    <fp:StandardColorPicker SelectedColor="{Binding CrossPriceForeground, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                                    <fp:StandardColorPicker SelectedColor="{Binding CrossPriceLabelForeground, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
                                 </StackPanel>
 
                                 <StackPanel Style="{StaticResource settingsItem}">
                                     <TextBlock Style="{StaticResource horizontalCaption}">Cross price background:</TextBlock>
-                                    <fp:StandardColorPicker SelectedColor="{Binding CrossPriceBackground, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                                    <fp:StandardColorPicker SelectedColor="{Binding CrossPriceLabelBackground, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                             </StackPanel>
                         </GroupBox>
@@ -461,6 +461,25 @@
                         <TextBlock Style="{StaticResource horizontalCaption}">Bearish candle outline:</TextBlock>
                         <fp:StandardColorPicker SelectedColor="{Binding BearishCandleStroke, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
                     </StackPanel>
+
+                    <GroupBox Header="Current price">
+                        <StackPanel>
+                            <StackPanel Style="{StaticResource settingsItem}" ToolTip="Show the current price (the closing price of the last candle) label on the price scale.">
+                                <TextBlock Style="{StaticResource horizontalCaption}">Show the current price:</TextBlock>
+                                <CheckBox IsChecked="{Binding IsCurrentPriceLabelShown, Mode=TwoWay}"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource settingsItem}" ToolTip="The foreground color of the current price label and its border">
+                                <TextBlock Style="{StaticResource horizontalCaption}">Current price color:</TextBlock>
+                                <fp:StandardColorPicker SelectedColor="{Binding CurrentPriceLabelForeground, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource settingsItem}" ToolTip="The background color of the current price label">
+                                <TextBlock Style="{StaticResource horizontalCaption}">Current price background:</TextBlock>
+                                <fp:StandardColorPicker SelectedColor="{Binding CurrentPriceLabelBackground, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
             </TabItem>
             

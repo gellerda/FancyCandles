@@ -26,6 +26,19 @@ namespace FancyCandles
 {
     class TimeTicksElement : FrameworkElement
     {
+        private static double TICK_LEFT_MARGIN = 2.0;
+        private static double TICK_RIGHT_MARGIN = 2.0;
+
+        private static CultureInfo cultureEnUS = CultureInfo.GetCultureInfo("en-us");
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        static TimeTicksElement()
+        {
+            Pen defaultPen = new Pen(CandleChart.DefaultVerticalGridlinesBrush, CandleChart.DefaultVerticalGridlinesThickness); // { DashStyle = new DashStyle(new double[] { 2, 3 }, 0) };
+            defaultPen.Freeze();
+            GridlinesPenProperty = DependencyProperty.Register("GridlinesPen", typeof(Pen), typeof(TimeTicksElement),
+                new FrameworkPropertyMetadata(defaultPen, null, CoerceGridlinesPen) { AffectsRender = true });
+        }
+        //---------------------------------------------------------------------------------------------------------------------------------------
         public TimeTicksElement()
         {
             Loaded += new RoutedEventHandler(OnTimeTicksElementLoaded);
@@ -40,16 +53,8 @@ namespace FancyCandles
 
         void OnTimeTicksElementLoaded(object sender, RoutedEventArgs e)
         {
-            if (Time_TickWidth==0.0)
-                OnTimeTickFontSizeChanged(this, new DependencyPropertyChangedEventArgs());
-        }
-        //---------------------------------------------------------------------------------------------------------------------------------------
-        static TimeTicksElement()
-        {
-            Pen defaultPen = new Pen(CandleChart.DefaultVerticalGridlinesBrush, CandleChart.DefaultVerticalGridlinesThickness); // { DashStyle = new DashStyle(new double[] { 2, 3 }, 0) };
-            defaultPen.Freeze();
-            GridlinesPenProperty = DependencyProperty.Register("GridlinesPen", typeof(Pen), typeof(TimeTicksElement),
-                new FrameworkPropertyMetadata(defaultPen, null, CoerceGridlinesPen) { AffectsRender = true });
+            if (threeCharTickLabelWidth==0.0)
+                OnTickLabelFontSizeChanged(this, new DependencyPropertyChangedEventArgs());
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
         public bool HideMinorGridlines
@@ -124,51 +129,61 @@ namespace FancyCandles
             }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
-        public double TimeTickFontSize
-        {
-            get { return (double)GetValue(TimeTickFontSizeProperty); }
-            set { SetValue(TimeTickFontSizeProperty, value); }
-        }
-        public static readonly DependencyProperty TimeTickFontSizeProperty 
-            = CandleChart.TimeTickFontSizeProperty.AddOwner(typeof(TimeTicksElement),
-                new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.Inherits, new PropertyChangedCallback(OnTimeTickFontSizeChanged)) { AffectsRender = true, AffectsMeasure = true });
-
-        private static void OnTimeTickFontSizeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
-        {
-            TimeTicksElement thisElement = (TimeTicksElement)obj;
-            thisElement.Time_TickWidth = thisElement.Calc_Time_TickWidth(thisElement.TimeTickFontSize);
-            thisElement.DayOrMonthOrYear_TickWidth = thisElement.Calc_DayOrMonthOrYear_TickWidth(thisElement.TimeTickFontSize);
-            thisElement.Day_TickWidth = thisElement.Calc_Day_TickWidth(thisElement.TimeTickFontSize);
-            thisElement.ReCalc_TimeTicksTimeFrame();
-        }
-        //---------------------------------------------------------------------------------------------------------------------------------------
         public double TimeAxisHeight
         {
             get { return (double)GetValue(TimePanelHeightProperty); }
             set { SetValue(TimePanelHeightProperty, value); }
         }
-        public static readonly DependencyProperty TimePanelHeightProperty 
+        public static readonly DependencyProperty TimePanelHeightProperty
             = DependencyProperty.Register("TimeAxisHeight", typeof(double), typeof(TimeTicksElement),
                 new FrameworkPropertyMetadata(0.0) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
-        static double TicksWidthWithGapFactor = 2.0; // = (Tick width + Gap width between ticks) / Tick width
+        private Typeface currentTypeFace = new Typeface(SystemFonts.MessageFontFamily.ToString());
 
-        double Time_TickWidth = 0.0;
-        double Calc_Time_TickWidth(double fontSize)
+        public FontFamily TickLabelFontFamily
         {
-            return (new FormattedText("23H", CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), fontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Width;
+            get { return (FontFamily)GetValue(TickLabelFontFamilyProperty); }
+            set { SetValue(TickLabelFontFamilyProperty, value); }
         }
+        public static readonly DependencyProperty TickLabelFontFamilyProperty =
+            DependencyProperty.Register("TickLabelFontFamily", typeof(FontFamily), typeof(TimeTicksElement), new FrameworkPropertyMetadata(SystemFonts.MessageFontFamily, OnTickLabelFontFamilyChanged));
 
-        double DayOrMonthOrYear_TickWidth = 0;
-        double Calc_DayOrMonthOrYear_TickWidth(double fontSize)
+        static void OnTickLabelFontFamilyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            return (new FormattedText("2020", CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), fontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Width;
+            TimeTicksElement thisElement = obj as TimeTicksElement;
+            if (thisElement == null) return;
+            thisElement.currentTypeFace = new Typeface(thisElement.TickLabelFontFamily.ToString());
         }
-
-        double Day_TickWidth = 0;
-        double Calc_Day_TickWidth(double fontSize)
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        public double TickLabelFontSize
         {
-            return TicksWidthWithGapFactor * (new FormattedText("30", CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), fontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Width;
+            get { return (double)GetValue(TickLabelFontSizeProperty); }
+            set { SetValue(TickLabelFontSizeProperty, value); }
+        }
+        public static readonly DependencyProperty TickLabelFontSizeProperty
+            = DependencyProperty.Register("TickLabelFontSize", typeof(double), typeof(TimeTicksElement), new FrameworkPropertyMetadata(16.0,OnTickLabelFontSizeChanged) { AffectsRender = true, AffectsMeasure = true });
+
+        private static void OnTickLabelFontSizeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            TimeTicksElement thisElement = (TimeTicksElement)obj;
+            thisElement.ReCalc_TickLabelWidths();
+            thisElement.ReCalc_TimeTicksTimeFrame();
+        }
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        private double twoCharTickLabelWidth = 0;
+        private double threeCharTickLabelWidth = 0.0;
+        private double fourCharTickLabelWidth = 0;
+
+        void ReCalc_TickLabelWidths()
+        {
+            FormattedText txt = new FormattedText("23H", cultureEnUS, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+            threeCharTickLabelWidth = txt.Width + TICK_RIGHT_MARGIN + TICK_LEFT_MARGIN;
+
+            txt = new FormattedText("2020", cultureEnUS, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+            fourCharTickLabelWidth = txt.Width + TICK_RIGHT_MARGIN + TICK_LEFT_MARGIN;
+
+            txt = new FormattedText("30", cultureEnUS, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+            twoCharTickLabelWidth = txt.Width + TICK_RIGHT_MARGIN + TICK_LEFT_MARGIN;
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
         public IntRange VisibleCandlesRange
@@ -213,14 +228,12 @@ namespace FancyCandles
         // Таймфрейм меток часто меняется и никак не связан с таймфреймом свечей.
         int TimeTicksTimeFrame;
 
-        bool ReCalc_TimeTicksTimeFrame()
+        void ReCalc_TimeTicksTimeFrame()
         {
-            if (TimeFrame == 0 || CandleWidthAndGap.Width == 0.0 || TimeTickFontSize == 0.0) return false;
+            if (TimeFrame == 0 || CandleWidthAndGap.Width == 0.0 || TickLabelFontSize == 0.0) return;
 
-            double minutesCoveredByOneTimeTickLabel = Math.Ceiling(Time_TickWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap)) * TimeFrame;
-            int old_TimeTicksTimeFrame = TimeTicksTimeFrame;
+            double minutesCoveredByOneTimeTickLabel = threeCharTickLabelWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap) * TimeFrame;
             TimeTicksTimeFrame = MyDateAndTime.CeilMinutesToConventionalTimeFrame(minutesCoveredByOneTimeTickLabel);
-            return TimeTicksTimeFrame != old_TimeTicksTimeFrame;
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnRender(DrawingContext drawingContext)
@@ -247,7 +260,7 @@ namespace FancyCandles
             int time_csi = -1;
             bool isHourStart = false;
 
-            int date_csi = -1;
+            int day_csi = -1;
             bool isMonthStart = false, isYearStart = false;
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             double topTimePanelY = RenderSize.Height - TimeAxisHeight;
@@ -258,27 +271,27 @@ namespace FancyCandles
             {
                 //double timeTickRightMargin = CandleWidth/2.0 +  (day_csi - VisibleCandlesRange.Start_i) * (CandleWidth + CandleGap);
                 string timeTickText = TimeTick.ConvertDateTimeToTimeTickText(isHourStart, CandlesSource[time_csi].t);
-                FormattedText timeTickFormattedText = new FormattedText(timeTickText, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                FormattedText timeTickFormattedText = new FormattedText(timeTickText, cultureEnUS, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double x = CandleWidthAndGap.Width / 2.0 + (time_csi - VisibleCandlesRange.Start_i) * (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
-                drawingContext.DrawText(timeTickFormattedText, new Point(x + 2, topTimePanelY));
+                drawingContext.DrawText(timeTickFormattedText, new Point(x + TICK_LEFT_MARGIN, topTimePanelY));
                 drawingContext.DrawLine(pen, new Point(x, topTimePanelY), new Point(x, isHourStart ? centerTimePanelY : smallMarkLineY));
 
                 if (IsGridlinesEnabled && GridlinesPen != null && isHourStart)
                     drawingContext.DrawLine(GridlinesPen, new Point(x, 0), new Point(x, topTimePanelY));
             }
 
-            void DrawDateTick()
+            void DrawDayTick()
             {
-                string dateTickText = TimeTick.ConvertDateTimeToDateTickText(isYearStart, isMonthStart, CandlesSource[date_csi].t);
-                FormattedText dateTickFormattedText = new FormattedText(dateTickText, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
-                double x = CandleWidthAndGap.Width / 2.0 + (date_csi - VisibleCandlesRange.Start_i) * (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
-                drawingContext.DrawText(dateTickFormattedText, new Point(x + 2, centerTimePanelY));
+                string dateTickText = TimeTick.ConvertDateTimeToDateTickText(isYearStart, isMonthStart, CandlesSource[day_csi].t);
+                FormattedText dateTickFormattedText = new FormattedText(dateTickText, cultureEnUS, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                double x = CandleWidthAndGap.Width / 2.0 + (day_csi - VisibleCandlesRange.Start_i) * (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
+                drawingContext.DrawText(dateTickFormattedText, new Point(x + TICK_LEFT_MARGIN, centerTimePanelY));
                 drawingContext.DrawLine(pen, new Point(x, centerTimePanelY), new Point(x, RenderSize.Height));
             }
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            int time_LabelWidthInCandles = Convert.ToInt32(Math.Ceiling(Time_TickWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap)));
-            int date_LabelWidthInCandles = Convert.ToInt32(Math.Ceiling(DayOrMonthOrYear_TickWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap)));
+            double timeLabelWidthInCandles = threeCharTickLabelWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
+            double dayLabelWidthInCandles = fourCharTickLabelWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
             for (int i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - 1; i >= VisibleCandlesRange.Start_i; i--)
             {
                 ICandle cndl = CandlesSource[i];
@@ -290,16 +303,16 @@ namespace FancyCandles
                     // Если cndl - это начало нового месяца:
                     if (cndl.t.Month != prev_cndl.t.Month)
                     {
-                        if ((date_csi - i) >= date_LabelWidthInCandles)
+                        if ((day_csi - i) >= dayLabelWidthInCandles)
                         {
-                            DrawDateTick();
-                            date_csi = i;
+                            DrawDayTick();
+                            day_csi = i;
                             isMonthStart = true;
                             isYearStart = cndl.t.Year != prev_cndl.t.Year;
                         }
-                        else if (date_csi == -1 || !isMonthStart || (!isYearStart && cndl.t.Year != prev_cndl.t.Year))
+                        else if (day_csi == -1 || !isMonthStart || (!isYearStart && cndl.t.Year != prev_cndl.t.Year))
                         {
-                            date_csi = i;
+                            day_csi = i;
                             isMonthStart = true;
                             isYearStart = cndl.t.Year != prev_cndl.t.Year;
                         }
@@ -307,15 +320,15 @@ namespace FancyCandles
                     // Если cndl - это НЕ начало нового месяца:
                     else
                     {
-                        if (date_csi == -1)
+                        if (day_csi == -1)
                         {
-                            date_csi = i;
+                            day_csi = i;
                             isMonthStart = isYearStart = false;
                         }
-                        else if ((date_csi - i) >= date_LabelWidthInCandles)
+                        else if ((day_csi - i) >= dayLabelWidthInCandles)
                         {
-                            DrawDateTick();
-                            date_csi = i;
+                            DrawDayTick();
+                            day_csi = i;
                             isMonthStart = isYearStart = false;
                         }
                     }
@@ -324,7 +337,7 @@ namespace FancyCandles
                 // Если cndl - это начало нового часа:
                 if (MyDateAndTime.IsTimeMultipleOf(cndl.t, 60) || (i > 0 && !MyDateAndTime.IsInSameHour(cndl.t, prev_cndl.t)))
                 {
-                    if ((time_csi - i) >= time_LabelWidthInCandles)
+                    if ((time_csi - i) >= timeLabelWidthInCandles)
                     {
                         DrawTimeTick();
                         time_csi = i;
@@ -344,7 +357,7 @@ namespace FancyCandles
                         time_csi = i;
                         isHourStart = false;
                     }
-                    else if ((time_csi - i) >= time_LabelWidthInCandles)
+                    else if ((time_csi - i) >= timeLabelWidthInCandles)
                     {
                         DrawTimeTick();
                         time_csi = i;
@@ -355,7 +368,7 @@ namespace FancyCandles
 
             // И не забудем нарисовать последний таймтик из "кэша", если он там есть:
             if (time_csi != -1) DrawTimeTick();
-            if (date_csi != -1) DrawDateTick();
+            if (day_csi != -1) DrawDayTick();
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
         void OnRender_DayAndMonth(DrawingContext drawingContext, Pen pen)
@@ -373,9 +386,9 @@ namespace FancyCandles
 
             void DrawDayTick()
             {
-                FormattedText dayTickFormattedText = new FormattedText(CandlesSource[day_csi].t.Day.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                FormattedText dayTickFormattedText = new FormattedText(CandlesSource[day_csi].t.Day.ToString(), cultureEnUS, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double x = CandleWidthAndGap.Width / 2.0 + (day_csi - VisibleCandlesRange.Start_i) * (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
-                drawingContext.DrawText(dayTickFormattedText, new Point(x + 2, topTimePanelY));
+                drawingContext.DrawText(dayTickFormattedText, new Point(x + TICK_LEFT_MARGIN, topTimePanelY));
                 drawingContext.DrawLine(pen, new Point(x, topTimePanelY), new Point(x, isMonthStart ? centerTimePanelY : smallMarkLineY));
 
                 if (GridlinesPen != null)
@@ -397,15 +410,15 @@ namespace FancyCandles
             void DrawMonthTick()
             {
                 string monthTickText = TimeTick.ConvertDateTimeToMonthTickText(isYearStart, CandlesSource[month_csi].t);
-                FormattedText monthTickFormattedText = new FormattedText(monthTickText, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                FormattedText monthTickFormattedText = new FormattedText(monthTickText, cultureEnUS, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double x = CandleWidthAndGap.Width / 2.0 + (month_csi - VisibleCandlesRange.Start_i) * (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
-                drawingContext.DrawText(monthTickFormattedText, new Point(x + 2, centerTimePanelY));
+                drawingContext.DrawText(monthTickFormattedText, new Point(x + TICK_LEFT_MARGIN, centerTimePanelY));
                 drawingContext.DrawLine(pen, new Point(x, centerTimePanelY), new Point(x, RenderSize.Height));
             }
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            int day_LabelWidthInCandles = Convert.ToInt32(Math.Ceiling(Day_TickWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap)));
-            int month_LabelWidthInCandles = Convert.ToInt32(Math.Ceiling(DayOrMonthOrYear_TickWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap)));
+            double dayLabelWidthInCandles = twoCharTickLabelWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
+            double monthLabelWidthInCandles = fourCharTickLabelWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap);
             for (int i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - 1; i >= VisibleCandlesRange.Start_i; i--)
             {
                 ICandle cndl = CandlesSource[i];
@@ -418,7 +431,7 @@ namespace FancyCandles
                     // Если cndl - это начало нового года:
                     if (cndl.t.Year != prev_cndl.t.Year)
                     {
-                        if ((month_csi - i) >= month_LabelWidthInCandles)
+                        if ((month_csi - i) >= monthLabelWidthInCandles)
                         {
                             DrawMonthTick();
                             month_csi = i;
@@ -438,7 +451,7 @@ namespace FancyCandles
                             month_csi = i;
                             isYearStart = false;
                         }
-                        else if ((month_csi - i) >= month_LabelWidthInCandles)
+                        else if ((month_csi - i) >= monthLabelWidthInCandles)
                         {
                             DrawMonthTick();
                             month_csi = i;
@@ -446,7 +459,7 @@ namespace FancyCandles
                         }
                     }
 
-                    if ((day_csi - i) >= day_LabelWidthInCandles)
+                    if ((day_csi - i) >= dayLabelWidthInCandles)
                     {
                         DrawDayTick();
                         day_csi = i;
@@ -467,7 +480,7 @@ namespace FancyCandles
                         day_csi = i;
                         isMonthStart = false;
                     }
-                    else if ((day_csi - i) >= day_LabelWidthInCandles)
+                    else if ((day_csi - i) >= dayLabelWidthInCandles)
                     {
                         DrawDayTick();
                         day_csi = i;
@@ -480,14 +493,6 @@ namespace FancyCandles
             if (day_csi != -1) DrawDayTick();
             if (month_csi != -1) DrawMonthTick();
         }
-        //---------------------------------------------------------------------------------------------------------------------------------------
-        /*protected override Size MeasureOverride(Size availableSize)
-        {
-            Size desiredSize = base.MeasureOverride(availableSize);
-            double textHeight = (new FormattedText("1Ajl", CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), TimeTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
-            desiredSize.Height = 2*textHeight + 4.0;
-            return desiredSize;
-        }*/
         //---------------------------------------------------------------------------------------------------------------------------------------
         //---------------------------------------------------------------------------------------------------------------------------------------
         //---------------------------------------------------------------------------------------------------------------------------------------

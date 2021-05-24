@@ -144,15 +144,15 @@ namespace FancyCandles
     class CrossPriceMarginConverter : IMultiValueConverter
     {
         // values[0] - Point CurrentMousePosition
-        // values[1] - double PriceTickTextHeight
+        // values[1] - double PriceAxisTickLabelHeight
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values == null || values.Length < 2 || (values[0]).GetType() != typeof(Point) || (values[1]).GetType() != typeof(double))
                 return new Thickness(0, 0, 0, 0);
 
             Point currentMousePosition = (Point)values[0];
-            double priceTickTextHeight = (double)values[1];
-            return new Thickness(0, currentMousePosition.Y - priceTickTextHeight / 2.0, 0, 0);
+            double priceAxisTickLabelHeight = (double)values[1];
+            return new Thickness(0, currentMousePosition.Y - priceAxisTickLabelHeight / 2.0, 0, 0);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

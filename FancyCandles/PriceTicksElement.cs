@@ -26,8 +26,8 @@ namespace FancyCandles
     class PriceTicksElement : FrameworkElement
     {
         public static double TICK_LINE_WIDTH = 3.0;
-        public static double TICK_LEFT_MARGIN = 2.0;
-        public static double TICK_RIGHT_MARGIN = 1.0;
+        public static double TICK_HORIZ_MARGIN = 2.0;
+
         //---------------------------------------------------------------------------------------------------------------------------------------
         static PriceTicksElement()
         {
@@ -39,11 +39,11 @@ namespace FancyCandles
         //---------------------------------------------------------------------------------------------------------------------------------------
         public PriceTicksElement()
         {
-            if (axisTickPen == null)
+            if (tickPen == null)
             {
-                axisTickPen = new Pen(CandleChart.DefaultAxisTickColor, 1.0);
-                if (!axisTickPen.IsFrozen)
-                    axisTickPen.Freeze();
+                tickPen = new Pen(CandleChart.DefaultAxisTickColor, 1.0);
+                if (!tickPen.IsFrozen)
+                    tickPen.Freeze();
             }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -54,6 +54,125 @@ namespace FancyCandles
         }
         public static readonly DependencyProperty CultureProperty =
             DependencyProperty.Register("Culture", typeof(CultureInfo), typeof(PriceTicksElement), new FrameworkPropertyMetadata(CultureInfo.CurrentCulture) { AffectsRender = true });
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        public double CurrentPrice
+        {
+            get { return (double)GetValue(CurrentPriceProperty); }
+            set { SetValue(CurrentPriceProperty, value); }
+        }
+        public static readonly DependencyProperty CurrentPriceProperty =
+            DependencyProperty.Register("CurrentPrice", typeof(double), typeof(PriceTicksElement), new FrameworkPropertyMetadata(0.0) { AffectsRender = true });
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        public bool IsCurrentPriceLabelShown
+        {
+            get { return (bool)GetValue(IsCurrentPriceLabelShownProperty); }
+            set { SetValue(IsCurrentPriceLabelShownProperty, value); }
+        }
+        public static readonly DependencyProperty IsCurrentPriceLabelShownProperty =
+            DependencyProperty.Register("IsCurrentPriceLabelShown", typeof(bool), typeof(PriceTicksElement), new FrameworkPropertyMetadata(true) { AffectsRender = true });
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        private Pen currentPriceLabelForegroundPen;
+
+        public Brush CurrentPriceLabelForeground
+        {
+            get { return (Brush)GetValue(CurrentPriceLabelForegroundProperty); }
+            set { SetValue(CurrentPriceLabelForegroundProperty, value); }
+        }
+        public static readonly DependencyProperty CurrentPriceLabelForegroundProperty =
+            DependencyProperty.Register("CurrentPriceLabelForeground", typeof(Brush), typeof(PriceTicksElement), 
+                new FrameworkPropertyMetadata(CandleChart.DefaultCurrentPriceLabelForeground, null, CoerceCurrentPriceLabelForeground) { AffectsRender = true });
+
+        private static object CoerceCurrentPriceLabelForeground(DependencyObject objWithOldDP, object newDPValue)
+        {
+            PriceTicksElement thisElement = (PriceTicksElement)objWithOldDP;
+            Brush newBrushValue = (Brush)newDPValue;
+
+            if (newBrushValue.IsFrozen)
+            {
+                Pen p = new Pen(newBrushValue, 1.0);
+                p.Freeze();
+                thisElement.currentPriceLabelForegroundPen = p;
+                return newDPValue;
+            }
+            else
+            {
+                Brush b = (Brush)newBrushValue.GetCurrentValueAsFrozen();
+                Pen p = new Pen(b, 1.0);
+                p.Freeze();
+                thisElement.currentPriceLabelForegroundPen = p;
+                return b;
+            }
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        public Brush CurrentPriceLabelBackground
+        {
+            get { return (Brush)GetValue(CurrentPriceLabelBackgroundProperty); }
+            set { SetValue(CurrentPriceLabelBackgroundProperty, value); }
+        }
+        public static readonly DependencyProperty CurrentPriceLabelBackgroundProperty =
+            DependencyProperty.Register("CurrentPriceLabelBackground", typeof(Brush), typeof(PriceTicksElement), 
+                new FrameworkPropertyMetadata(CandleChart.DefaultCurrentPriceLabelBackground, null, CoerceCurrentPriceLabelBackground) { AffectsRender = true });
+
+        private static object CoerceCurrentPriceLabelBackground(DependencyObject objWithOldDP, object newDPValue)
+        {
+            PriceTicksElement thisElement = (PriceTicksElement)objWithOldDP;
+            Brush newBrushValue = (Brush)newDPValue;
+
+            if (newBrushValue.IsFrozen)
+                return newDPValue;
+            else
+                return (Brush)newBrushValue.GetCurrentValueAsFrozen();
+        }
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        private Pen tickPen;
+
+        public Brush TickColor
+        {
+            get { return (Brush)GetValue(TickColorProperty); }
+            set { SetValue(TickColorProperty, value); }
+        }
+        public static readonly DependencyProperty TickColorProperty
+            = DependencyProperty.Register("TickColor", typeof(Brush), typeof(PriceTicksElement),
+                new FrameworkPropertyMetadata(CandleChart.DefaultAxisTickColor, null, CoerceTickColor) { AffectsRender = true });
+
+        private static object CoerceTickColor(DependencyObject objWithOldDP, object newDPValue)
+        {
+            PriceTicksElement thisElement = (PriceTicksElement)objWithOldDP;
+            Brush newBrushValue = (Brush)newDPValue;
+
+            if (newBrushValue.IsFrozen)
+            {
+                Pen p = new Pen(newBrushValue, 1.0);
+                p.Freeze();
+                thisElement.tickPen = p;
+                return newDPValue;
+            }
+            else
+            {
+                Brush b = (Brush)newBrushValue.GetCurrentValueAsFrozen();
+                Pen p = new Pen(b, 1.0);
+                p.Freeze();
+                thisElement.tickPen = p;
+                return b;
+            }
+        }
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        private Typeface currentTypeFace = new Typeface(SystemFonts.MessageFontFamily.ToString());
+
+        public FontFamily TickLabelFontFamily
+        {
+            get { return (FontFamily)GetValue(TickLabelFontFamilyProperty); }
+            set { SetValue(TickLabelFontFamilyProperty, value); }
+        }
+        public static readonly DependencyProperty TickLabelFontFamilyProperty =
+            DependencyProperty.Register("TickLabelFontFamily", typeof(FontFamily), typeof(PriceTicksElement), new FrameworkPropertyMetadata(SystemFonts.MessageFontFamily, OnTickLabelFontFamilyChanged));
+
+        static void OnTickLabelFontFamilyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            PriceTicksElement thisElement = obj as PriceTicksElement;
+            if (thisElement == null) return;
+            thisElement.currentTypeFace = new Typeface(thisElement.TickLabelFontFamily.ToString());
+        }
         //---------------------------------------------------------------------------------------------------------------------------------------
         public Pen GridlinesPen
         {
@@ -108,46 +227,13 @@ namespace FancyCandles
         public static readonly DependencyProperty ChartTopMarginProperty
             = DependencyProperty.Register("ChartTopMargin", typeof(double), typeof(PriceTicksElement), new FrameworkPropertyMetadata(15.0) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
-        public double PriceTickFontSize
+        public double TickLabelFontSize
         {
-            get { return (double)GetValue(PriceTickFontSizeProperty); }
-            set { SetValue(PriceTickFontSizeProperty, value); }
+            get { return (double)GetValue(TickLabelFontSizeProperty); }
+            set { SetValue(TickLabelFontSizeProperty, value); }
         }
-        public static readonly DependencyProperty PriceTickFontSizeProperty
-            = CandleChart.PriceTickFontSizeProperty.AddOwner(typeof(PriceTicksElement), new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.Inherits) { AffectsRender = true });
-        //---------------------------------------------------------------------------------------------------------------------------------------
-        private Pen axisTickPen;
-
-        public Brush AxisTickColor
-        {
-            get { return (Brush)GetValue(AxisTickColorProperty); }
-            set { SetValue(AxisTickColorProperty, value); }
-        }
-        public static readonly DependencyProperty AxisTickColorProperty
-            = DependencyProperty.Register("AxisTickColor", typeof(Brush), typeof(PriceTicksElement),
-                new FrameworkPropertyMetadata(CandleChart.DefaultAxisTickColor, null, CoerceAxisTickColor) { AffectsRender = true });
-
-        private static object CoerceAxisTickColor(DependencyObject objWithOldDP, object newDPValue)
-        {
-            PriceTicksElement thisElement = (PriceTicksElement)objWithOldDP;
-            Brush newBrushValue = (Brush)newDPValue;
-
-            if (newBrushValue.IsFrozen)
-            {
-                Pen p = new Pen(newBrushValue, 1.0);
-                p.Freeze();
-                thisElement.axisTickPen = p;
-                return newDPValue;
-            }
-            else
-            {
-                Brush b = (Brush)newBrushValue.GetCurrentValueAsFrozen();
-                Pen p = new Pen(b, 1.0);
-                p.Freeze();
-                thisElement.axisTickPen = p;
-                return b;
-            }
-        }
+        public static readonly DependencyProperty TickLabelFontSizeProperty
+            = DependencyProperty.Register("TickLabelFontSize", typeof(double), typeof(PriceTicksElement), new FrameworkPropertyMetadata(9.0) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         public double PriceAxisWidth
         {
@@ -159,32 +245,45 @@ namespace FancyCandles
         //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnRender(DrawingContext drawingContext)
         {
-            double textHeight = (new FormattedText("123", Culture, FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
+            double textHeight = (new FormattedText("123", Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
             double halfTextHeight = textHeight / 2.0;
             double candlePanelWidth = ActualWidth - PriceAxisWidth;
-            double tick_text_X = candlePanelWidth + TICK_LINE_WIDTH + TICK_LEFT_MARGIN;
+            double tick_text_X = candlePanelWidth + TICK_LINE_WIDTH + TICK_HORIZ_MARGIN;
             double tick_line_endX = candlePanelWidth + TICK_LINE_WIDTH;
 
             double chartHeight = ActualHeight - ChartBottomMargin - ChartTopMargin;
             double stepInRubles = (VisibleCandlesExtremums.PriceHigh - VisibleCandlesExtremums.PriceLow) / chartHeight * (textHeight + GapBetweenTickLabels);
             double stepInRubles_maxDigit = MyWpfMath.MaxDigit(stepInRubles);
             stepInRubles = Math.Ceiling(stepInRubles / stepInRubles_maxDigit) * stepInRubles_maxDigit;
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
             double chartHeight_candlesLHRange_Ratio = chartHeight / (VisibleCandlesExtremums.PriceHigh - VisibleCandlesExtremums.PriceLow);
 
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
             char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
 
             void DrawPriceTick(double price)
             {
                 string s = price.MyToString(Culture, decimalSeparator, decimalSeparatorArray);
-                FormattedText priceTickFormattedText = new FormattedText(s, Culture, FlowDirection.LeftToRight, new Typeface("Verdana"), PriceTickFontSize, AxisTickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                FormattedText priceTickFormattedText = new FormattedText(s, Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, TickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double y = ChartTopMargin + (VisibleCandlesExtremums.PriceHigh - price) * chartHeight_candlesLHRange_Ratio;
                 drawingContext.DrawText(priceTickFormattedText, new Point(tick_text_X, y - halfTextHeight));
-                drawingContext.DrawLine(axisTickPen, new Point(candlePanelWidth, y), new Point(tick_line_endX, y));
+                drawingContext.DrawLine(tickPen, new Point(candlePanelWidth, y), new Point(tick_line_endX, y));
 
                 if (IsGridlinesEnabled && GridlinesPen != null)
                     drawingContext.DrawLine(GridlinesPen, new Point(0, y), new Point(candlePanelWidth, y));
+            }
+            
+            void DrawCurrentPrice()
+            {
+                string currentPriceString = CurrentPrice.MyToString(Culture, decimalSeparator, decimalSeparatorArray);
+                FormattedText formattedText = new FormattedText(currentPriceString, Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, CurrentPriceLabelForeground, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                double formattedTextWidth = formattedText.Width;
+                double y = ChartTopMargin + (VisibleCandlesExtremums.PriceHigh - CurrentPrice) * chartHeight_candlesLHRange_Ratio;
+                drawingContext.DrawRectangle(CurrentPriceLabelBackground, currentPriceLabelForegroundPen, 
+                                             new Rect(candlePanelWidth, y - halfTextHeight, formattedTextWidth + TICK_LINE_WIDTH + 2 * TICK_HORIZ_MARGIN, textHeight + 1.0));
+                drawingContext.DrawLine(currentPriceLabelForegroundPen, new Point(candlePanelWidth, y), new Point(tick_line_endX, y));
+                drawingContext.DrawText(formattedText, new Point(tick_text_X, y - halfTextHeight));
             }
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             double theMostRoundPrice = MyWpfMath.TheMostRoundValueInsideRange(VisibleCandlesExtremums.PriceLow, VisibleCandlesExtremums.PriceHigh);
@@ -210,6 +309,9 @@ namespace FancyCandles
                 step_i++;
                 next_tick = theMostRoundPrice - step_i * stepInRubles;
             }
+
+            if (IsCurrentPriceLabelShown && CurrentPrice >= VisibleCandlesExtremums.PriceLow && CurrentPrice <= VisibleCandlesExtremums.PriceHigh)
+                DrawCurrentPrice();
 
             // Горизонтальные линии на всю ширину разделяющая и окаймляющая панели времени и даты:
             //drawingContext.DrawLine(pen, new Point(0, 0), new Point(RenderSize.Width, 0));
