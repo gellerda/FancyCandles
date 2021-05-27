@@ -13,9 +13,9 @@ namespace CandleChartExample
         public double H { get; set; }
         public double L { get; set; }
         public double C { get; set; }
-        public long V { get; set; }
+        public double V { get; set; }
 
-        public Candle(DateTime t, double O, double H, double L, double C, long V)
+        public Candle(DateTime t, double O, double H, double L, double C, double V)
         {
             this.t = t;
             this.O = O;

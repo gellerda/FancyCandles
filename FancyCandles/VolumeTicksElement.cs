@@ -19,6 +19,7 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Globalization;
+using System;
 
 namespace FancyCandles
 {
@@ -82,7 +83,7 @@ namespace FancyCandles
         }
         public static readonly DependencyProperty VisibleCandlesExtremumsProperty
             = DependencyProperty.Register("VisibleCandlesExtremums", typeof(CandleExtremums), typeof(VolumeTicksElement),
-                new FrameworkPropertyMetadata(new CandleExtremums(0.0, 0.0, long.MinValue, long.MinValue)) { AffectsRender = true });
+                new FrameworkPropertyMetadata(new CandleExtremums()) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         public double GapBetweenTickLabels
         {
@@ -176,59 +177,57 @@ namespace FancyCandles
         //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnRender(DrawingContext drawingContext)
         {
-            if (VisibleCandlesExtremums.VolumeHigh == long.MinValue) return;
+            //if (VisibleCandlesExtremums.VolumeHigh == long.MinValue) return;
 
-            double textHeight = (new FormattedText("123", Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
+            double textHeight = (new FormattedText("1,23", Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
             double halfTextHeight = textHeight / 2.0;
-            double volumeHistogramPanelWidth = ActualWidth - PriceAxisWidth;
-            double tick_text_X = volumeHistogramPanelWidth + TICK_LINE_WIDTH + TICK_LEFT_MARGIN;
-            double tick_line_endX = volumeHistogramPanelWidth + TICK_LINE_WIDTH;
-
+            double chartPanelWidth = ActualWidth - PriceAxisWidth;
+            double tickLabelX = chartPanelWidth + TICK_LINE_WIDTH + TICK_LEFT_MARGIN;
+            double tickLineEndX = chartPanelWidth + TICK_LINE_WIDTH;
             double chartHeight = ActualHeight - ChartBottomMargin - ChartTopMargin;
             if (chartHeight <= 0) return;
-            long stepInVolumeLots = (long)(VisibleCandlesExtremums.VolumeHigh * ((textHeight + GapBetweenTickLabels) / chartHeight)) + 1;
-            long stepInVolumeLots_maxDigit = MyWpfMath.MaxDigit(stepInVolumeLots);
-            stepInVolumeLots = (stepInVolumeLots % stepInVolumeLots_maxDigit) == 0 ? stepInVolumeLots : (stepInVolumeLots / stepInVolumeLots_maxDigit + 1) * stepInVolumeLots_maxDigit;
+
+            double stepInVolumeUnits = VisibleCandlesExtremums.VolumeHigh * ((textHeight + GapBetweenTickLabels) / chartHeight);
+            double stepInVolumeUnits_HPlace = MyWpfMath.HighestDecimalPlace(stepInVolumeUnits, out _);
+            stepInVolumeUnits = Math.Ceiling(stepInVolumeUnits / stepInVolumeUnits_HPlace) * stepInVolumeUnits_HPlace;
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             double chartHeight_candlesLHRange_Ratio = chartHeight / VisibleCandlesExtremums.VolumeHigh;
 
             string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
             char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
 
-            void DrawPriceTick(long volume)
+            void DrawVolumeTick(double volume)
             {
-                string s = volume.MyToString(Culture, decimalSeparator, decimalSeparatorArray);
+                //string s = volume.MyToString(Culture, decimalSeparator, decimalSeparatorArray);
+                string s = volume.VolumeToLimitedLengthString(Culture, decimalSeparator, decimalSeparatorArray);
                 FormattedText priceTickFormattedText = new FormattedText(s, Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, TickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double y = ChartTopMargin + (VisibleCandlesExtremums.VolumeHigh - volume) * chartHeight_candlesLHRange_Ratio;
-                drawingContext.DrawText(priceTickFormattedText, new Point(tick_text_X, y - halfTextHeight));
-                drawingContext.DrawLine(tickPen, new Point(volumeHistogramPanelWidth, y), new Point(tick_line_endX, y));
+                drawingContext.DrawText(priceTickFormattedText, new Point(tickLabelX, y - halfTextHeight));
+                drawingContext.DrawLine(tickPen, new Point(chartPanelWidth, y), new Point(tickLineEndX, y));
 
                 if (IsGridlinesEnabled && GridlinesPen != null)
-                    drawingContext.DrawLine(GridlinesPen, new Point(0, y), new Point(volumeHistogramPanelWidth, y));
+                    drawingContext.DrawLine(GridlinesPen, new Point(0, y), new Point(chartPanelWidth, y));
             }
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            long theMostRoundVolume = MyWpfMath.MaxDigit(VisibleCandlesExtremums.VolumeHigh);
-            DrawPriceTick(theMostRoundVolume);
+            double theMostRoundVolume = MyWpfMath.HighestDecimalPlace(VisibleCandlesExtremums.VolumeHigh, out _);
+            DrawVolumeTick(theMostRoundVolume);
 
-            long maxVolumeThreshold = (long)(VisibleCandlesExtremums.VolumeHigh + (ChartTopMargin - halfTextHeight) / chartHeight_candlesLHRange_Ratio);
-            long minVolumeThreshold = (long)(VisibleCandlesExtremums.VolumeHigh + (ChartTopMargin - ActualHeight + halfTextHeight) / chartHeight_candlesLHRange_Ratio);
+            double maxVolumeThreshold = (VisibleCandlesExtremums.VolumeHigh + (ChartTopMargin - halfTextHeight) / chartHeight_candlesLHRange_Ratio);
+            double minVolumeThreshold = (VisibleCandlesExtremums.VolumeHigh + (ChartTopMargin - ActualHeight + halfTextHeight) / chartHeight_candlesLHRange_Ratio);
 
             int step_i = 1;
-            long next_tick = theMostRoundVolume + step_i * stepInVolumeLots;
-            while (next_tick < maxVolumeThreshold)
+            double next_tick;
+            while ((next_tick = theMostRoundVolume + step_i * stepInVolumeUnits) < maxVolumeThreshold)
             {
-                DrawPriceTick(next_tick);
+                DrawVolumeTick(next_tick);
                 step_i++;
-                next_tick = theMostRoundVolume + step_i * stepInVolumeLots;
             }
 
             step_i = 1;
-            next_tick = theMostRoundVolume - step_i * stepInVolumeLots;
-            while (next_tick > minVolumeThreshold)
+            while ((next_tick = theMostRoundVolume - step_i * stepInVolumeUnits) > minVolumeThreshold)
             {
-                DrawPriceTick(next_tick);
+                DrawVolumeTick(next_tick);
                 step_i++;
-                next_tick = theMostRoundVolume - step_i * stepInVolumeLots;
             }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------

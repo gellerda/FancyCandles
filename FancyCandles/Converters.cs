@@ -187,7 +187,7 @@ namespace FancyCandles
             char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
 
             double price = Math.Round((priceHigh - (currentMousePosition.Y - chartTopMargin) / (ChartAreaHeight - chartTopMargin - chartBottomMargin) * (priceHigh - priceLow)), maxNumberOfFractionalDigitsInPrice);
-            return price.MyToString(candleChartCulture, decimalSeparator, decimalSeparatorArray);
+            return price.PriceToString(candleChartCulture, decimalSeparator, decimalSeparatorArray);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -206,7 +206,7 @@ namespace FancyCandles
         {
             if (values == null || values.Length < 5 || (values[0]).GetType() != typeof(Point) || (values[1]).GetType() != typeof(double) || (values[2]).GetType() != typeof(CandleExtremums)
                  || (values[3]).GetType() != typeof(double) || (values[4]).GetType() != typeof(double))
-                return (long)0;
+                return 0.0;
 
             Point currentMousePosition = (Point)values[0];
             double volumeHistogramHeight = (double)values[1];
@@ -218,8 +218,9 @@ namespace FancyCandles
             string decimalSeparator = candleChartCulture.NumberFormat.NumberDecimalSeparator;
             char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
 
-            long volume = ((long)((visibleCandlesExtremums.VolumeHigh - (currentMousePosition.Y - volumeHistogramTopMargin) / (volumeHistogramHeight - volumeHistogramTopMargin - volumeHistogramBottomMargin) * visibleCandlesExtremums.VolumeHigh)));
-            return volume.MyToString(candleChartCulture, decimalSeparator, decimalSeparatorArray);
+            double volume = (((visibleCandlesExtremums.VolumeHigh - (currentMousePosition.Y - volumeHistogramTopMargin) / (volumeHistogramHeight - volumeHistogramTopMargin - volumeHistogramBottomMargin) * visibleCandlesExtremums.VolumeHigh)));
+            //return volume.MyToString(candleChartCulture, decimalSeparator, decimalSeparatorArray);
+            return volume.VolumeToLimitedLengthString(candleChartCulture, decimalSeparator, decimalSeparatorArray);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

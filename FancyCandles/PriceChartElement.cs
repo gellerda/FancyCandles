@@ -308,7 +308,7 @@ namespace FancyCandles
             //Vector uv = new Vector(mousePos.X/ RenderSize.Width, mousePos.Y / RenderSize.Height);
             int cndl_i = VisibleCandlesRange.Start_i + (int)(mousePos.X / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap));
             ICandle cndl = CandlesSource[cndl_i];
-            string tooltipText = $"{cndl.t.ToString("g", Culture)}\nO= {cndl.O.MyToString(Culture, decimalSeparator, decimalSeparatorArray)}\nH= {cndl.H.MyToString(Culture, decimalSeparator, decimalSeparatorArray)}\nL= {cndl.L.MyToString(Culture, decimalSeparator, decimalSeparatorArray)}\nC= {cndl.C.MyToString(Culture, decimalSeparator, decimalSeparatorArray)}\nV= {cndl.V.MyToString(Culture, decimalSeparator, decimalSeparatorArray)}";
+            string tooltipText = $"{cndl.t.ToString("g", Culture)}\nO= {cndl.O.PriceToString(Culture, decimalSeparator, decimalSeparatorArray)}\nH= {cndl.H.PriceToString(Culture, decimalSeparator, decimalSeparatorArray)}\nL= {cndl.L.PriceToString(Culture, decimalSeparator, decimalSeparatorArray)}\nC= {cndl.C.PriceToString(Culture, decimalSeparator, decimalSeparatorArray)}\nV= {cndl.V.VolumeToString(Culture, decimalSeparator, decimalSeparatorArray)}";
             ((ToolTip)ToolTip).Content = tooltipText;
         }
         //---------------------------------------------------------------------------------------------------------------------------------------

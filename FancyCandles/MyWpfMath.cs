@@ -32,7 +32,7 @@ namespace FancyCandles
         public static List<double> CalcTicks(double minValue, double maxValue, double chartAxisLength, double chartLabelLength)
         {
             double lineHeight = (maxValue - minValue) / chartAxisLength * chartLabelLength;
-            double lineHeightMaxDigit = MaxDigit(lineHeight);
+            double lineHeightMaxDigit = HighestDecimalPlace(lineHeight, out _);
             double step = Math.Ceiling(lineHeight / lineHeightMaxDigit) * lineHeightMaxDigit;
             double theMostRoundTick = TheMostRoundValueInsideRange(minValue, maxValue);
             List<double> ticks = new List<double>();
@@ -59,81 +59,138 @@ namespace FancyCandles
             return ticks;
         }
         //----------------------------------------------------------------------------------------------------------------------------------
-        public static int MaxDecimalPow(double x)
+        public static double HighestDecimalPlace(double x, out int highestDecimalPow)
         {
             if (x >= 1.0)
             {
-                if (x >= 1000000.0)
-                    return 6; // 1000000.0;
-                else if (x >= 100000.0)
-                    return 5; // 100000.0;
-                else if (x >= 10000.0)
-                    return 4; // 10000.0;
-                else if (x >= 1000.0)
-                    return 3; // 1000.0;
-                else if (x >= 100.0)
-                    return 2; // 100.0;
-                else if (x >= 10.0)
-                    return 1; // 10.0;
-                else
-                    return 0; // 1.0;
+                if (x >= 1_000_000.0)
+                {
+                    if (x >= 1_000_000_000_000.0)
+                    {
+                        highestDecimalPow = 12;
+                        return 1_000_000_000_000.0;
+                    }
+                    else if (x >= 100_000_000_000.0)
+                    {
+                        highestDecimalPow = 11;
+                        return 100_000_000_000.0;
+                    }
+                    else if (x >= 10_000_000_000.0)
+                    {
+                        highestDecimalPow = 10;
+                        return 10_000_000_000.0;
+                    }
+                    else if (x >= 1_000_000_000.0)
+                    {
+                        highestDecimalPow = 9;
+                        return 1_000_000_000.0;
+                    }
+                    else if (x >= 100_000_000.0)
+                    {
+                        highestDecimalPow = 8;
+                        return 100_000_000.0;
+                    }
+                    else if (x >= 10_000_000.0)
+                    {
+                        highestDecimalPow = 7;
+                        return 10_000_000.0;
+                    }
+                    else // if (x >= 1_000_000.0)
+                    {
+                        highestDecimalPow = 6;
+                        return 1_000_000.0;
+                    }
+                }
+                else //if (x < 1_000_000.0)
+                {
+                    if (x >= 100_000.0)
+                    {
+                        highestDecimalPow = 5;
+                        return 100_000.0;
+                    }
+                    else if (x >= 10_000.0)
+                    {
+                        highestDecimalPow = 4;
+                        return 10_000.0;
+                    }
+                    else if (x >= 1_000.0)
+                    {
+                        highestDecimalPow = 3;
+                        return 1_000.0;
+                    }
+                    else if (x >= 100.0)
+                    {
+                        highestDecimalPow = 2;
+                        return 100.0;
+                    }
+                    else if (x >= 10.0)
+                    {
+                        highestDecimalPow = 1;
+                        return 10.0;
+                    }
+                    else //if (x >= 1.0)
+                    {
+                        highestDecimalPow = 0;
+                        return 1.0;
+                    }
+                }
             }
-            else
+            else //if (x < 1.0)
             {
                 if (x >= 0.1)
-                    return -1; // 0.1;
+                {
+                    highestDecimalPow = -1;
+                    return 0.1;
+                }
                 else if (x >= 0.01)
-                    return -2; // 0.01;
+                {
+                    highestDecimalPow = -2;
+                    return 0.01;
+                }
                 else if (x >= 0.001)
-                    return -3; // 0.001;
-                else if (x >= 0.0001)
-                    return -4; // 0.0001;
-                else if (x >= 0.00001)
-                    return -5; // 0.00001;
-                else if (x >= 0.000001)
-                    return -6; // 0.000001;
-                else if (x >= 0.0000001)
-                    return -7; // 0.0000001;
+                {
+                    highestDecimalPow = -3;
+                    return 0.001;
+                }
+                else if (x >= 0.000_1)
+                {
+                    highestDecimalPow = -4;
+                    return 0.000_1;
+                }
+                else if (x >= 0.000_01)
+                {
+                    highestDecimalPow = -5;
+                    return 0.000_01;
+                }
+                else if (x >= 0.000_001)
+                {
+                    highestDecimalPow = -6;
+                    return 0.000_001;
+                }
+                else if (x >= 0.000_000_1)
+                {
+                    highestDecimalPow = -7;
+                    return 0.000_000_1;
+                }
+                else if (x >= 0.000_000_01)
+                {
+                    highestDecimalPow = -8;
+                    return 0.000_000_01;
+                }
+                else if (x >= 0.000_000_001)
+                {
+                    highestDecimalPow = -9;
+                    return 0.000_000_001;
+                }
                 else
-                    return int.MinValue;
+                {
+                    highestDecimalPow = int.MinValue;
+                    return double.NegativeInfinity;
+                }
             }
         }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        public static double MaxDigit(double x)
-        {
-            if (x >= 1000000.0)
-                return 1000000.0;
-            else if (x >= 100000.0)
-                return 100000.0;
-            else if (x >= 10000.0)
-                return 10000.0;
-            else if (x >= 1000.0)
-                return 1000.0;
-            else if (x >= 100.0)
-                return 100.0;
-            else if (x >= 10.0)
-                return 10.0;
-            else if (x >= 1.0)
-                return 1.0;
-            else if (x >= 0.1)
-                return 0.1;
-            else if (x >= 0.01)
-                return 0.01;
-            else if (x >= 0.001)
-                return 0.001;
-            else if (x >= 0.0001)
-                return 0.0001;
-            else if (x >= 0.00001)
-                return 0.00001;
-            else if (x >= 0.000001)
-                return 0.000001;
-            else if (x >= 0.0000001)
-                return 0.0000001;
-            else
-                return double.NegativeInfinity;
-        }
 
-        public static long MaxDigit(long x)
+        public static long HighestDecimalPlace(long x)
         {
             if (x >= 1000000000000)
                 return 1000000000000;
@@ -166,7 +223,7 @@ namespace FancyCandles
         //----------------------------------------------------------------------------------------------------------------------------------
         public static double TheMostRoundValueInsideRange(double x0, double x1)
         {
-            int max10Pow = MaxDecimalPow(x0);
+            HighestDecimalPlace(x0, out int max10Pow);
             double max10PowValue = Math.Pow(10.0, max10Pow);
             double mostR = Math.Ceiling(x0 / max10PowValue) * max10PowValue;
             while (mostR > x1)

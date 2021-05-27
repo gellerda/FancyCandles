@@ -66,18 +66,18 @@ namespace FancyCandles
 
         /// <summary>The Volume minimum.</summary>
         /// <value>The Volume minimum.</value>
-        public long VolumeLow;
+        public double VolumeLow;
 
         /// <summary>The Volume maximum.</summary>
         /// <value>The Volume maximum.</value>
-        public long VolumeHigh;
+        public double VolumeHigh;
 
         /// <summary>Initializes a new instance of the CandleExtremums structure that has the specified PriceLow, PriceHigh, VolumeLow, and VolumeHigh.</summary>
         /// <param name="priceLow">The PriceLow of the CandleExtremums.</param>
         /// <param name="priceHigh">The PriceHigh of the CandleExtremums.</param>
         /// <param name="volumeLow">The VolumeLow of the CandleExtremums.</param>
         /// <param name="volumeHigh">The VolumeHigh of the CandleExtremums.</param>
-        public CandleExtremums(double priceLow, double priceHigh, long volumeLow, long volumeHigh)
+        public CandleExtremums(double priceLow, double priceHigh, double volumeLow, double volumeHigh)
         {
             PriceLow = priceLow;
             PriceHigh = priceHigh;
@@ -1482,17 +1482,18 @@ namespace FancyCandles
             if (CandlesSource == null) return;
 
             if (CandlesSource.Count == 0)
-                MaxNumberOfCharsInPrice = 0;
+                MaxNumberOfCharsInPrice = MyNumberFormatting.MaxVolumeStringLength;
             else
             {
                 string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
                 char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
 
-                int charsInPrice = CandlesSource.Select(c => c.H.MyToString(Culture,decimalSeparator,decimalSeparatorArray).Length).Max();
+                int charsInPrice = CandlesSource.Select(c => c.H.PriceToString(Culture,decimalSeparator,decimalSeparatorArray).Length).Max();
 
                 int charsInVolume = 0;
                 if (IsVolumePanelVisible)
-                    charsInVolume = CandlesSource.Select(c => c.V.MyToString(Culture, decimalSeparator, decimalSeparatorArray).Length).Max();
+                    //charsInVolume = CandlesSource.Select(c => c.V.MyToString(Culture, decimalSeparator, decimalSeparatorArray).Length).Max();
+                    charsInVolume = MyNumberFormatting.MaxVolumeStringLength;
 
                 MaxNumberOfCharsInPrice = Math.Max(charsInPrice, charsInVolume);
             }
@@ -1508,11 +1509,12 @@ namespace FancyCandles
             string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
             char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
 
-            int L1 = newCandle.H.MyToString(Culture, decimalSeparator, decimalSeparatorArray).Length;
+            int L1 = newCandle.H.PriceToString(Culture, decimalSeparator, decimalSeparatorArray).Length;
 
             int L2 = 0;
             if (IsVolumePanelVisible)
-                L2 = newCandle.V.MyToString(Culture, decimalSeparator, decimalSeparatorArray).Length;
+                //L2 = newCandle.V.MyToString(Culture, decimalSeparator, decimalSeparatorArray).Length;
+                L2 = MyNumberFormatting.MaxVolumeStringLength;
 
             int L = Math.Max(L1, L2);
 
@@ -2101,10 +2103,7 @@ namespace FancyCandles
                 return;
 
             int end_i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - 1;
-            double maxH = double.MinValue;
-            double minL = double.MaxValue;
-            long maxV = long.MinValue;
-            long minV = long.MaxValue;
+            double maxH = double.MinValue, maxV = double.MinValue, minL = double.MaxValue, minV = double.MaxValue;
             for (int i = VisibleCandlesRange.Start_i; i <= end_i; i++)
             {
                 ICandle cndl = CandlesSource[i];
@@ -2126,8 +2125,8 @@ namespace FancyCandles
 
             double newPriceL = Math.Min(cndl.L, VisibleCandlesExtremums.PriceLow);
             double newPriceH = Math.Max(cndl.H, VisibleCandlesExtremums.PriceHigh);
-            long newVolL = Math.Min(cndl.V, VisibleCandlesExtremums.VolumeLow);
-            long newVolH = Math.Max(cndl.V, VisibleCandlesExtremums.VolumeHigh);
+            double newVolL = Math.Min(cndl.V, VisibleCandlesExtremums.VolumeLow);
+            double newVolH = Math.Max(cndl.V, VisibleCandlesExtremums.VolumeHigh);
             VisibleCandlesExtremums = new CandleExtremums(newPriceL, newPriceH, newVolL, newVolH);
         }
         //----------------------------------------------------------------------------------------------------------------------------------

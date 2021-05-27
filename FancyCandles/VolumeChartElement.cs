@@ -211,7 +211,7 @@ namespace FancyCandles
             //Vector uv = new Vector(mousePos.X/ RenderSize.Width, mousePos.Y / RenderSize.Height);
             int cndl_i = VisibleCandlesRange.Start_i + (int)(mousePos.X / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap));
             ICandle cndl = CandlesSource[cndl_i];
-            string tooltipText = $"{cndl.t.ToString("g", Culture)}\nV= {cndl.V.MyToString(Culture, decimalSeparator, decimalSeparatorArray)}";
+            string tooltipText = $"{cndl.t.ToString("g", Culture)}\nV= {cndl.V.VolumeToString(Culture, decimalSeparator, decimalSeparatorArray)}";
             ((ToolTip)ToolTip).Content = tooltipText;
         }
         //---------------------------------------------------------------------------------------------------------------------------------------

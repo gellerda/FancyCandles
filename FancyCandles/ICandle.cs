@@ -45,6 +45,6 @@ namespace FancyCandles
 
         ///<summary>The Volume of the candlestick.</summary>
         ///<value>The Volume of the candlestick.</value>
-        long V { get;}
+        double V { get;}
     }
 }

@@ -247,14 +247,14 @@ namespace FancyCandles
         {
             double textHeight = (new FormattedText("123", Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
             double halfTextHeight = textHeight / 2.0;
-            double candlePanelWidth = ActualWidth - PriceAxisWidth;
-            double tick_text_X = candlePanelWidth + TICK_LINE_WIDTH + TICK_HORIZ_MARGIN;
-            double tick_line_endX = candlePanelWidth + TICK_LINE_WIDTH;
-
+            double chartPanelWidth = ActualWidth - PriceAxisWidth;
+            double tickLabelX = chartPanelWidth + TICK_LINE_WIDTH + TICK_HORIZ_MARGIN;
+            double tickLineEndX = chartPanelWidth + TICK_LINE_WIDTH;
             double chartHeight = ActualHeight - ChartBottomMargin - ChartTopMargin;
+
             double stepInRubles = (VisibleCandlesExtremums.PriceHigh - VisibleCandlesExtremums.PriceLow) / chartHeight * (textHeight + GapBetweenTickLabels);
-            double stepInRubles_maxDigit = MyWpfMath.MaxDigit(stepInRubles);
-            stepInRubles = Math.Ceiling(stepInRubles / stepInRubles_maxDigit) * stepInRubles_maxDigit;
+            double stepInRubles_HPlace = MyWpfMath.HighestDecimalPlace(stepInRubles, out _);
+            stepInRubles = Math.Ceiling(stepInRubles / stepInRubles_HPlace) * stepInRubles_HPlace;
 
             double chartHeight_candlesLHRange_Ratio = chartHeight / (VisibleCandlesExtremums.PriceHigh - VisibleCandlesExtremums.PriceLow);
 
@@ -264,26 +264,26 @@ namespace FancyCandles
 
             void DrawPriceTick(double price)
             {
-                string s = price.MyToString(Culture, decimalSeparator, decimalSeparatorArray);
+                string s = price.PriceToString(Culture, decimalSeparator, decimalSeparatorArray);
                 FormattedText priceTickFormattedText = new FormattedText(s, Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, TickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double y = ChartTopMargin + (VisibleCandlesExtremums.PriceHigh - price) * chartHeight_candlesLHRange_Ratio;
-                drawingContext.DrawText(priceTickFormattedText, new Point(tick_text_X, y - halfTextHeight));
-                drawingContext.DrawLine(tickPen, new Point(candlePanelWidth, y), new Point(tick_line_endX, y));
+                drawingContext.DrawText(priceTickFormattedText, new Point(tickLabelX, y - halfTextHeight));
+                drawingContext.DrawLine(tickPen, new Point(chartPanelWidth, y), new Point(tickLineEndX, y));
 
                 if (IsGridlinesEnabled && GridlinesPen != null)
-                    drawingContext.DrawLine(GridlinesPen, new Point(0, y), new Point(candlePanelWidth, y));
+                    drawingContext.DrawLine(GridlinesPen, new Point(0, y), new Point(chartPanelWidth, y));
             }
             
             void DrawCurrentPrice()
             {
-                string currentPriceString = CurrentPrice.MyToString(Culture, decimalSeparator, decimalSeparatorArray);
+                string currentPriceString = CurrentPrice.PriceToString(Culture, decimalSeparator, decimalSeparatorArray);
                 FormattedText formattedText = new FormattedText(currentPriceString, Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, CurrentPriceLabelForeground, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double formattedTextWidth = formattedText.Width;
                 double y = ChartTopMargin + (VisibleCandlesExtremums.PriceHigh - CurrentPrice) * chartHeight_candlesLHRange_Ratio;
                 drawingContext.DrawRectangle(CurrentPriceLabelBackground, currentPriceLabelForegroundPen, 
-                                             new Rect(candlePanelWidth, y - halfTextHeight, formattedTextWidth + TICK_LINE_WIDTH + 2 * TICK_HORIZ_MARGIN, textHeight + 1.0));
-                drawingContext.DrawLine(currentPriceLabelForegroundPen, new Point(candlePanelWidth, y), new Point(tick_line_endX, y));
-                drawingContext.DrawText(formattedText, new Point(tick_text_X, y - halfTextHeight));
+                                             new Rect(chartPanelWidth, y - halfTextHeight, formattedTextWidth + TICK_LINE_WIDTH + 2 * TICK_HORIZ_MARGIN, textHeight + 1.0));
+                drawingContext.DrawLine(currentPriceLabelForegroundPen, new Point(chartPanelWidth, y), new Point(tickLineEndX, y));
+                drawingContext.DrawText(formattedText, new Point(tickLabelX, y - halfTextHeight));
             }
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             double theMostRoundPrice = MyWpfMath.TheMostRoundValueInsideRange(VisibleCandlesExtremums.PriceLow, VisibleCandlesExtremums.PriceHigh);
@@ -293,21 +293,18 @@ namespace FancyCandles
             double minPriceThreshold = VisibleCandlesExtremums.PriceHigh + (ChartTopMargin - ActualHeight + halfTextHeight) / chartHeight_candlesLHRange_Ratio;
 
             int step_i = 1;
-            double next_tick = theMostRoundPrice + step_i * stepInRubles;
-            while (next_tick < maxPriceThreshold)
+            double next_tick;
+            while ((next_tick = theMostRoundPrice + step_i * stepInRubles) < maxPriceThreshold)
             {
                 DrawPriceTick(next_tick);
                 step_i++;
-                next_tick = theMostRoundPrice + step_i * stepInRubles;
             }
 
             step_i = 1;
-            next_tick = theMostRoundPrice - step_i * stepInRubles;
-            while (next_tick > minPriceThreshold)
+            while ((next_tick = theMostRoundPrice - step_i * stepInRubles) > minPriceThreshold)
             {
                 DrawPriceTick(next_tick);
                 step_i++;
-                next_tick = theMostRoundPrice - step_i * stepInRubles;
             }
 
             if (IsCurrentPriceLabelVisible && CurrentPrice >= VisibleCandlesExtremums.PriceLow && CurrentPrice <= VisibleCandlesExtremums.PriceHigh)
