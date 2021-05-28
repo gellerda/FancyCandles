@@ -9,10 +9,10 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.CandleChart.html",
-          "hash": "wsQ0Q/Wb3D2O+NBhkKruVA=="
+          "hash": "Sg8ydiHL9DAJd//dXdFKmw=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -21,10 +21,10 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.CandleExtremums.html",
-          "hash": "YrYMnkncaVpfl2Yk2f12qA=="
+          "hash": "JPcrMX/hh61scWga/WVFAA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -33,10 +33,34 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.ICandle.html",
-          "hash": "L4QDP+zXAEEycUKQB0kg2g=="
+          "hash": "QS5z3YzO3h2y9GHnsQxb2A=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/FancyCandles.ICandleProvider.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/FancyCandles.ICandleProvider.html",
+          "hash": "E1ZYUhBIDvh8J/6kSt5VKA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/FancyCandles.ISecurityInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/FancyCandles.ISecurityInfo.html",
+          "hash": "5IomTE4kRXE/np26tVD1Ag=="
+        }
+      },
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -45,10 +69,10 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.Indicators.ExponentialMovingAverage.html",
-          "hash": "MCZPZ9l3w+RXUttdr2rsdw=="
+          "hash": "0YNVi1kqn7HRxtWsurRa4w=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -57,10 +81,10 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.Indicators.OverlayIndicator.html",
-          "hash": "d2lvE4+N8SlGcgaSHrNnmQ=="
+          "hash": "eHrPe3NJwEv4Y2W3YxUacg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -72,7 +96,7 @@
           "hash": "nlK1SZdkL5CGuuKLwNEGIw=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -84,7 +108,7 @@
           "hash": "VvXfntXyyX/ur3Y1CSBchA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -96,7 +120,19 @@
           "hash": "QNOT8kkefJGOXfkNMqvxZg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/FancyCandles.SecurityTypes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/FancyCandles.SecurityTypes.html",
+          "hash": "Xy7aLH9Nr73Otgad9Q/bMQ=="
+        }
+      },
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -105,10 +141,10 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.html",
-          "hash": "pNzfF5twoM8h+v1jyanalg=="
+          "hash": "qYnBzqklQ9d3uJlFWY/kVw=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -120,7 +156,7 @@
           "hash": "jSd7Rh8TxHFWBaWdceYJCQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -129,7 +165,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "IY85aiqZL1TuMQN+Yp9kQg=="
+          "hash": "Ow+JGWZLoZAtqmzgC4Vbsw=="
         }
       },
       "is_incremental": false,
@@ -180,10 +216,10 @@
       "output": {
         ".html": {
           "relative_path": "articles/overview.html",
-          "hash": "Q1+lbiUQ5P2cCNyUPnK51A=="
+          "hash": "SKOtN1E7qpk239gGSPX/3g=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -192,7 +228,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/populating_candlestick_chart.html",
-          "hash": "F/j3mWx1FuawMVSSvSye2A=="
+          "hash": "e8iojnW9dfb/u7+6Gg/nXQ=="
         }
       },
       "is_incremental": true,
@@ -405,10 +441,10 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "RUk9fBqQ0N5LZeh7WPneFA=="
+          "hash": "XBE5DFE8zbN7mNQzXPFUIA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -437,13 +473,13 @@
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 8,
-          "skipped_file_count": 8
+          "skipped_file_count": 7
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 9,
-          "skipped_file_count": 1
+          "total_file_count": 12,
+          "skipped_file_count": 12
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,

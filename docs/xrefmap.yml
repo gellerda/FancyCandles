@@ -77,6 +77,25 @@ references:
   commentId: F:FancyCandles.CandleChart.AxisTickColorProperty
   fullName: FancyCandles.CandleChart.AxisTickColorProperty
   nameWithType: CandleChart.AxisTickColorProperty
+- uid: FancyCandles.CandleChart.AxisTickLabelFontFamily
+  name: AxisTickLabelFontFamily
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_AxisTickLabelFontFamily
+  commentId: P:FancyCandles.CandleChart.AxisTickLabelFontFamily
+  fullName: FancyCandles.CandleChart.AxisTickLabelFontFamily
+  nameWithType: CandleChart.AxisTickLabelFontFamily
+- uid: FancyCandles.CandleChart.AxisTickLabelFontFamily*
+  name: AxisTickLabelFontFamily
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_AxisTickLabelFontFamily_
+  commentId: Overload:FancyCandles.CandleChart.AxisTickLabelFontFamily
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.AxisTickLabelFontFamily
+  nameWithType: CandleChart.AxisTickLabelFontFamily
+- uid: FancyCandles.CandleChart.AxisTickLabelFontFamilyProperty
+  name: AxisTickLabelFontFamilyProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_AxisTickLabelFontFamilyProperty
+  commentId: F:FancyCandles.CandleChart.AxisTickLabelFontFamilyProperty
+  fullName: FancyCandles.CandleChart.AxisTickLabelFontFamilyProperty
+  nameWithType: CandleChart.AxisTickLabelFontFamilyProperty
 - uid: FancyCandles.CandleChart.BearishCandleFill
   name: BearishCandleFill
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_BearishCandleFill
@@ -204,6 +223,25 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.CandleGap
   nameWithType: CandleChart.CandleGap
+- uid: FancyCandles.CandleChart.CandleProvider
+  name: CandleProvider
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandleProvider
+  commentId: P:FancyCandles.CandleChart.CandleProvider
+  fullName: FancyCandles.CandleChart.CandleProvider
+  nameWithType: CandleChart.CandleProvider
+- uid: FancyCandles.CandleChart.CandleProvider*
+  name: CandleProvider
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandleProvider_
+  commentId: Overload:FancyCandles.CandleChart.CandleProvider
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.CandleProvider
+  nameWithType: CandleChart.CandleProvider
+- uid: FancyCandles.CandleChart.CandleProviderProperty
+  name: CandleProviderProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandleProviderProperty
+  commentId: F:FancyCandles.CandleChart.CandleProviderProperty
+  fullName: FancyCandles.CandleChart.CandleProviderProperty
+  nameWithType: CandleChart.CandleProviderProperty
 - uid: FancyCandles.CandleChart.CandlesSource
   name: CandlesSource
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource
@@ -274,44 +312,63 @@ references:
   commentId: F:FancyCandles.CandleChart.CrossLinesBrushProperty
   fullName: FancyCandles.CandleChart.CrossLinesBrushProperty
   nameWithType: CandleChart.CrossLinesBrushProperty
-- uid: FancyCandles.CandleChart.CrossPriceBackground
-  name: CrossPriceBackground
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CrossPriceBackground
-  commentId: P:FancyCandles.CandleChart.CrossPriceBackground
-  fullName: FancyCandles.CandleChart.CrossPriceBackground
-  nameWithType: CandleChart.CrossPriceBackground
-- uid: FancyCandles.CandleChart.CrossPriceBackground*
-  name: CrossPriceBackground
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CrossPriceBackground_
-  commentId: Overload:FancyCandles.CandleChart.CrossPriceBackground
+- uid: FancyCandles.CandleChart.CrossPriceLabelBackground
+  name: CrossPriceLabelBackground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CrossPriceLabelBackground
+  commentId: P:FancyCandles.CandleChart.CrossPriceLabelBackground
+  fullName: FancyCandles.CandleChart.CrossPriceLabelBackground
+  nameWithType: CandleChart.CrossPriceLabelBackground
+- uid: FancyCandles.CandleChart.CrossPriceLabelBackground*
+  name: CrossPriceLabelBackground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CrossPriceLabelBackground_
+  commentId: Overload:FancyCandles.CandleChart.CrossPriceLabelBackground
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.CrossPriceBackground
-  nameWithType: CandleChart.CrossPriceBackground
-- uid: FancyCandles.CandleChart.CrossPriceBackgroundProperty
-  name: CrossPriceBackgroundProperty
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CrossPriceBackgroundProperty
-  commentId: F:FancyCandles.CandleChart.CrossPriceBackgroundProperty
-  fullName: FancyCandles.CandleChart.CrossPriceBackgroundProperty
-  nameWithType: CandleChart.CrossPriceBackgroundProperty
-- uid: FancyCandles.CandleChart.CrossPriceForeground
-  name: CrossPriceForeground
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CrossPriceForeground
-  commentId: P:FancyCandles.CandleChart.CrossPriceForeground
-  fullName: FancyCandles.CandleChart.CrossPriceForeground
-  nameWithType: CandleChart.CrossPriceForeground
-- uid: FancyCandles.CandleChart.CrossPriceForeground*
-  name: CrossPriceForeground
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CrossPriceForeground_
-  commentId: Overload:FancyCandles.CandleChart.CrossPriceForeground
+  fullName: FancyCandles.CandleChart.CrossPriceLabelBackground
+  nameWithType: CandleChart.CrossPriceLabelBackground
+- uid: FancyCandles.CandleChart.CrossPriceLabelBackgroundProperty
+  name: CrossPriceLabelBackgroundProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CrossPriceLabelBackgroundProperty
+  commentId: F:FancyCandles.CandleChart.CrossPriceLabelBackgroundProperty
+  fullName: FancyCandles.CandleChart.CrossPriceLabelBackgroundProperty
+  nameWithType: CandleChart.CrossPriceLabelBackgroundProperty
+- uid: FancyCandles.CandleChart.CrossPriceLabelForeground
+  name: CrossPriceLabelForeground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CrossPriceLabelForeground
+  commentId: P:FancyCandles.CandleChart.CrossPriceLabelForeground
+  fullName: FancyCandles.CandleChart.CrossPriceLabelForeground
+  nameWithType: CandleChart.CrossPriceLabelForeground
+- uid: FancyCandles.CandleChart.CrossPriceLabelForeground*
+  name: CrossPriceLabelForeground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CrossPriceLabelForeground_
+  commentId: Overload:FancyCandles.CandleChart.CrossPriceLabelForeground
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.CrossPriceForeground
-  nameWithType: CandleChart.CrossPriceForeground
-- uid: FancyCandles.CandleChart.CrossPriceForegroundProperty
-  name: CrossPriceForegroundProperty
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CrossPriceForegroundProperty
-  commentId: F:FancyCandles.CandleChart.CrossPriceForegroundProperty
-  fullName: FancyCandles.CandleChart.CrossPriceForegroundProperty
-  nameWithType: CandleChart.CrossPriceForegroundProperty
+  fullName: FancyCandles.CandleChart.CrossPriceLabelForeground
+  nameWithType: CandleChart.CrossPriceLabelForeground
+- uid: FancyCandles.CandleChart.CrossPriceLabelForegroundProperty
+  name: CrossPriceLabelForegroundProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CrossPriceLabelForegroundProperty
+  commentId: F:FancyCandles.CandleChart.CrossPriceLabelForegroundProperty
+  fullName: FancyCandles.CandleChart.CrossPriceLabelForegroundProperty
+  nameWithType: CandleChart.CrossPriceLabelForegroundProperty
+- uid: FancyCandles.CandleChart.Culture
+  name: Culture
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_Culture
+  commentId: P:FancyCandles.CandleChart.Culture
+  fullName: FancyCandles.CandleChart.Culture
+  nameWithType: CandleChart.Culture
+- uid: FancyCandles.CandleChart.Culture*
+  name: Culture
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_Culture_
+  commentId: Overload:FancyCandles.CandleChart.Culture
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.Culture
+  nameWithType: CandleChart.Culture
+- uid: FancyCandles.CandleChart.CultureProperty
+  name: CultureProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CultureProperty
+  commentId: F:FancyCandles.CandleChart.CultureProperty
+  fullName: FancyCandles.CandleChart.CultureProperty
+  nameWithType: CandleChart.CultureProperty
 - uid: FancyCandles.CandleChart.CurrentMousePosition
   name: CurrentMousePosition
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CurrentMousePosition
@@ -325,6 +382,57 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.CurrentMousePosition
   nameWithType: CandleChart.CurrentMousePosition
+- uid: FancyCandles.CandleChart.CurrentPrice
+  name: CurrentPrice
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CurrentPrice
+  commentId: P:FancyCandles.CandleChart.CurrentPrice
+  fullName: FancyCandles.CandleChart.CurrentPrice
+  nameWithType: CandleChart.CurrentPrice
+- uid: FancyCandles.CandleChart.CurrentPrice*
+  name: CurrentPrice
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CurrentPrice_
+  commentId: Overload:FancyCandles.CandleChart.CurrentPrice
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.CurrentPrice
+  nameWithType: CandleChart.CurrentPrice
+- uid: FancyCandles.CandleChart.CurrentPriceLabelBackground
+  name: CurrentPriceLabelBackground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CurrentPriceLabelBackground
+  commentId: P:FancyCandles.CandleChart.CurrentPriceLabelBackground
+  fullName: FancyCandles.CandleChart.CurrentPriceLabelBackground
+  nameWithType: CandleChart.CurrentPriceLabelBackground
+- uid: FancyCandles.CandleChart.CurrentPriceLabelBackground*
+  name: CurrentPriceLabelBackground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CurrentPriceLabelBackground_
+  commentId: Overload:FancyCandles.CandleChart.CurrentPriceLabelBackground
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.CurrentPriceLabelBackground
+  nameWithType: CandleChart.CurrentPriceLabelBackground
+- uid: FancyCandles.CandleChart.CurrentPriceLabelBackgroundProperty
+  name: CurrentPriceLabelBackgroundProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CurrentPriceLabelBackgroundProperty
+  commentId: F:FancyCandles.CandleChart.CurrentPriceLabelBackgroundProperty
+  fullName: FancyCandles.CandleChart.CurrentPriceLabelBackgroundProperty
+  nameWithType: CandleChart.CurrentPriceLabelBackgroundProperty
+- uid: FancyCandles.CandleChart.CurrentPriceLabelForeground
+  name: CurrentPriceLabelForeground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CurrentPriceLabelForeground
+  commentId: P:FancyCandles.CandleChart.CurrentPriceLabelForeground
+  fullName: FancyCandles.CandleChart.CurrentPriceLabelForeground
+  nameWithType: CandleChart.CurrentPriceLabelForeground
+- uid: FancyCandles.CandleChart.CurrentPriceLabelForeground*
+  name: CurrentPriceLabelForeground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CurrentPriceLabelForeground_
+  commentId: Overload:FancyCandles.CandleChart.CurrentPriceLabelForeground
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.CurrentPriceLabelForeground
+  nameWithType: CandleChart.CurrentPriceLabelForeground
+- uid: FancyCandles.CandleChart.CurrentPriceLabelForegroundProperty
+  name: CurrentPriceLabelForegroundProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CurrentPriceLabelForegroundProperty
+  commentId: F:FancyCandles.CandleChart.CurrentPriceLabelForegroundProperty
+  fullName: FancyCandles.CandleChart.CurrentPriceLabelForegroundProperty
+  nameWithType: CandleChart.CurrentPriceLabelForegroundProperty
 - uid: FancyCandles.CandleChart.DefaultAxisTickColor
   name: DefaultAxisTickColor
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultAxisTickColor
@@ -442,32 +550,58 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.DefaultCrossLinesBrush
   nameWithType: CandleChart.DefaultCrossLinesBrush
-- uid: FancyCandles.CandleChart.DefaultCrossPriceBackground
-  name: DefaultCrossPriceBackground
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultCrossPriceBackground
-  commentId: P:FancyCandles.CandleChart.DefaultCrossPriceBackground
-  fullName: FancyCandles.CandleChart.DefaultCrossPriceBackground
-  nameWithType: CandleChart.DefaultCrossPriceBackground
-- uid: FancyCandles.CandleChart.DefaultCrossPriceBackground*
-  name: DefaultCrossPriceBackground
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultCrossPriceBackground_
-  commentId: Overload:FancyCandles.CandleChart.DefaultCrossPriceBackground
+- uid: FancyCandles.CandleChart.DefaultCrossPriceLabelBackground
+  name: DefaultCrossPriceLabelBackground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultCrossPriceLabelBackground
+  commentId: P:FancyCandles.CandleChart.DefaultCrossPriceLabelBackground
+  fullName: FancyCandles.CandleChart.DefaultCrossPriceLabelBackground
+  nameWithType: CandleChart.DefaultCrossPriceLabelBackground
+- uid: FancyCandles.CandleChart.DefaultCrossPriceLabelBackground*
+  name: DefaultCrossPriceLabelBackground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultCrossPriceLabelBackground_
+  commentId: Overload:FancyCandles.CandleChart.DefaultCrossPriceLabelBackground
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.DefaultCrossPriceBackground
-  nameWithType: CandleChart.DefaultCrossPriceBackground
-- uid: FancyCandles.CandleChart.DefaultCrossPriceForeground
-  name: DefaultCrossPriceForeground
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultCrossPriceForeground
-  commentId: P:FancyCandles.CandleChart.DefaultCrossPriceForeground
-  fullName: FancyCandles.CandleChart.DefaultCrossPriceForeground
-  nameWithType: CandleChart.DefaultCrossPriceForeground
-- uid: FancyCandles.CandleChart.DefaultCrossPriceForeground*
-  name: DefaultCrossPriceForeground
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultCrossPriceForeground_
-  commentId: Overload:FancyCandles.CandleChart.DefaultCrossPriceForeground
+  fullName: FancyCandles.CandleChart.DefaultCrossPriceLabelBackground
+  nameWithType: CandleChart.DefaultCrossPriceLabelBackground
+- uid: FancyCandles.CandleChart.DefaultCrossPriceLabelForeground
+  name: DefaultCrossPriceLabelForeground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultCrossPriceLabelForeground
+  commentId: P:FancyCandles.CandleChart.DefaultCrossPriceLabelForeground
+  fullName: FancyCandles.CandleChart.DefaultCrossPriceLabelForeground
+  nameWithType: CandleChart.DefaultCrossPriceLabelForeground
+- uid: FancyCandles.CandleChart.DefaultCrossPriceLabelForeground*
+  name: DefaultCrossPriceLabelForeground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultCrossPriceLabelForeground_
+  commentId: Overload:FancyCandles.CandleChart.DefaultCrossPriceLabelForeground
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.DefaultCrossPriceForeground
-  nameWithType: CandleChart.DefaultCrossPriceForeground
+  fullName: FancyCandles.CandleChart.DefaultCrossPriceLabelForeground
+  nameWithType: CandleChart.DefaultCrossPriceLabelForeground
+- uid: FancyCandles.CandleChart.DefaultCurrentPriceLabelBackground
+  name: DefaultCurrentPriceLabelBackground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultCurrentPriceLabelBackground
+  commentId: P:FancyCandles.CandleChart.DefaultCurrentPriceLabelBackground
+  fullName: FancyCandles.CandleChart.DefaultCurrentPriceLabelBackground
+  nameWithType: CandleChart.DefaultCurrentPriceLabelBackground
+- uid: FancyCandles.CandleChart.DefaultCurrentPriceLabelBackground*
+  name: DefaultCurrentPriceLabelBackground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultCurrentPriceLabelBackground_
+  commentId: Overload:FancyCandles.CandleChart.DefaultCurrentPriceLabelBackground
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.DefaultCurrentPriceLabelBackground
+  nameWithType: CandleChart.DefaultCurrentPriceLabelBackground
+- uid: FancyCandles.CandleChart.DefaultCurrentPriceLabelForeground
+  name: DefaultCurrentPriceLabelForeground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultCurrentPriceLabelForeground
+  commentId: P:FancyCandles.CandleChart.DefaultCurrentPriceLabelForeground
+  fullName: FancyCandles.CandleChart.DefaultCurrentPriceLabelForeground
+  nameWithType: CandleChart.DefaultCurrentPriceLabelForeground
+- uid: FancyCandles.CandleChart.DefaultCurrentPriceLabelForeground*
+  name: DefaultCurrentPriceLabelForeground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultCurrentPriceLabelForeground_
+  commentId: Overload:FancyCandles.CandleChart.DefaultCurrentPriceLabelForeground
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.DefaultCurrentPriceLabelForeground
+  nameWithType: CandleChart.DefaultCurrentPriceLabelForeground
 - uid: FancyCandles.CandleChart.DefaultDisabledFill
   name: DefaultDisabledFill
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultDisabledFill
@@ -558,19 +692,19 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.DefaultIsCrossLinesVisible
   nameWithType: CandleChart.DefaultIsCrossLinesVisible
-- uid: FancyCandles.CandleChart.DefaultIsCrossPriceVisible
-  name: DefaultIsCrossPriceVisible
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultIsCrossPriceVisible
-  commentId: P:FancyCandles.CandleChart.DefaultIsCrossPriceVisible
-  fullName: FancyCandles.CandleChart.DefaultIsCrossPriceVisible
-  nameWithType: CandleChart.DefaultIsCrossPriceVisible
-- uid: FancyCandles.CandleChart.DefaultIsCrossPriceVisible*
-  name: DefaultIsCrossPriceVisible
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultIsCrossPriceVisible_
-  commentId: Overload:FancyCandles.CandleChart.DefaultIsCrossPriceVisible
+- uid: FancyCandles.CandleChart.DefaultIsCrossPriceLabelVisible
+  name: DefaultIsCrossPriceLabelVisible
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultIsCrossPriceLabelVisible
+  commentId: P:FancyCandles.CandleChart.DefaultIsCrossPriceLabelVisible
+  fullName: FancyCandles.CandleChart.DefaultIsCrossPriceLabelVisible
+  nameWithType: CandleChart.DefaultIsCrossPriceLabelVisible
+- uid: FancyCandles.CandleChart.DefaultIsCrossPriceLabelVisible*
+  name: DefaultIsCrossPriceLabelVisible
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultIsCrossPriceLabelVisible_
+  commentId: Overload:FancyCandles.CandleChart.DefaultIsCrossPriceLabelVisible
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.DefaultIsCrossPriceVisible
-  nameWithType: CandleChart.DefaultIsCrossPriceVisible
+  fullName: FancyCandles.CandleChart.DefaultIsCrossPriceLabelVisible
+  nameWithType: CandleChart.DefaultIsCrossPriceLabelVisible
 - uid: FancyCandles.CandleChart.DefaultIsHorizontalGridlinesEnabled
   name: DefaultIsHorizontalGridlinesEnabled
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultIsHorizontalGridlinesEnabled
@@ -714,6 +848,19 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.DefaultLegendVerticalAlignment
   nameWithType: CandleChart.DefaultLegendVerticalAlignment
+- uid: FancyCandles.CandleChart.DefaultPriceAxisTickLabelFontSize
+  name: DefaultPriceAxisTickLabelFontSize
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultPriceAxisTickLabelFontSize
+  commentId: P:FancyCandles.CandleChart.DefaultPriceAxisTickLabelFontSize
+  fullName: FancyCandles.CandleChart.DefaultPriceAxisTickLabelFontSize
+  nameWithType: CandleChart.DefaultPriceAxisTickLabelFontSize
+- uid: FancyCandles.CandleChart.DefaultPriceAxisTickLabelFontSize*
+  name: DefaultPriceAxisTickLabelFontSize
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultPriceAxisTickLabelFontSize_
+  commentId: Overload:FancyCandles.CandleChart.DefaultPriceAxisTickLabelFontSize
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.DefaultPriceAxisTickLabelFontSize
+  nameWithType: CandleChart.DefaultPriceAxisTickLabelFontSize
 - uid: FancyCandles.CandleChart.DefaultPriceChartBottomMargin
   name: DefaultPriceChartBottomMargin
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultPriceChartBottomMargin
@@ -740,19 +887,6 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.DefaultPriceChartTopMargin
   nameWithType: CandleChart.DefaultPriceChartTopMargin
-- uid: FancyCandles.CandleChart.DefaultPriceTickFontSize
-  name: DefaultPriceTickFontSize
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultPriceTickFontSize
-  commentId: P:FancyCandles.CandleChart.DefaultPriceTickFontSize
-  fullName: FancyCandles.CandleChart.DefaultPriceTickFontSize
-  nameWithType: CandleChart.DefaultPriceTickFontSize
-- uid: FancyCandles.CandleChart.DefaultPriceTickFontSize*
-  name: DefaultPriceTickFontSize
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultPriceTickFontSize_
-  commentId: Overload:FancyCandles.CandleChart.DefaultPriceTickFontSize
-  isSpec: "True"
-  fullName: FancyCandles.CandleChart.DefaultPriceTickFontSize
-  nameWithType: CandleChart.DefaultPriceTickFontSize
 - uid: FancyCandles.CandleChart.DefaultScrollBarBackground
   name: DefaultScrollBarBackground
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultScrollBarBackground
@@ -779,19 +913,19 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.DefaultScrollBarHeight
   nameWithType: CandleChart.DefaultScrollBarHeight
-- uid: FancyCandles.CandleChart.DefaultTimeTickFontSize
-  name: DefaultTimeTickFontSize
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultTimeTickFontSize
-  commentId: P:FancyCandles.CandleChart.DefaultTimeTickFontSize
-  fullName: FancyCandles.CandleChart.DefaultTimeTickFontSize
-  nameWithType: CandleChart.DefaultTimeTickFontSize
-- uid: FancyCandles.CandleChart.DefaultTimeTickFontSize*
-  name: DefaultTimeTickFontSize
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultTimeTickFontSize_
-  commentId: Overload:FancyCandles.CandleChart.DefaultTimeTickFontSize
+- uid: FancyCandles.CandleChart.DefaultTimeAxisTickLabelFontSize
+  name: DefaultTimeAxisTickLabelFontSize
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultTimeAxisTickLabelFontSize
+  commentId: P:FancyCandles.CandleChart.DefaultTimeAxisTickLabelFontSize
+  fullName: FancyCandles.CandleChart.DefaultTimeAxisTickLabelFontSize
+  nameWithType: CandleChart.DefaultTimeAxisTickLabelFontSize
+- uid: FancyCandles.CandleChart.DefaultTimeAxisTickLabelFontSize*
+  name: DefaultTimeAxisTickLabelFontSize
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultTimeAxisTickLabelFontSize_
+  commentId: Overload:FancyCandles.CandleChart.DefaultTimeAxisTickLabelFontSize
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.DefaultTimeTickFontSize
-  nameWithType: CandleChart.DefaultTimeTickFontSize
+  fullName: FancyCandles.CandleChart.DefaultTimeAxisTickLabelFontSize
+  nameWithType: CandleChart.DefaultTimeAxisTickLabelFontSize
 - uid: FancyCandles.CandleChart.DefaultVerticalGridlinesBrush
   name: DefaultVerticalGridlinesBrush
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultVerticalGridlinesBrush
@@ -978,25 +1112,44 @@ references:
   commentId: F:FancyCandles.CandleChart.IsCrossLinesVisibleProperty
   fullName: FancyCandles.CandleChart.IsCrossLinesVisibleProperty
   nameWithType: CandleChart.IsCrossLinesVisibleProperty
-- uid: FancyCandles.CandleChart.IsCrossPriceVisible
-  name: IsCrossPriceVisible
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_IsCrossPriceVisible
-  commentId: P:FancyCandles.CandleChart.IsCrossPriceVisible
-  fullName: FancyCandles.CandleChart.IsCrossPriceVisible
-  nameWithType: CandleChart.IsCrossPriceVisible
-- uid: FancyCandles.CandleChart.IsCrossPriceVisible*
-  name: IsCrossPriceVisible
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_IsCrossPriceVisible_
-  commentId: Overload:FancyCandles.CandleChart.IsCrossPriceVisible
+- uid: FancyCandles.CandleChart.IsCrossPriceLabelVisible
+  name: IsCrossPriceLabelVisible
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_IsCrossPriceLabelVisible
+  commentId: P:FancyCandles.CandleChart.IsCrossPriceLabelVisible
+  fullName: FancyCandles.CandleChart.IsCrossPriceLabelVisible
+  nameWithType: CandleChart.IsCrossPriceLabelVisible
+- uid: FancyCandles.CandleChart.IsCrossPriceLabelVisible*
+  name: IsCrossPriceLabelVisible
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_IsCrossPriceLabelVisible_
+  commentId: Overload:FancyCandles.CandleChart.IsCrossPriceLabelVisible
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.IsCrossPriceVisible
-  nameWithType: CandleChart.IsCrossPriceVisible
-- uid: FancyCandles.CandleChart.IsCrossPriceVisibleProperty
-  name: IsCrossPriceVisibleProperty
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_IsCrossPriceVisibleProperty
-  commentId: F:FancyCandles.CandleChart.IsCrossPriceVisibleProperty
-  fullName: FancyCandles.CandleChart.IsCrossPriceVisibleProperty
-  nameWithType: CandleChart.IsCrossPriceVisibleProperty
+  fullName: FancyCandles.CandleChart.IsCrossPriceLabelVisible
+  nameWithType: CandleChart.IsCrossPriceLabelVisible
+- uid: FancyCandles.CandleChart.IsCrossPriceLabelVisibleProperty
+  name: IsCrossPriceLabelVisibleProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_IsCrossPriceLabelVisibleProperty
+  commentId: F:FancyCandles.CandleChart.IsCrossPriceLabelVisibleProperty
+  fullName: FancyCandles.CandleChart.IsCrossPriceLabelVisibleProperty
+  nameWithType: CandleChart.IsCrossPriceLabelVisibleProperty
+- uid: FancyCandles.CandleChart.IsCurrentPriceLabelVisible
+  name: IsCurrentPriceLabelVisible
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_IsCurrentPriceLabelVisible
+  commentId: P:FancyCandles.CandleChart.IsCurrentPriceLabelVisible
+  fullName: FancyCandles.CandleChart.IsCurrentPriceLabelVisible
+  nameWithType: CandleChart.IsCurrentPriceLabelVisible
+- uid: FancyCandles.CandleChart.IsCurrentPriceLabelVisible*
+  name: IsCurrentPriceLabelVisible
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_IsCurrentPriceLabelVisible_
+  commentId: Overload:FancyCandles.CandleChart.IsCurrentPriceLabelVisible
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.IsCurrentPriceLabelVisible
+  nameWithType: CandleChart.IsCurrentPriceLabelVisible
+- uid: FancyCandles.CandleChart.IsCurrentPriceLabelVisibleProperty
+  name: IsCurrentPriceLabelVisibleProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_IsCurrentPriceLabelVisibleProperty
+  commentId: F:FancyCandles.CandleChart.IsCurrentPriceLabelVisibleProperty
+  fullName: FancyCandles.CandleChart.IsCurrentPriceLabelVisibleProperty
+  nameWithType: CandleChart.IsCurrentPriceLabelVisibleProperty
 - uid: FancyCandles.CandleChart.IsHorizontalGridlinesEnabled
   name: IsHorizontalGridlinesEnabled
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_IsHorizontalGridlinesEnabled
@@ -1251,19 +1404,19 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.MaxNumberOfCharsInPrice
   nameWithType: CandleChart.MaxNumberOfCharsInPrice
-- uid: FancyCandles.CandleChart.MaxNumberOfDigitsAfterPointInPrice
-  name: MaxNumberOfDigitsAfterPointInPrice
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_MaxNumberOfDigitsAfterPointInPrice
-  commentId: P:FancyCandles.CandleChart.MaxNumberOfDigitsAfterPointInPrice
-  fullName: FancyCandles.CandleChart.MaxNumberOfDigitsAfterPointInPrice
-  nameWithType: CandleChart.MaxNumberOfDigitsAfterPointInPrice
-- uid: FancyCandles.CandleChart.MaxNumberOfDigitsAfterPointInPrice*
-  name: MaxNumberOfDigitsAfterPointInPrice
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_MaxNumberOfDigitsAfterPointInPrice_
-  commentId: Overload:FancyCandles.CandleChart.MaxNumberOfDigitsAfterPointInPrice
+- uid: FancyCandles.CandleChart.MaxNumberOfFractionalDigitsInPrice
+  name: MaxNumberOfFractionalDigitsInPrice
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_MaxNumberOfFractionalDigitsInPrice
+  commentId: P:FancyCandles.CandleChart.MaxNumberOfFractionalDigitsInPrice
+  fullName: FancyCandles.CandleChart.MaxNumberOfFractionalDigitsInPrice
+  nameWithType: CandleChart.MaxNumberOfFractionalDigitsInPrice
+- uid: FancyCandles.CandleChart.MaxNumberOfFractionalDigitsInPrice*
+  name: MaxNumberOfFractionalDigitsInPrice
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_MaxNumberOfFractionalDigitsInPrice_
+  commentId: Overload:FancyCandles.CandleChart.MaxNumberOfFractionalDigitsInPrice
   isSpec: "True"
-  fullName: FancyCandles.CandleChart.MaxNumberOfDigitsAfterPointInPrice
-  nameWithType: CandleChart.MaxNumberOfDigitsAfterPointInPrice
+  fullName: FancyCandles.CandleChart.MaxNumberOfFractionalDigitsInPrice
+  nameWithType: CandleChart.MaxNumberOfFractionalDigitsInPrice
 - uid: FancyCandles.CandleChart.MouseWheelModifierKeyForCandleWidthChanging
   name: MouseWheelModifierKeyForCandleWidthChanging
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_MouseWheelModifierKeyForCandleWidthChanging
@@ -1360,6 +1513,38 @@ references:
   commentId: F:FancyCandles.CandleChart.OverlayIndicatorsProperty
   fullName: FancyCandles.CandleChart.OverlayIndicatorsProperty
   nameWithType: CandleChart.OverlayIndicatorsProperty
+- uid: FancyCandles.CandleChart.PriceAxisTickLabelFontSize
+  name: PriceAxisTickLabelFontSize
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_PriceAxisTickLabelFontSize
+  commentId: P:FancyCandles.CandleChart.PriceAxisTickLabelFontSize
+  fullName: FancyCandles.CandleChart.PriceAxisTickLabelFontSize
+  nameWithType: CandleChart.PriceAxisTickLabelFontSize
+- uid: FancyCandles.CandleChart.PriceAxisTickLabelFontSize*
+  name: PriceAxisTickLabelFontSize
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_PriceAxisTickLabelFontSize_
+  commentId: Overload:FancyCandles.CandleChart.PriceAxisTickLabelFontSize
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.PriceAxisTickLabelFontSize
+  nameWithType: CandleChart.PriceAxisTickLabelFontSize
+- uid: FancyCandles.CandleChart.PriceAxisTickLabelFontSizeProperty
+  name: PriceAxisTickLabelFontSizeProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_PriceAxisTickLabelFontSizeProperty
+  commentId: F:FancyCandles.CandleChart.PriceAxisTickLabelFontSizeProperty
+  fullName: FancyCandles.CandleChart.PriceAxisTickLabelFontSizeProperty
+  nameWithType: CandleChart.PriceAxisTickLabelFontSizeProperty
+- uid: FancyCandles.CandleChart.PriceAxisTickLabelHeight
+  name: PriceAxisTickLabelHeight
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_PriceAxisTickLabelHeight
+  commentId: P:FancyCandles.CandleChart.PriceAxisTickLabelHeight
+  fullName: FancyCandles.CandleChart.PriceAxisTickLabelHeight
+  nameWithType: CandleChart.PriceAxisTickLabelHeight
+- uid: FancyCandles.CandleChart.PriceAxisTickLabelHeight*
+  name: PriceAxisTickLabelHeight
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_PriceAxisTickLabelHeight_
+  commentId: Overload:FancyCandles.CandleChart.PriceAxisTickLabelHeight
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.PriceAxisTickLabelHeight
+  nameWithType: CandleChart.PriceAxisTickLabelHeight
 - uid: FancyCandles.CandleChart.PriceAxisWidth
   name: PriceAxisWidth
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_PriceAxisWidth
@@ -1411,38 +1596,6 @@ references:
   commentId: F:FancyCandles.CandleChart.PriceChartTopMarginProperty
   fullName: FancyCandles.CandleChart.PriceChartTopMarginProperty
   nameWithType: CandleChart.PriceChartTopMarginProperty
-- uid: FancyCandles.CandleChart.PriceTickFontSize
-  name: PriceTickFontSize
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_PriceTickFontSize
-  commentId: P:FancyCandles.CandleChart.PriceTickFontSize
-  fullName: FancyCandles.CandleChart.PriceTickFontSize
-  nameWithType: CandleChart.PriceTickFontSize
-- uid: FancyCandles.CandleChart.PriceTickFontSize*
-  name: PriceTickFontSize
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_PriceTickFontSize_
-  commentId: Overload:FancyCandles.CandleChart.PriceTickFontSize
-  isSpec: "True"
-  fullName: FancyCandles.CandleChart.PriceTickFontSize
-  nameWithType: CandleChart.PriceTickFontSize
-- uid: FancyCandles.CandleChart.PriceTickFontSizeProperty
-  name: PriceTickFontSizeProperty
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_PriceTickFontSizeProperty
-  commentId: F:FancyCandles.CandleChart.PriceTickFontSizeProperty
-  fullName: FancyCandles.CandleChart.PriceTickFontSizeProperty
-  nameWithType: CandleChart.PriceTickFontSizeProperty
-- uid: FancyCandles.CandleChart.PriceTickTextHeight
-  name: PriceTickTextHeight
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_PriceTickTextHeight
-  commentId: P:FancyCandles.CandleChart.PriceTickTextHeight
-  fullName: FancyCandles.CandleChart.PriceTickTextHeight
-  nameWithType: CandleChart.PriceTickTextHeight
-- uid: FancyCandles.CandleChart.PriceTickTextHeight*
-  name: PriceTickTextHeight
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_PriceTickTextHeight_
-  commentId: Overload:FancyCandles.CandleChart.PriceTickTextHeight
-  isSpec: "True"
-  fullName: FancyCandles.CandleChart.PriceTickTextHeight
-  nameWithType: CandleChart.PriceTickTextHeight
 - uid: FancyCandles.CandleChart.PropertyChanged
   name: PropertyChanged
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_PropertyChanged
@@ -1552,6 +1705,25 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.TimeAxisHeight
   nameWithType: CandleChart.TimeAxisHeight
+- uid: FancyCandles.CandleChart.TimeAxisTickLabelFontSize
+  name: TimeAxisTickLabelFontSize
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_TimeAxisTickLabelFontSize
+  commentId: P:FancyCandles.CandleChart.TimeAxisTickLabelFontSize
+  fullName: FancyCandles.CandleChart.TimeAxisTickLabelFontSize
+  nameWithType: CandleChart.TimeAxisTickLabelFontSize
+- uid: FancyCandles.CandleChart.TimeAxisTickLabelFontSize*
+  name: TimeAxisTickLabelFontSize
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_TimeAxisTickLabelFontSize_
+  commentId: Overload:FancyCandles.CandleChart.TimeAxisTickLabelFontSize
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.TimeAxisTickLabelFontSize
+  nameWithType: CandleChart.TimeAxisTickLabelFontSize
+- uid: FancyCandles.CandleChart.TimeAxisTickLabelFontSizeProperty
+  name: TimeAxisTickLabelFontSizeProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_TimeAxisTickLabelFontSizeProperty
+  commentId: F:FancyCandles.CandleChart.TimeAxisTickLabelFontSizeProperty
+  fullName: FancyCandles.CandleChart.TimeAxisTickLabelFontSizeProperty
+  nameWithType: CandleChart.TimeAxisTickLabelFontSizeProperty
 - uid: FancyCandles.CandleChart.TimeFrame
   name: TimeFrame
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_TimeFrame
@@ -1565,25 +1737,6 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.TimeFrame
   nameWithType: CandleChart.TimeFrame
-- uid: FancyCandles.CandleChart.TimeTickFontSize
-  name: TimeTickFontSize
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_TimeTickFontSize
-  commentId: P:FancyCandles.CandleChart.TimeTickFontSize
-  fullName: FancyCandles.CandleChart.TimeTickFontSize
-  nameWithType: CandleChart.TimeTickFontSize
-- uid: FancyCandles.CandleChart.TimeTickFontSize*
-  name: TimeTickFontSize
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_TimeTickFontSize_
-  commentId: Overload:FancyCandles.CandleChart.TimeTickFontSize
-  isSpec: "True"
-  fullName: FancyCandles.CandleChart.TimeTickFontSize
-  nameWithType: CandleChart.TimeTickFontSize
-- uid: FancyCandles.CandleChart.TimeTickFontSizeProperty
-  name: TimeTickFontSizeProperty
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_TimeTickFontSizeProperty
-  commentId: F:FancyCandles.CandleChart.TimeTickFontSizeProperty
-  fullName: FancyCandles.CandleChart.TimeTickFontSizeProperty
-  nameWithType: CandleChart.TimeTickFontSizeProperty
 - uid: FancyCandles.CandleChart.ToolTipFontSize
   name: ToolTipFontSize
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_ToolTipFontSize
@@ -1704,12 +1857,12 @@ references:
   commentId: T:FancyCandles.CandleExtremums
   fullName: FancyCandles.CandleExtremums
   nameWithType: CandleExtremums
-- uid: FancyCandles.CandleExtremums.#ctor(System.Double,System.Double,System.Int64,System.Int64)
-  name: CandleExtremums(Double, Double, Int64, Int64)
-  href: api/FancyCandles.CandleExtremums.html#FancyCandles_CandleExtremums__ctor_System_Double_System_Double_System_Int64_System_Int64_
-  commentId: M:FancyCandles.CandleExtremums.#ctor(System.Double,System.Double,System.Int64,System.Int64)
-  fullName: FancyCandles.CandleExtremums.CandleExtremums(System.Double, System.Double, System.Int64, System.Int64)
-  nameWithType: CandleExtremums.CandleExtremums(Double, Double, Int64, Int64)
+- uid: FancyCandles.CandleExtremums.#ctor(System.Double,System.Double,System.Double,System.Double)
+  name: CandleExtremums(Double, Double, Double, Double)
+  href: api/FancyCandles.CandleExtremums.html#FancyCandles_CandleExtremums__ctor_System_Double_System_Double_System_Double_System_Double_
+  commentId: M:FancyCandles.CandleExtremums.#ctor(System.Double,System.Double,System.Double,System.Double)
+  fullName: FancyCandles.CandleExtremums.CandleExtremums(System.Double, System.Double, System.Double, System.Double)
+  nameWithType: CandleExtremums.CandleExtremums(Double, Double, Double, Double)
 - uid: FancyCandles.CandleExtremums.#ctor*
   name: CandleExtremums
   href: api/FancyCandles.CandleExtremums.html#FancyCandles_CandleExtremums__ctor_
@@ -1838,6 +1991,38 @@ references:
   isSpec: "True"
   fullName: FancyCandles.ICandle.V
   nameWithType: ICandle.V
+- uid: FancyCandles.ICandleProvider
+  name: ICandleProvider
+  href: api/FancyCandles.ICandleProvider.html
+  commentId: T:FancyCandles.ICandleProvider
+  fullName: FancyCandles.ICandleProvider
+  nameWithType: ICandleProvider
+- uid: FancyCandles.ICandleProvider.GetCandleSource(System.Int32,System.Int32)
+  name: GetCandleSource(Int32, Int32)
+  href: api/FancyCandles.ICandleProvider.html#FancyCandles_ICandleProvider_GetCandleSource_System_Int32_System_Int32_
+  commentId: M:FancyCandles.ICandleProvider.GetCandleSource(System.Int32,System.Int32)
+  fullName: FancyCandles.ICandleProvider.GetCandleSource(System.Int32, System.Int32)
+  nameWithType: ICandleProvider.GetCandleSource(Int32, Int32)
+- uid: FancyCandles.ICandleProvider.GetCandleSource*
+  name: GetCandleSource
+  href: api/FancyCandles.ICandleProvider.html#FancyCandles_ICandleProvider_GetCandleSource_
+  commentId: Overload:FancyCandles.ICandleProvider.GetCandleSource
+  isSpec: "True"
+  fullName: FancyCandles.ICandleProvider.GetCandleSource
+  nameWithType: ICandleProvider.GetCandleSource
+- uid: FancyCandles.ICandleProvider.SecCatalog
+  name: SecCatalog
+  href: api/FancyCandles.ICandleProvider.html#FancyCandles_ICandleProvider_SecCatalog
+  commentId: P:FancyCandles.ICandleProvider.SecCatalog
+  fullName: FancyCandles.ICandleProvider.SecCatalog
+  nameWithType: ICandleProvider.SecCatalog
+- uid: FancyCandles.ICandleProvider.SecCatalog*
+  name: SecCatalog
+  href: api/FancyCandles.ICandleProvider.html#FancyCandles_ICandleProvider_SecCatalog_
+  commentId: Overload:FancyCandles.ICandleProvider.SecCatalog
+  isSpec: "True"
+  fullName: FancyCandles.ICandleProvider.SecCatalog
+  nameWithType: ICandleProvider.SecCatalog
 - uid: FancyCandles.Indicators
   name: FancyCandles.Indicators
   href: api/FancyCandles.Indicators.html
@@ -2432,3 +2617,121 @@ references:
   isSpec: "True"
   fullName: FancyCandles.IntRange.Undefined
   nameWithType: IntRange.Undefined
+- uid: FancyCandles.ISecurityInfo
+  name: ISecurityInfo
+  href: api/FancyCandles.ISecurityInfo.html
+  commentId: T:FancyCandles.ISecurityInfo
+  fullName: FancyCandles.ISecurityInfo
+  nameWithType: ISecurityInfo
+- uid: FancyCandles.ISecurityInfo.ExchangeName
+  name: ExchangeName
+  href: api/FancyCandles.ISecurityInfo.html#FancyCandles_ISecurityInfo_ExchangeName
+  commentId: P:FancyCandles.ISecurityInfo.ExchangeName
+  fullName: FancyCandles.ISecurityInfo.ExchangeName
+  nameWithType: ISecurityInfo.ExchangeName
+- uid: FancyCandles.ISecurityInfo.ExchangeName*
+  name: ExchangeName
+  href: api/FancyCandles.ISecurityInfo.html#FancyCandles_ISecurityInfo_ExchangeName_
+  commentId: Overload:FancyCandles.ISecurityInfo.ExchangeName
+  isSpec: "True"
+  fullName: FancyCandles.ISecurityInfo.ExchangeName
+  nameWithType: ISecurityInfo.ExchangeName
+- uid: FancyCandles.ISecurityInfo.SecurityName
+  name: SecurityName
+  href: api/FancyCandles.ISecurityInfo.html#FancyCandles_ISecurityInfo_SecurityName
+  commentId: P:FancyCandles.ISecurityInfo.SecurityName
+  fullName: FancyCandles.ISecurityInfo.SecurityName
+  nameWithType: ISecurityInfo.SecurityName
+- uid: FancyCandles.ISecurityInfo.SecurityName*
+  name: SecurityName
+  href: api/FancyCandles.ISecurityInfo.html#FancyCandles_ISecurityInfo_SecurityName_
+  commentId: Overload:FancyCandles.ISecurityInfo.SecurityName
+  isSpec: "True"
+  fullName: FancyCandles.ISecurityInfo.SecurityName
+  nameWithType: ISecurityInfo.SecurityName
+- uid: FancyCandles.ISecurityInfo.SecurityType
+  name: SecurityType
+  href: api/FancyCandles.ISecurityInfo.html#FancyCandles_ISecurityInfo_SecurityType
+  commentId: P:FancyCandles.ISecurityInfo.SecurityType
+  fullName: FancyCandles.ISecurityInfo.SecurityType
+  nameWithType: ISecurityInfo.SecurityType
+- uid: FancyCandles.ISecurityInfo.SecurityType*
+  name: SecurityType
+  href: api/FancyCandles.ISecurityInfo.html#FancyCandles_ISecurityInfo_SecurityType_
+  commentId: Overload:FancyCandles.ISecurityInfo.SecurityType
+  isSpec: "True"
+  fullName: FancyCandles.ISecurityInfo.SecurityType
+  nameWithType: ISecurityInfo.SecurityType
+- uid: FancyCandles.ISecurityInfo.Ticker
+  name: Ticker
+  href: api/FancyCandles.ISecurityInfo.html#FancyCandles_ISecurityInfo_Ticker
+  commentId: P:FancyCandles.ISecurityInfo.Ticker
+  fullName: FancyCandles.ISecurityInfo.Ticker
+  nameWithType: ISecurityInfo.Ticker
+- uid: FancyCandles.ISecurityInfo.Ticker*
+  name: Ticker
+  href: api/FancyCandles.ISecurityInfo.html#FancyCandles_ISecurityInfo_Ticker_
+  commentId: Overload:FancyCandles.ISecurityInfo.Ticker
+  isSpec: "True"
+  fullName: FancyCandles.ISecurityInfo.Ticker
+  nameWithType: ISecurityInfo.Ticker
+- uid: FancyCandles.SecurityTypes
+  name: SecurityTypes
+  href: api/FancyCandles.SecurityTypes.html
+  commentId: T:FancyCandles.SecurityTypes
+  fullName: FancyCandles.SecurityTypes
+  nameWithType: SecurityTypes
+- uid: FancyCandles.SecurityTypes.Bond
+  name: Bond
+  href: api/FancyCandles.SecurityTypes.html#FancyCandles_SecurityTypes_Bond
+  commentId: F:FancyCandles.SecurityTypes.Bond
+  fullName: FancyCandles.SecurityTypes.Bond
+  nameWithType: SecurityTypes.Bond
+- uid: FancyCandles.SecurityTypes.Commodity
+  name: Commodity
+  href: api/FancyCandles.SecurityTypes.html#FancyCandles_SecurityTypes_Commodity
+  commentId: F:FancyCandles.SecurityTypes.Commodity
+  fullName: FancyCandles.SecurityTypes.Commodity
+  nameWithType: SecurityTypes.Commodity
+- uid: FancyCandles.SecurityTypes.CryptocurrencyPair
+  name: CryptocurrencyPair
+  href: api/FancyCandles.SecurityTypes.html#FancyCandles_SecurityTypes_CryptocurrencyPair
+  commentId: F:FancyCandles.SecurityTypes.CryptocurrencyPair
+  fullName: FancyCandles.SecurityTypes.CryptocurrencyPair
+  nameWithType: SecurityTypes.CryptocurrencyPair
+- uid: FancyCandles.SecurityTypes.CurrencyPair
+  name: CurrencyPair
+  href: api/FancyCandles.SecurityTypes.html#FancyCandles_SecurityTypes_CurrencyPair
+  commentId: F:FancyCandles.SecurityTypes.CurrencyPair
+  fullName: FancyCandles.SecurityTypes.CurrencyPair
+  nameWithType: SecurityTypes.CurrencyPair
+- uid: FancyCandles.SecurityTypes.Futures
+  name: Futures
+  href: api/FancyCandles.SecurityTypes.html#FancyCandles_SecurityTypes_Futures
+  commentId: F:FancyCandles.SecurityTypes.Futures
+  fullName: FancyCandles.SecurityTypes.Futures
+  nameWithType: SecurityTypes.Futures
+- uid: FancyCandles.SecurityTypes.Index
+  name: Index
+  href: api/FancyCandles.SecurityTypes.html#FancyCandles_SecurityTypes_Index
+  commentId: F:FancyCandles.SecurityTypes.Index
+  fullName: FancyCandles.SecurityTypes.Index
+  nameWithType: SecurityTypes.Index
+- uid: FancyCandles.SecurityTypes.Option
+  name: Option
+  href: api/FancyCandles.SecurityTypes.html#FancyCandles_SecurityTypes_Option
+  commentId: F:FancyCandles.SecurityTypes.Option
+  fullName: FancyCandles.SecurityTypes.Option
+  nameWithType: SecurityTypes.Option
+- uid: FancyCandles.SecurityTypes.Stock
+  name: Stock
+  href: api/FancyCandles.SecurityTypes.html#FancyCandles_SecurityTypes_Stock
+  commentId: F:FancyCandles.SecurityTypes.Stock
+  fullName: FancyCandles.SecurityTypes.Stock
+  nameWithType: SecurityTypes.Stock
+- uid: FancyCandles.SecurityTypes.Undefined
+  name: Undefined
+  href: api/FancyCandles.SecurityTypes.html#FancyCandles_SecurityTypes_Undefined
+  commentId: F:FancyCandles.SecurityTypes.Undefined
+  fullName: FancyCandles.SecurityTypes.Undefined
+  nameWithType: SecurityTypes.Undefined

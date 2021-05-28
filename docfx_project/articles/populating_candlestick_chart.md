@@ -2,7 +2,7 @@
 
 After [the empty instance of the CandleChart control has been created](creating_candlestick_chart.md), you need to populate it with candles:
 
-1. The [CandleChart](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html) control requires the data source of its candle collection ([CandlesSource property](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource)) to be of type [ObservableCollection\<](https://docs.microsoft.com/ru-ru/dotnet/api/system.collections.objectmodel.observablecollection-1?view=netframework-4.8)[ICandle\>](https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html). Therefore, add to your project a new **class Candle** that implements the [ICandle](https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html) interface:
+1. The [CandleChart](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html) control requires the data source of its candle collection ([CandlesSource property](https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource)) to be of type [IList\<](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1?view=netframework-4.7.2)[ICandle\>](https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html). Therefore, add to your project a new **class Candle** that implements the [ICandle](https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html) interface:
 
     ```cs
         public class Candle : FancyCandles.ICandle
@@ -12,9 +12,9 @@ After [the empty instance of the CandleChart control has been created](creating_
             public double H { get; set; }
             public double L { get; set; }
             public double C { get; set; }
-            public long V { get; set; }
+            public double V { get; set; }
 
-            public Candle(DateTime t, double O, double H, double L, double C, long V)
+            public Candle(DateTime t, double O, double H, double L, double C, double V)
             {
                 this.t = t;
                 this.O = O;

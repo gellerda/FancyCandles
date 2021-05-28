@@ -16,7 +16,7 @@ using System.ComponentModel;
 
 namespace FancyCandles
 {
-    public partial class SelectCandleSourceWindow : Window
+    internal partial class SelectCandleSourceWindow : Window
     {
         private CandleChart parentCandleChart;
         //----------------------------------------------------------------------------------------------------------------------------------

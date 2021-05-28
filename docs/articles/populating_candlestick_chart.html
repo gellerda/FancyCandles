@@ -78,7 +78,7 @@
 
 <p>After <a href="creating_candlestick_chart.html">the empty instance of the CandleChart control has been created</a>, you need to populate it with candles:</p>
 <ol>
-<li><p>The <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> control requires the data source of its candle collection (<a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource">CandlesSource property</a>) to be of type <a href="https://docs.microsoft.com/ru-ru/dotnet/api/system.collections.objectmodel.observablecollection-1?view=netframework-4.8">ObservableCollection&lt;</a><a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html">ICandle&gt;</a>. Therefore, add to your project a new <strong>class Candle</strong> that implements the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html">ICandle</a> interface:</p>
+<li><p>The <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> control requires the data source of its candle collection (<a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource">CandlesSource property</a>) to be of type <a href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1?view=netframework-4.7.2">IList&lt;</a><a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html">ICandle&gt;</a>. Therefore, add to your project a new <strong>class Candle</strong> that implements the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html">ICandle</a> interface:</p>
 <pre><code class="lang-cs">    public class Candle : FancyCandles.ICandle
     {
         public DateTime t { get; set; }
@@ -86,9 +86,9 @@
         public double H { get; set; }
         public double L { get; set; }
         public double C { get; set; }
-        public long V { get; set; }
+        public double V { get; set; }
 
-        public Candle(DateTime t, double O, double H, double L, double C, long V)
+        public Candle(DateTime t, double O, double H, double L, double C, double V)
         {
             this.t = t;
             this.O = O;
@@ -163,6 +163,9 @@
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
+                  <li>
+                    <a href="https://github.com/gellerda/FancyCandles/blob/master/docfx_project/articles/populating_candlestick_chart.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
                 </ul>
               </div>
           	

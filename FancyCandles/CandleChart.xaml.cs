@@ -1263,8 +1263,8 @@ namespace FancyCandles
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
         #region COMMON PROPERTIES FOR THE PRICE AXIS AND THE TIME AXIS*******************************************************************************************
-        ///<summary>Gets or sets the color of lines, ticks and its labels for the time, price and volume axises.</summary>
-        ///<value>The color of lines, ticks and its labels for the time, price and volume axises. The default is determined by the <see cref="DefaultAxisTickColor"/> value.</value>
+        ///<summary>Gets or sets the color of lines, ticks and its labels for all the axises.</summary>
+        ///<value>The color of lines, ticks and its labels for all the axises. The default is determined by the <see cref="DefaultAxisTickColor"/> value.</value>
         ///<remarks> 
         ///<h3>Dependency Property Information</h3>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
@@ -1287,8 +1287,8 @@ namespace FancyCandles
         ///<value>The default value for the <see cref="AxisTickColor"/> property: <c>Brushes.Black</c>.</value>
         public static Brush DefaultAxisTickColor { get { return (Brush)(new SolidColorBrush(Colors.Black)).GetCurrentValueAsFrozen(); } }
         //----------------------------------------------------------------------------------------------------------------------------------
-        ///<summary>Gets or sets the font family of the time axis tick labels.</summary>
-        ///<value>The font family of the time axis tick labels. The default is <see href="https://docs.microsoft.com/en-us/dotnet/api/system.windows.systemfonts.messagefontfamily?view=netframework-4.7.2">SystemFonts.MessageFontFamily</see>.</value>
+        ///<summary>Gets or sets the tick label font family for all the axises.</summary>
+        ///<value>The tick label font family for all the axises. The default is <see href="https://docs.microsoft.com/en-us/dotnet/api/system.windows.systemfonts.messagefontfamily?view=netframework-4.7.2">SystemFonts.MessageFontFamily</see>.</value>
         ///<remarks> 
         ///<h3>Dependency Property Information</h3>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
@@ -1359,8 +1359,8 @@ namespace FancyCandles
         ///<value>The default <see cref="Brush"/> value for the <see cref="CurrentPriceLabelBackground"/> property: <c>#FFE8EDFF</c>.</value>
         public static Brush DefaultCurrentPriceLabelBackground { get { return (Brush)(new SolidColorBrush(Color.FromArgb(255, 232, 237, 255))).GetCurrentValueAsFrozen(); } } // #FFE8EDFF
         //----------------------------------------------------------------------------------------------------------------------------------
-        ///<summary>Gets or sets the font size of the tick labels for the price and volume axis.</summary>
-        ///<value>The font size of the tick labels for the price and volume axis. The default is determined by the <see cref="DefaultPriceAxisTickLabelFontSize"/> value.</value>
+        ///<summary>Gets or sets the font size of the tick labels for the price and volume axises.</summary>
+        ///<value>The font size of the tick labels for the price and volume axises. The default is determined by the <see cref="DefaultPriceAxisTickLabelFontSize"/> value.</value>
         ///<remarks>
         /// The volume axis doesn't have its own appearance properties. Therefore, the volume axis appearance depends on price axis properties. 
         ///<h3>Dependency Property Information</h3>
@@ -1445,7 +1445,7 @@ namespace FancyCandles
         /// <summary>Gets the maximal number of chars in a price for the current candle collection.</summary>
         ///<value>The maximal number of chars in a price for the current candle collection.</value>
         ///<remarks>
-        ///This value is recalculated every time the candle collection source is changed, and remains constant until next change.
+        ///This value is recalculated every time the candle collection is changed.
         ///</remarks>
         public int MaxNumberOfCharsInPrice
         {
@@ -1463,7 +1463,7 @@ namespace FancyCandles
         /// <summary>Gets the maximum number of fractional digits in a price and volume for the current candle collection.</summary>
         ///<value>The maximum number of fractional digits in a price and volume for the current candle collection.</value>
         ///<remarks>
-        ///This property is recalculated every time the <see cref="CandlesSource"/> property is changed.
+        ///This value is recalculated every time the candle collection is changed.
         ///</remarks>
         public int MaxNumberOfFractionalDigitsInPrice
         {

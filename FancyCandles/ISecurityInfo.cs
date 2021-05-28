@@ -16,7 +16,7 @@ namespace FancyCandles
         Commodity,
         Index,
         Bond,
-        Cryptocurrency
+        CryptocurrencyPair
     }
 
     public interface ISecurityInfo
