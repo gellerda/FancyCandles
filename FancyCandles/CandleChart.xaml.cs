@@ -101,7 +101,6 @@ namespace FancyCandles
         //----------------------------------------------------------------------------------------------------------------------------------
         private void OnUserControlLoaded(object sender, RoutedEventArgs e)
         {
-            ReCalc_TimeFrame();
             ReCalc_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice();
             CandleGap = InitialCandleGap;
             CandleWidth = InitialCandleWidth;
@@ -110,7 +109,6 @@ namespace FancyCandles
         /// <summary>Default constructor.</summary>
         public CandleChart()
         {
-            timeFrame = 5;
             InitialCandleWidth = DefaultInitialCandleWidth;
             InitialCandleGap = DefaultInitialCandleGap;
 
@@ -1896,30 +1894,35 @@ namespace FancyCandles
 
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
-        public ICandleProvider CandleProvider
+        public ICandlesSourceProvider CandleProvider
         {
-            get { return (ICandleProvider)GetValue(CandleProviderProperty); }
+            get { return (ICandlesSourceProvider)GetValue(CandleProviderProperty); }
             set { SetValue(CandleProviderProperty, value); }
         }
         public static readonly DependencyProperty CandleProviderProperty =
-            DependencyProperty.Register("CandleProvider", typeof(ICandleProvider), typeof(CandleChart), new PropertyMetadata(null));
+            DependencyProperty.Register("CandleProvider", typeof(ICandlesSourceProvider), typeof(CandleChart), new PropertyMetadata(null));
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the data source for the candles of this chart.</summary>
         ///<value>The data source for the candles of this chart. The default value is null.</value>
         ///<remarks>
+        ///<para>Note that the timeframe is an immutable characteristic of a candle collection. 
+        ///Therefore <see cref="ICandlesSource.TimeFrameInMinutes"/> is the readonly property of the <see cref="ICandlesSource"/> interface.
+        ///The only way to change the timeframe of your <see cref="CandleChart"/> is to change the value of the <see cref="CandlesSource"/> property 
+        ///to a whole new candle collection with a new timeframe.</para>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
         ///<tr><td>Identifier field</td><td><see cref="CandlesSourceProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>
-        public IList<ICandle> CandlesSource
+        ///<seealso href="https://gellerda.github.io/FancyCandles/articles/populating_candlestick_chart.html">Populating CandleChart with candles</seealso>
+        public ICandlesSource CandlesSource
         {
-            get { return (IList<ICandle>)GetValue(CandlesSourceProperty); }
+            get { return (ICandlesSource)GetValue(CandlesSourceProperty); }
             set { SetValue(CandlesSourceProperty, value); }
         }
         /// <summary>Identifies the <see cref="CandlesSource"/> dependency property.</summary>
         /// <value><see cref="DependencyProperty"/></value>
         public static readonly DependencyProperty CandlesSourceProperty =
-            DependencyProperty.Register("CandlesSource", typeof(IList<ICandle>), typeof(CandleChart), new UIPropertyMetadata(null, OnCandlesSourceChanged, CoerceCandlesSource));
+            DependencyProperty.Register("CandlesSource", typeof(ICandlesSource), typeof(CandleChart), new UIPropertyMetadata(null, OnCandlesSourceChanged, CoerceCandlesSource));
 
         DateTime lastCenterCandleDateTime;
         private static object CoerceCandlesSource(DependencyObject objWithOldDP, object newDPValue)
@@ -1971,9 +1974,7 @@ namespace FancyCandles
 
             if (thisCandleChart.IsLoaded)
             {
-                thisCandleChart.ReCalc_TimeFrame();
                 thisCandleChart.ReCalc_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice();
-
 
                 DateTime old_lastCenterCandleDateTime = thisCandleChart.lastCenterCandleDateTime;
                 thisCandleChart.ReCalc_VisibleCandlesRange();
@@ -1996,15 +1997,12 @@ namespace FancyCandles
                 ICandle newCandle = CandlesSource[e.NewStartingIndex];
                 Update_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice(newCandle);
 
-                if (CandlesSource.Count < 20)
-                    ReCalc_TimeFrame();
-
                 int maxVisibleCandlesCount = (int)(priceChartContainer.ActualWidth / (CandleWidth + CandleGap));
 
                 if (e.NewStartingIndex == (CandlesSource.Count - 1))
                     CurrentPrice = CandlesSource[CandlesSource.Count - 1].C;
 
-                if (CandlesSource.Count< maxVisibleCandlesCount)
+                if (CandlesSource.Count<= maxVisibleCandlesCount)
                     VisibleCandlesRange = new IntRange(0, CandlesSource.Count);
                 else if (e.NewStartingIndex == (CandlesSource.Count - 1))
                 {
@@ -2029,55 +2027,6 @@ namespace FancyCandles
             }
             if (e.Action == NotifyCollectionChangedAction.Remove) { /* your code */ }
             if (e.Action == NotifyCollectionChangedAction.Move) { /* your code */ }
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------
-        int timeFrame;
-        /// <summary>Gets the automatically determined timeframe of this chart in minutes.</summary>
-        ///<value>The automatically determined timeframe of this chart in minutes.</value>
-        ///<remarks>
-        ///This value is recalculated every time the <see cref="CandlesSource"/> property is changed.
-        ///</remarks>
-        public int TimeFrame
-        {
-            get { return timeFrame; }
-            private set
-            {
-                if (value == timeFrame) return;
-                timeFrame = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // Просматривает CandlesSource и возвращает предполагаемый таймфрейм в минутах
-        private void ReCalc_TimeFrame()
-        {
-            if (CandlesSource == null) return;
-
-            Dictionary<TimeSpan, int> hist = new Dictionary<TimeSpan, int>();
-
-            for (int i = 1; i < CandlesSource.Count; i++)
-            {
-                DateTime t0 = CandlesSource[i - 1].t; // MyDateAndTime.YYMMDDHHMM_to_Datetime(CandlesSource[i - 1].YYMMDD, CandlesSource[i - 1].HHMM);
-                DateTime t1 = CandlesSource[i].t; // MyDateAndTime.YYMMDDHHMM_to_Datetime(CandlesSource[i].YYMMDD, CandlesSource[i].HHMM);
-                TimeSpan ts = t1 - t0;
-                if (hist.ContainsKey(ts))
-                    hist[ts]++;
-                else
-                    hist.Add(ts, 1);
-            }
-
-            int max_freq = int.MinValue;
-            TimeSpan max_freq_ts = TimeSpan.MinValue;
-            foreach (KeyValuePair<TimeSpan, int> keyVal in hist)
-            {
-                if (keyVal.Value > max_freq)
-                {
-                    max_freq = keyVal.Value;
-                    max_freq_ts = keyVal.Key;
-                }
-            }
-
-            TimeFrame = (int)(max_freq_ts.TotalMinutes);
         }
         //----------------------------------------------------------------------------------------------------------------------------------
         CandleExtremums visibleCandlesExtremums;
@@ -2392,7 +2341,7 @@ namespace FancyCandles
         //----------------------------------------------------------------------------------------------------------------------------------
         private void OnPanelCandlesContainerSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (!IsLoaded || e.NewSize.Width == 0 || CandlesSource.Count() == 0)
+            if (!IsLoaded || e.NewSize.Width == 0 || CandlesSource?.Count() == 0)
                 return;
 
             if (e.NewSize.Width != e.PreviousSize.Width)

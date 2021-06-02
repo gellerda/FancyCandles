@@ -33,7 +33,7 @@ namespace FancyCandles
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (value != null && ((ICandleProvider)value).SecCatalog.Count>0);
+            return (value != null && ((ICandlesSourceProvider)value).SecCatalog.Count>0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

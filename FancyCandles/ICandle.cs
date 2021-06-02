@@ -23,27 +23,27 @@ namespace FancyCandles
     ///<summary>Represents the most widely used candlestick parameters.</summary>
     public interface ICandle
     {
-        ///<summary>The time of the candlestick.</summary>
+        ///<summary>Gets the time of the candlestick.</summary>
         ///<value>The time of the candlestick.</value>
         DateTime t { get; } // Момент времени включая дату и время
 
-        ///<summary>The Open of the candlestick (opening price).</summary>
+        ///<summary>Gets the Open of the candlestick (opening price).</summary>
         ///<value>The Open of the candlestick (opening price).</value>
         double O { get;}
 
-        ///<summary>The High of the candlestick (price maximum).</summary>
+        ///<summary>Gets the High of the candlestick (price maximum).</summary>
         ///<value>The High of the candlestick (price maximum).</value>
         double H { get;}
 
-        ///<summary>The Low of the candlestick (price minimum).</summary>
+        ///<summary>Gets the Low of the candlestick (price minimum).</summary>
         ///<value>The Low of the candlestick (price minimum).</value>
         double L { get;}
 
-        ///<summary>The Close of the candlestick (closing price).</summary>
+        ///<summary>Gets the Close of the candlestick (closing price).</summary>
         ///<value>The Close of the candlestick (closing price).</value>
         double C { get;}
 
-        ///<summary>The Volume of the candlestick.</summary>
+        ///<summary>Gets the Volume of the candlestick.</summary>
         ///<value>The Volume of the candlestick.</value>
         double V { get;}
     }

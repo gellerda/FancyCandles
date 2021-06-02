@@ -15,10 +15,9 @@
             <RowDefinition Height="200"/>
         </Grid.RowDefinitions>
 
-        <fc:CandleChart CandlesSource="{Binding Path=ReadOnlyCandles}"
+        <fc:CandleChart CandlesSource="{Binding Path=Candles}"
                         VolumeBarWidthToCandleWidthRatio="0.5" 
-                        Grid.Row="0"
-                        >
+                        Grid.Row="0">
             <fc:CandleChart.OverlayIndicators>
                 <local:ObservableOverlayIndicatorCollection>
                     <fci:SimpleMovingAverage N="7">

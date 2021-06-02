@@ -86,10 +86,10 @@ namespace FancyCandles
         //----------------------------------------------------------------------------------------------------------------------------------
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            ICandleProvider candleProvider = parentCandleChart.CandleProvider;
+            ICandlesSourceProvider candleProvider = parentCandleChart.CandleProvider;
 
             int secCatalog_i = candleProvider.SecCatalog.IndexOf(secList.SelectedItem as ISecurityInfo);
-            ReadOnlyObservableCollection<ICandle> newCandleSource = candleProvider.GetCandleSource(secCatalog_i, parentCandleChart.TimeFrame);
+            ICandlesSource newCandleSource = candleProvider.GetCandlesSource(secCatalog_i, parentCandleChart.CandlesSource.TimeFrameInMinutes);
             parentCandleChart.CandlesSource = newCandleSource;
 
             DialogResult = true;

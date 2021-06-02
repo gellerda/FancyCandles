@@ -78,7 +78,7 @@
 
 <p>After <a href="creating_candlestick_chart.html">the empty instance of the CandleChart control has been created</a>, you need to populate it with candles:</p>
 <ol>
-<li><p>The <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> control requires the data source of its candle collection (<a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource">CandlesSource property</a>) to be of type <a href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1?view=netframework-4.7.2">IList&lt;</a><a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html">ICandle&gt;</a>. Therefore, add to your project a new <strong>class Candle</strong> that implements the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html">ICandle</a> interface:</p>
+<li><p>The <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> control requires the data source of its candles (<a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource">the CandlesSource property</a>) to be of type <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandlesSource.html">ICandlesSource</a>, which is <a href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1?view=netframework-4.7.2">IList&lt;</a><a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html">ICandle&gt;</a> with the readonly integer <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html#FancyCandles_ICandlesSource_TimeFrameInMinutes">TimeFrameInMinutes</a> property. Therefore, you have to add to your project a new class <strong>Candle</strong> that implements the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html">ICandle</a> interface:</p>
 <pre><code class="lang-cs">    public class Candle : FancyCandles.ICandle
     {
         public DateTime t { get; set; }
@@ -99,25 +99,36 @@
         }
     }
 </code></pre>
-</li>
-<li><p>For convenience, add some <em>using</em> directives to <strong>MainWindow.xaml.cs</strong> of your project:</p>
-<pre><code class="lang-cs">    using System.Collections.ObjectModel;
-    using FancyCandles;
+<p>And a new class <strong>CandlesSource</strong> that implements the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandlesSource.html">ICandlesSource</a> interface:</p>
+<pre><code class="lang-cs">    public class CandlesSource :
+            System.Collections.ObjectModel.ObservableCollection&lt;ICandle&gt;, 
+            FancyCandles.ICandlesSource
+    {
+        public CandlesSource(int timeFrameInMinutes)
+        {
+            this.timeFrameInMinutes = timeFrameInMinutes;
+        }
+
+        private readonly int timeFrameInMinutes;
+        public int TimeFrameInMinutes { get { return timeFrameInMinutes; } }
+    }
 </code></pre>
 </li>
 <li><p>In <strong>MainWindow.xaml.cs</strong> of your project, in the constructor of the <strong>MainWindow class</strong>:</p>
 <ul>
-<li>Create an instance of <a href="https://docs.microsoft.com/ru-ru/dotnet/api/system.collections.objectmodel.observablecollection-1?view=netframework-4.8">ObservableCollection&lt;</a><a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.ICandle.html">ICandle&gt;</a>, which will be used as the data source for the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> control.
-<pre><code class="lang-cs">    ObservableCollection&lt;ICandle&gt; candles = new ObservableCollection&lt;ICandle&gt;();
+<li>Create an instance of <strong>CandlesSource</strong>, which will be used as the data source for the <a href="https://gellerda.github.io/FancyCandles/api/FancyCandles.CandleChart.html">CandleChart</a> control.
+<pre><code class="lang-cs">    // Let's take the 5-minute timeframe for this example: 
+    int timeFrameInMinutes = 5;
+    CandlesSource candles = new CandlesSource(timeFrameInMinutes);
 </code></pre>
 </li>
-<li>In the constructor of the <strong>MainWindow</strong> class populate this collection with some data. In this example, we will generate a meaningless set of <strong>Candle</strong> instances:
+<li>Populate this collection with some data. In this example, we will generate a meaningless set of <strong>Candle</strong> instances:
 <pre><code class="lang-cs">    DateTime t0 = new DateTime(2019, 6, 11, 23, 40, 0);
     for (int i = 0; i &lt; 500; i++)
     {
         double p0 = Math.Round(Math.Sin(0.3*i) + 0.1*i, 3);
         double p1 = Math.Round(Math.Sin(0.3*i + 1) + 0.1*i, 3);
-        candles.Add(new Candle(t0.AddMinutes(i * 5),
+        candles.Add(new Candle(t0.AddMinutes(i * timeFrameInMinutes),
                     100 + p0, 101 + p0, 99 + p0, 100 + p1, i));
     }
 </code></pre>
@@ -134,14 +145,16 @@
 
         /// ... some code
 
-        ObservableCollection&lt;ICandle&gt; candles = new ObservableCollection&lt;ICandle&gt;();
+        // Let's take the 5-minute timeframe for this example: 
+        int timeFrameInMinutes = 5;
+        CandlesSource candles = new CandlesSource(timeFrameInMinutes);
 
         DateTime t0 = new DateTime(2019, 6, 11, 23, 40, 0);
         for (int i = 0; i &lt; 250; i++)
         {
             double p0 = Math.Round(Math.Sin(0.3*i) + 0.1*i, 3);
             double p1 = Math.Round(Math.Sin(0.3*i + 1) + 0.1*i, 3);
-            candles.Add(new Candle(t0.AddMinutes(i * 5),
+            candles.Add(new Candle(t0.AddMinutes(i * timeFrameInMinutes),
                         100 + p0, 101 + p0, 99 + p0, 100 + p1, i));
         }
 

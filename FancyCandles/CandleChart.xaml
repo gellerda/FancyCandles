@@ -92,7 +92,7 @@
                         <MenuItem Header="Settings" Click="OpenCandleChartPropertiesWindow"/>
                         <MenuItem Header="Load Settings" Click="OpenLoadSettingsDialog"/>
                         <MenuItem Header="Save Settings As" Click="OpenSaveSettingsAsDialog"/>
-                        <!-- <MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandleProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/>-->
+                        <!--<MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandleProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/>-->
                     </ContextMenu>
                 </Rectangle.ContextMenu>
             </Rectangle>
@@ -301,7 +301,7 @@
                                 TimeAxisHeight="{Binding Path=TimeAxisHeight, Mode=OneWay}"
                                 CandlesSource="{Binding Path=CandlesSource, Mode=OneWay}"
                                 AxisTickColor="{Binding Path=AxisTickColor, Mode=OneWay}"
-                                TimeFrame="{Binding Path=TimeFrame, Mode=OneWay}"
+                                TimeFrame="{Binding Path=CandlesSource.TimeFrameInMinutes, Mode=OneWay}"
                                 VisibleCandlesRange="{Binding Path=VisibleCandlesRange, Mode=OneWay}"
                                 IsGridlinesEnabled="{Binding Path=IsVerticalGridlinesEnabled, Mode=OneWay}"
                                 GridlinesPen="{Binding Path=VerticalGridlinesPen, Mode=OneWay}"
