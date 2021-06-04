@@ -92,7 +92,7 @@
                         <MenuItem Header="Settings" Click="OpenCandleChartPropertiesWindow"/>
                         <MenuItem Header="Load Settings" Click="OpenLoadSettingsDialog"/>
                         <MenuItem Header="Save Settings As" Click="OpenSaveSettingsAsDialog"/>
-                        <!--<MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandleProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/>-->
+                        <MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandlesSourceProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/>
                     </ContextMenu>
                 </Rectangle.ContextMenu>
             </Rectangle>
@@ -195,7 +195,7 @@
                         <MenuItem Header="Settings" Click="OpenCandleChartPropertiesWindow"></MenuItem>
                         <MenuItem Header="Load Settings" Click="OpenLoadSettingsDialog"></MenuItem>
                         <MenuItem Header="Save Settings As" Click="OpenSaveSettingsAsDialog"></MenuItem>
-                        <!-- <MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandleProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/> -->
+                        <MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandlesSourceProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/>
                     </ContextMenu>
                 </Rectangle.ContextMenu>
             </Rectangle>

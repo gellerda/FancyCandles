@@ -1894,13 +1894,13 @@ namespace FancyCandles
 
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
-        public ICandlesSourceProvider CandleProvider
+        public ICandlesSourceProvider CandlesSourceProvider
         {
-            get { return (ICandlesSourceProvider)GetValue(CandleProviderProperty); }
-            set { SetValue(CandleProviderProperty, value); }
+            get { return (ICandlesSourceProvider)GetValue(CandlesSourceProviderProperty); }
+            set { SetValue(CandlesSourceProviderProperty, value); }
         }
-        public static readonly DependencyProperty CandleProviderProperty =
-            DependencyProperty.Register("CandleProvider", typeof(ICandlesSourceProvider), typeof(CandleChart), new PropertyMetadata(null));
+        public static readonly DependencyProperty CandlesSourceProviderProperty =
+            DependencyProperty.Register("CandlesSourceProvider", typeof(ICandlesSourceProvider), typeof(CandleChart), new PropertyMetadata(null));
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the data source for the candles of this chart.</summary>
         ///<value>The data source for the candles of this chart. The default value is null.</value>
@@ -2188,7 +2188,7 @@ namespace FancyCandles
                 return;
             }
 
-            VisibleCandlesRange = IntRange.CreateContainingOnlyStart_i(CandlesSource.FindCandleByDatetime(visibleCandlesRangeCenter) - VisibleCandlesRange.Count / 2);
+            VisibleCandlesRange = IntRange.CreateContainingOnlyStart_i(FindCandleByDatetime(CandlesSource, visibleCandlesRangeCenter) - VisibleCandlesRange.Count / 2);
         }
 
         ///<summary>Sets the range of visible candles, that starts and ends at specified moments in time.</summary>
@@ -2226,16 +2226,41 @@ namespace FancyCandles
             if (CandlesSource[0].t > lowerBound)
                 i0 = 0;
             else
-                i0 = CandlesSource.FindCandleByDatetime(lowerBound);
+                i0 = FindCandleByDatetime(CandlesSource, lowerBound);
 
             if (CandlesSource[N - 1].t < upperBound)
                 i1 = N - 1;
             else
-                i1 = CandlesSource.FindCandleByDatetime(upperBound);
+                i1 = FindCandleByDatetime(CandlesSource, upperBound);
 
             int newVisibleCandlesCount = i1 - i0 + 1;
             ReCalc_CandleWidthAndGap(newVisibleCandlesCount);
             VisibleCandlesRange = new IntRange(i0, newVisibleCandlesCount);
+        }
+
+        private static int FindCandleByDatetime(IList<ICandle> candles, DateTime t)
+        {
+            int i0 = 0, i1 = candles.Count - 1;
+            DateTime t_ = candles[i0].t;
+            if (t <= t_) return i0;
+            //else if (t < t_) return -1;
+
+            t_ = candles[i1].t;
+            if (t >= t_) return i1;
+            //else if (t > t_) return -1;
+
+            while (true)
+            {
+                if ((i0 + 1) == i1) return i1;
+
+                int i = (i0 + i1) / 2;
+                t_ = candles[i].t;
+                if (t == t_) return i;
+                else if (t > t_)
+                    i0 = i;
+                else
+                    i1 = i;
+            }
         }
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the modifier key that in conjunction with mouse wheel rolling will cause a change of the visible candles range width.</summary>

@@ -21,6 +21,7 @@ namespace FancyCandles
 
     public interface ISecurityInfo
     {
+        string SecID { get; }
         SecurityTypes SecurityType { get; }
         string ExchangeName { get; }
         string Ticker { get; }

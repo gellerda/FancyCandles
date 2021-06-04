@@ -64,7 +64,6 @@
   <ItemGroup>
     <Compile Include="Converters.cs" />
     <Compile Include="DateTimeMilestones.cs" />
-    <Compile Include="ICandleExtensionMethods.cs" />
     <Compile Include="ICandlesSource.cs" />
     <Compile Include="ICandlesSourceProvider.cs" />
     <Compile Include="Indicators\ExponentialMovingAverage.cs" />

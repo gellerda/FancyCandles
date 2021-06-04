@@ -11,16 +11,16 @@ namespace FancyCandles
     {
         List<ISecurityInfo> SecCatalog { get; }
         //ReadOnlyObservableCollection<ICandle> GetCandlesSource(int secCatalog_i, int timeFrameInMinutes);
-        CandlesSourceFromProvider GetCandlesSource(int secCatalog_i, int timeFrameInMinutes);
+        CandlesSourceFromProvider GetCandlesSource(string secID, int timeFrameInMinutes);
     }
     //*****************************************************************************************************************************************************************************
     public class CandlesSourceFromProvider : ReadOnlyObservableCollection<ICandle>, ICandlesSource
     {
         //---------------------------------------------------------------------------------------------------------------------------------------
-        public CandlesSourceFromProvider(ObservableCollection<ICandle> candlesSource, ICandlesSourceProvider parentProvider, int secCatalogIndex, int timeFrameInMinutes) : base(candlesSource)
+        public CandlesSourceFromProvider(ObservableCollection<ICandle> candlesSource, ICandlesSourceProvider parentProvider, string secID, int timeFrameInMinutes) : base(candlesSource)
         {
             this.parentProvider = parentProvider;
-            this.secCatalogIndex = secCatalogIndex; 
+            this.secID = secID; 
             this.timeFrameInMinutes = timeFrameInMinutes;
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -30,10 +30,10 @@ namespace FancyCandles
             get { return parentProvider; }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
-        private readonly int secCatalogIndex;
-        public int SecCatalogIndex
+        private readonly string secID;
+        public string SecID
         {
-            get { return secCatalogIndex; }
+            get { return secID; }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
         private readonly int timeFrameInMinutes;

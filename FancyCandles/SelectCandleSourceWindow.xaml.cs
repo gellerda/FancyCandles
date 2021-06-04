@@ -24,7 +24,7 @@ namespace FancyCandles
         {
             InitializeComponent();
 
-            SecsView = CollectionViewSource.GetDefaultView(parentCandleChart.CandleProvider.SecCatalog);
+            SecsView = CollectionViewSource.GetDefaultView(parentCandleChart.CandlesSourceProvider.SecCatalog);
             SecsView.Filter = SecFilter;
 
             this.parentCandleChart = parentCandleChart;
@@ -86,10 +86,10 @@ namespace FancyCandles
         //----------------------------------------------------------------------------------------------------------------------------------
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            ICandlesSourceProvider candleProvider = parentCandleChart.CandleProvider;
+            ICandlesSourceProvider candlesSourceProvider = parentCandleChart.CandlesSourceProvider;
 
-            int secCatalog_i = candleProvider.SecCatalog.IndexOf(secList.SelectedItem as ISecurityInfo);
-            ICandlesSource newCandleSource = candleProvider.GetCandlesSource(secCatalog_i, parentCandleChart.CandlesSource.TimeFrameInMinutes);
+            string secID = (secList.SelectedItem as ISecurityInfo).SecID;
+            ICandlesSource newCandleSource = candlesSourceProvider.GetCandlesSource(secID, parentCandleChart.CandlesSource.TimeFrameInMinutes);
             parentCandleChart.CandlesSource = newCandleSource;
 
             DialogResult = true;
