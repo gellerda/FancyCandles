@@ -74,6 +74,7 @@
     <Compile Include="MyDateAndTime.cs" />
     <Compile Include="MyNumberFormatting.cs" />
     <Compile Include="MyWpfMath.cs" />
+    <Compile Include="DiscreteRandomVariableSample.cs" />
     <Compile Include="PriceChartElement.cs" />
     <Compile Include="Indicators\OverlayIndicator.cs" />
     <Compile Include="CandleChartPropertiesWindow.xaml.cs">

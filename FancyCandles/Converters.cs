@@ -187,7 +187,8 @@ namespace FancyCandles
             char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
 
             double price = Math.Round((priceHigh - (currentMousePosition.Y - chartTopMargin) / (ChartAreaHeight - chartTopMargin - chartBottomMargin) * (priceHigh - priceLow)), maxNumberOfFractionalDigitsInPrice);
-            return price.PriceToString(candleChartCulture, decimalSeparator, decimalSeparatorArray);
+            string priceNumberFormat = $"N{maxNumberOfFractionalDigitsInPrice}";
+            return MyNumberFormatting.PriceToString(price, priceNumberFormat, candleChartCulture, decimalSeparator, decimalSeparatorArray);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -219,8 +220,7 @@ namespace FancyCandles
             char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
 
             double volume = (((visibleCandlesExtremums.VolumeHigh - (currentMousePosition.Y - volumeHistogramTopMargin) / (volumeHistogramHeight - volumeHistogramTopMargin - volumeHistogramBottomMargin) * visibleCandlesExtremums.VolumeHigh)));
-            //return volume.MyToString(candleChartCulture, decimalSeparator, decimalSeparatorArray);
-            return volume.VolumeToLimitedLengthString(candleChartCulture, decimalSeparator, decimalSeparatorArray);
+            return MyNumberFormatting.VolumeToLimitedLengthString(volume, candleChartCulture, decimalSeparator, decimalSeparatorArray);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

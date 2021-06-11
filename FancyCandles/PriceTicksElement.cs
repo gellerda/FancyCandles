@@ -243,6 +243,14 @@ namespace FancyCandles
         public static readonly DependencyProperty PricePanelWidthProperty
             = DependencyProperty.Register("PriceAxisWidth", typeof(double), typeof(PriceTicksElement), new FrameworkPropertyMetadata(0.0) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
+        public int MaxNumberOfFractionalDigitsInPrice
+        {
+            get { return (int)GetValue(MaxNumberOfFractionalDigitsInPriceProperty); }
+            set { SetValue(MaxNumberOfFractionalDigitsInPriceProperty, value); }
+        }
+        public static readonly DependencyProperty MaxNumberOfFractionalDigitsInPriceProperty =
+            DependencyProperty.Register("MaxNumberOfFractionalDigitsInPrice", typeof(int), typeof(PriceTicksElement), new FrameworkPropertyMetadata(0));
+        //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnRender(DrawingContext drawingContext)
         {
             double textHeight = (new FormattedText("123", Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip)).Height;
@@ -253,8 +261,11 @@ namespace FancyCandles
             double chartHeight = ActualHeight - ChartBottomMargin - ChartTopMargin;
 
             double stepInRubles = (VisibleCandlesExtremums.PriceHigh - VisibleCandlesExtremums.PriceLow) / chartHeight * (textHeight + GapBetweenTickLabels);
-            double stepInRubles_HPlace = MyWpfMath.HighestDecimalPlace(stepInRubles, out _);
+            double stepInRubles_HPlace = MyWpfMath.HighestDecimalPlace(stepInRubles, out int stepInRubles_HPow);
             stepInRubles = Math.Ceiling(stepInRubles / stepInRubles_HPlace) * stepInRubles_HPlace;
+            MyWpfMath.HighestDecimalPlace(stepInRubles, out int stepInRublesHighestDecimalPow);
+            string priceTickLabelNumberFormat = (stepInRubles_HPow >= 0) ? "N0" : $"N{-stepInRubles_HPow}";
+            string currentPriceLabelNumberFormat = $"N{MaxNumberOfFractionalDigitsInPrice}";
 
             double chartHeight_candlesLHRange_Ratio = chartHeight / (VisibleCandlesExtremums.PriceHigh - VisibleCandlesExtremums.PriceLow);
 
@@ -262,9 +273,9 @@ namespace FancyCandles
             string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
             char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
 
-            void DrawPriceTick(double price)
+            void DrawPriceTickLabel(double price, int priceStepHighestDecimalPow)
             {
-                string s = price.PriceToString(Culture, decimalSeparator, decimalSeparatorArray);
+                string s = MyNumberFormatting.PriceToString(price, priceTickLabelNumberFormat, Culture, decimalSeparator, decimalSeparatorArray);
                 FormattedText priceTickFormattedText = new FormattedText(s, Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, TickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double y = ChartTopMargin + (VisibleCandlesExtremums.PriceHigh - price) * chartHeight_candlesLHRange_Ratio;
                 drawingContext.DrawText(priceTickFormattedText, new Point(tickLabelX, y - halfTextHeight));
@@ -274,9 +285,9 @@ namespace FancyCandles
                     drawingContext.DrawLine(GridlinesPen, new Point(0, y), new Point(chartPanelWidth, y));
             }
             
-            void DrawCurrentPrice()
+            void DrawCurrentPriceLabel()
             {
-                string currentPriceString = CurrentPrice.PriceToString(Culture, decimalSeparator, decimalSeparatorArray);
+                string currentPriceString = MyNumberFormatting.PriceToString(CurrentPrice, currentPriceLabelNumberFormat, Culture, decimalSeparator, decimalSeparatorArray);
                 FormattedText formattedText = new FormattedText(currentPriceString, Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, CurrentPriceLabelForeground, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double formattedTextWidth = formattedText.Width;
                 double y = ChartTopMargin + (VisibleCandlesExtremums.PriceHigh - CurrentPrice) * chartHeight_candlesLHRange_Ratio;
@@ -287,7 +298,7 @@ namespace FancyCandles
             }
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             double theMostRoundPrice = MyWpfMath.TheMostRoundValueInsideRange(VisibleCandlesExtremums.PriceLow, VisibleCandlesExtremums.PriceHigh);
-            DrawPriceTick(theMostRoundPrice);
+            DrawPriceTickLabel(theMostRoundPrice, stepInRublesHighestDecimalPow);
 
             double maxPriceThreshold = VisibleCandlesExtremums.PriceHigh + (ChartTopMargin - halfTextHeight) / chartHeight_candlesLHRange_Ratio;
             double minPriceThreshold = VisibleCandlesExtremums.PriceHigh + (ChartTopMargin - ActualHeight + halfTextHeight) / chartHeight_candlesLHRange_Ratio;
@@ -296,19 +307,19 @@ namespace FancyCandles
             double next_tick;
             while ((next_tick = theMostRoundPrice + step_i * stepInRubles) < maxPriceThreshold)
             {
-                DrawPriceTick(next_tick);
+                DrawPriceTickLabel(next_tick, stepInRublesHighestDecimalPow);
                 step_i++;
             }
 
             step_i = 1;
             while ((next_tick = theMostRoundPrice - step_i * stepInRubles) > minPriceThreshold)
             {
-                DrawPriceTick(next_tick);
+                DrawPriceTickLabel(next_tick, stepInRublesHighestDecimalPow);
                 step_i++;
             }
 
             if (IsCurrentPriceLabelVisible && CurrentPrice >= VisibleCandlesExtremums.PriceLow && CurrentPrice <= VisibleCandlesExtremums.PriceHigh)
-                DrawCurrentPrice();
+                DrawCurrentPriceLabel();
 
             // Горизонтальные линии на всю ширину разделяющая и окаймляющая панели времени и даты:
             //drawingContext.DrawLine(pen, new Point(0, 0), new Point(RenderSize.Width, 0));

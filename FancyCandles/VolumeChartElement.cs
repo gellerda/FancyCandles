@@ -45,13 +45,6 @@ namespace FancyCandles
             ToolTipService.SetShowDuration(this, int.MaxValue);
             ToolTipService.SetInitialShowDelay(this, 0);
 
-            if (bullishBarPen == null)
-            {
-                bullishBarPen = new Pen(CandleChart.DefaultBullishVolumeBarFill, 1);
-                if (!bullishBarPen.IsFrozen)
-                    bullishBarPen.Freeze();
-            }
-
             if (bearishBarPen == null)
             {
                 bearishBarPen = new Pen(CandleChart.DefaultBearishVolumeBarFill, 1);
@@ -76,8 +69,6 @@ namespace FancyCandles
             set { SetValue(CandlesSourceProperty, value); }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
-        private Pen bullishBarPen;
-
         public static readonly DependencyProperty BullishBarFillProperty
             = DependencyProperty.Register("BullishBarFill", typeof(Brush), typeof(VolumeChartElement), 
                 new FrameworkPropertyMetadata(CandleChart.DefaultBullishVolumeBarFill, null, CoerceBullishCandleFill) { AffectsRender = true });
@@ -89,22 +80,13 @@ namespace FancyCandles
 
         private static object CoerceBullishCandleFill(DependencyObject objWithOldDP, object newDPValue)
         {
-            VolumeChartElement thisElement = (VolumeChartElement)objWithOldDP;
             Brush newBrushValue = (Brush)newDPValue;
 
             if (newBrushValue.IsFrozen)
-            {
-                Pen p = new Pen(newBrushValue, 1.0);
-                p.Freeze();
-                thisElement.bullishBarPen = p;
                 return newDPValue;
-            }
             else
             {
                 Brush b = (Brush)newBrushValue.GetCurrentValueAsFrozen();
-                Pen p = new Pen(b, 1.0);
-                p.Freeze();
-                thisElement.bullishBarPen = p;
                 return b;
             }
         }
@@ -180,25 +162,20 @@ namespace FancyCandles
         //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnRender(DrawingContext drawingContext)
         {
-            //drawingContext.DrawRectangle(Brushes.Aquamarine, transparentPen, new Rect(0, 0, RenderSize.Width, RenderSize.Height));
             double volumeBarWidth = VolumeBarWidthToCandleWidthRatio * CandleWidthAndGap.Width;
-            double volumeBarGap = (1.0 - VolumeBarWidthToCandleWidthRatio) * CandleWidthAndGap.Width + CandleWidthAndGap.Gap;
+            double volumeBarWidthNotLessThan1 = Math.Max(1.0, volumeBarWidth);
             double halfDWidth = 0.5 * (CandleWidthAndGap.Width - volumeBarWidth);
+            double volumeBarGap = (1.0 - VolumeBarWidthToCandleWidthRatio) * CandleWidthAndGap.Width + CandleWidthAndGap.Gap;
 
             for (int i = 0; i < VisibleCandlesRange.Count; i++)
             {
                 ICandle cndl = CandlesSource[VisibleCandlesRange.Start_i + i];
                 Brush cndlBrush = (cndl.C > cndl.O) ? BullishBarFill : BearishBarFill;
-                Pen cndlPen = (cndl.C > cndl.O) ? bullishBarPen : bearishBarPen;
 
-                double wnd_V = (1.0 - cndl.V / (double)VisibleCandlesExtremums.VolumeHigh) * RenderSize.Height;
-
+                double barHeight = Math.Max(1.0, cndl.V / VisibleCandlesExtremums.VolumeHigh * RenderSize.Height);
                 double volumeBarLeftX = halfDWidth + i * (volumeBarWidth + volumeBarGap);
-                double barHeight = RenderSize.Height - wnd_V;
-                if (cndl.V > 0L && barHeight >= 1.0)
-                    drawingContext.DrawRectangle(cndlBrush, null, new Rect(volumeBarLeftX, wnd_V, volumeBarWidth, barHeight));
-                else
-                    drawingContext.DrawLine(cndlPen, new Point(volumeBarLeftX, RenderSize.Height), new Point(volumeBarLeftX + volumeBarWidth, RenderSize.Height));
+
+                drawingContext.DrawRectangle(cndlBrush, null, new Rect(new Point(volumeBarLeftX, RenderSize.Height), new Vector(volumeBarWidthNotLessThan1, -barHeight)));
             }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -211,7 +188,7 @@ namespace FancyCandles
             //Vector uv = new Vector(mousePos.X/ RenderSize.Width, mousePos.Y / RenderSize.Height);
             int cndl_i = VisibleCandlesRange.Start_i + (int)(mousePos.X / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap));
             ICandle cndl = CandlesSource[cndl_i];
-            string tooltipText = $"{cndl.t.ToString("g", Culture)}\nV= {cndl.V.VolumeToString(Culture, decimalSeparator, decimalSeparatorArray)}";
+            string tooltipText = $"{cndl.t.ToString("g", Culture)}\nV= {MyNumberFormatting.VolumeToString(cndl.V, Culture, decimalSeparator, decimalSeparatorArray)}";
             ((ToolTip)ToolTip).Content = tooltipText;
         }
         //---------------------------------------------------------------------------------------------------------------------------------------

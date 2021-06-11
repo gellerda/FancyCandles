@@ -198,8 +198,7 @@ namespace FancyCandles
 
             void DrawVolumeTick(double volume)
             {
-                //string s = volume.MyToString(Culture, decimalSeparator, decimalSeparatorArray);
-                string s = volume.VolumeToLimitedLengthString(Culture, decimalSeparator, decimalSeparatorArray);
+                string s = MyNumberFormatting.VolumeToLimitedLengthString(volume, Culture, decimalSeparator, decimalSeparatorArray);
                 FormattedText priceTickFormattedText = new FormattedText(s, Culture, FlowDirection.LeftToRight, currentTypeFace, TickLabelFontSize, TickColor, VisualTreeHelper.GetDpi(this).PixelsPerDip);
                 double y = ChartTopMargin + (VisibleCandlesExtremums.VolumeHigh - volume) * chartHeight_candlesLHRange_Ratio;
                 drawingContext.DrawText(priceTickFormattedText, new Point(tickLabelX, y - halfTextHeight));

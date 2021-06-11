@@ -18,7 +18,7 @@ namespace FancyCandles
         private static string volumeStringFormat2 = "N1"; // 2 digits before decimal point
         private static string volumeStringFormat3 = "N0"; // 3 digits before decimal point
 
-        public static string VolumeToLimitedLengthString(this double volume, CultureInfo culture, string decimalSeparator, char[] decimalSeparatorArray)
+        public static string VolumeToLimitedLengthString(double volume, CultureInfo culture, string decimalSeparator, char[] decimalSeparatorArray)
         {
             if (volume < 0.0) return "0";
 
@@ -113,7 +113,7 @@ namespace FancyCandles
             return s;
         }
         //----------------------------------------------------------------------------------------------------------------------------------
-        public static string VolumeToString(this double volume, CultureInfo culture, string decimalSeparator, char[] decimalSeparatorArray)
+        public static string VolumeToString(double volume, CultureInfo culture, string decimalSeparator, char[] decimalSeparatorArray)
         {
             if (volume <= 0.0) return "0";
 
@@ -147,25 +147,16 @@ namespace FancyCandles
             return s;
         }
         //----------------------------------------------------------------------------------------------------------------------------------
-        public static string PriceToString(this double num, CultureInfo culture, string decimalSeparator, char[] decimalSeparatorArray)
+        public static string PriceToString(double price, string numberFormat, CultureInfo culture, string decimalSeparator, char[] decimalSeparatorArray)
         {
-            string s = num.ToString("N15", culture);
-            if (s.Contains(decimalSeparator))
-                s = s.TrimEnd('0').TrimEnd(decimalSeparatorArray);
-
-            return s;
-        }
-
-        public static string MyToString(this long num, CultureInfo culture, string decimalSeparator, char[] decimalSeparatorArray)
-        {
-            string s = num.ToString("N15", culture);
+            string s = price.ToString(numberFormat, culture);
             if (s.Contains(decimalSeparator))
                 s = s.TrimEnd('0').TrimEnd(decimalSeparatorArray);
 
             return s;
         }
         //----------------------------------------------------------------------------------------------------------------------------------
-        public static int NumberOfFractionalDigits(this double d)
+        public static int NumberOfFractionalDigits(double d)
         {
             string str = d.ToString(cultureEnUS);
             int pointPosition = str.LastIndexOf('.');

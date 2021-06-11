@@ -20,7 +20,8 @@ namespace CandleChartExample
     public partial class MainWindow : Window
     {
         private double freq;
-        private int currentTimeFrameInMinutes = 5;
+        private int timeFrameInMinutes = 5;
+        private int numberOfDecimalDigits = 2;
         //-----------------------------------------------------------------------------------------------------------------
         public CandlesSource Candles
         {
@@ -35,27 +36,31 @@ namespace CandleChartExample
             InitializeComponent();
 
             freq = 0.3;
-            Candles = GenerateNewCandlesSource(500, freq, currentTimeFrameInMinutes);
+            Candles = GenerateNewCandlesSource(500);
 
             DataContext = this;
         }
         //-----------------------------------------------------------------------------------------------------------------
-        private CandlesSource GenerateNewCandlesSource(int candlesCount, double freq, int timeFrameInMinutes)
+        private CandlesSource GenerateNewCandlesSource(int candlesCount)
         {
             CandlesSource newCandles = new CandlesSource(timeFrameInMinutes);
 
             for (int i = 0; i < candlesCount; i++)
-                newCandles.Add(CalculateCandle(i, freq, timeFrameInMinutes));
+                newCandles.Add(CalculateCandle(i));
 
             return newCandles;
         }
         //-----------------------------------------------------------------------------------------------------------------
-        private Candle CalculateCandle(int i, double freq, int timeFrameInMinutes)
+        private Candle CalculateCandle(int i)
         {
+            double slope = 0.1;
+            double shiftY = 38650;
             DateTime t0 = new DateTime(2010, 10, 7, 10, 0, 0);
-            double p0 = Math.Round(Math.Sin(freq * i) + 0.1 * i, 3);
-            double p1 = Math.Round(Math.Sin(freq * i + 1) + 0.1 * i, 3);
-            return new Candle(t0.AddMinutes(i * timeFrameInMinutes), 100 + p0, 101 + p0, 99 + p0, 100 + p1, (i%3 == 0)?0:i);
+            double p0 = Math.Round(Math.Sin(freq * i) + slope * i, numberOfDecimalDigits);
+            double p1 = Math.Round(Math.Sin(freq * i + 1) + slope * i, numberOfDecimalDigits);
+            //double p0 = Math.Sin(freq * i) + slope * i;
+            //double p1 = Math.Sin(freq * i + 1) + slope * i;
+            return new Candle(t0.AddMinutes(i * timeFrameInMinutes), shiftY + p0, shiftY + 1 + p0, shiftY - 1 + p0, shiftY + p1, (i%3 == 0)?0:i);
         }
         //-----------------------------------------------------------------------------------------------------------------
         private void OnChangeLastCandle(object sender, RoutedEventArgs e)
@@ -78,42 +83,42 @@ namespace CandleChartExample
         private void OnAddNewCandle(object sender, RoutedEventArgs e)
         {
             int N = Candles.Count;
-            Candles.Add(CalculateCandle(N, freq, currentTimeFrameInMinutes));
+            Candles.Add(CalculateCandle(N));
         }
         //-----------------------------------------------------------------------------------------------------------------
         private void OnReplaceCandlesBySmallerOne(object sender, RoutedEventArgs e)
         {
-            currentTimeFrameInMinutes = 5;
+            timeFrameInMinutes = 5;
             freq = 0.8;
-            Candles = GenerateNewCandlesSource(30, freq, currentTimeFrameInMinutes);
+            Candles = GenerateNewCandlesSource(30);
         }
         //-----------------------------------------------------------------------------------------------------------------
         private void OnReplaceCandlesByBiggerOne(object sender, RoutedEventArgs e)
         {
-            currentTimeFrameInMinutes = 5;
+            timeFrameInMinutes = 5;
             freq = 0.8;
-            Candles = GenerateNewCandlesSource(800, freq, currentTimeFrameInMinutes);
+            Candles = GenerateNewCandlesSource(800);
         }
         //-----------------------------------------------------------------------------------------------------------------
         private void OnReplaceCandlesByEmptyOne(object sender, RoutedEventArgs e)
         {
-            currentTimeFrameInMinutes = 5;
+            timeFrameInMinutes = 5;
             freq = 0.8;
-            Candles = GenerateNewCandlesSource(0, freq, currentTimeFrameInMinutes);
+            Candles = GenerateNewCandlesSource(0);
         }
         //-----------------------------------------------------------------------------------------------------------------
         private void OnReplaceCandlesByDailyOne(object sender, RoutedEventArgs e)
         {
-            currentTimeFrameInMinutes = 1440;
+            timeFrameInMinutes = 1440;
             freq = 0.8;
-            Candles = GenerateNewCandlesSource(500, freq, currentTimeFrameInMinutes);
+            Candles = GenerateNewCandlesSource(500);
         }
         //-----------------------------------------------------------------------------------------------------------------
         private void OnReplaceCandlesByWeeklyOne(object sender, RoutedEventArgs e)
         {
-            currentTimeFrameInMinutes = 1440*7;
+            timeFrameInMinutes = 1440*7;
             freq = 0.8;
-            Candles = GenerateNewCandlesSource(500, freq, currentTimeFrameInMinutes);
+            Candles = GenerateNewCandlesSource(500);
         }
         //-----------------------------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------------------------
