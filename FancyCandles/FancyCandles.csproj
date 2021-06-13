@@ -84,6 +84,7 @@
     <Compile Include="SelectCandleSourceWindow.xaml.cs">
       <DependentUpon>SelectCandleSourceWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimeFrame.cs" />
     <Compile Include="TimeTick.cs" />
     <Compile Include="TimeTicksElement.cs" />
     <Compile Include="VolumeChartElement.cs" />

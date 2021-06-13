@@ -11,13 +11,13 @@ namespace CandleChartExample
 
     public class CandlesSource : ObservableCollection<ICandle>, ICandlesSource
     {
-        public CandlesSource(int timeFrameInMinutes)
+        public CandlesSource(TimeFrame timeFrame)
         {
-            this.timeFrameInMinutes = timeFrameInMinutes;
+            this.timeFrame = timeFrame;
         }
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
-        private readonly int timeFrameInMinutes;
-        public int TimeFrameInMinutes { get { return timeFrameInMinutes; } }
+        private readonly TimeFrame timeFrame;
+        public TimeFrame TimeFrame { get { return timeFrame; } }
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
     }
 
@@ -25,13 +25,13 @@ namespace CandleChartExample
     public class CandlesSource : ReadOnlyObservableCollection<ICandle>, ICandlesSource
     {
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
-        public CandlesSource(ObservableCollection<ICandle> list, int timeFrameInMinutes) : base(list)
+        public CandlesSource(ObservableCollection<ICandle> list, TimeFrame timeFrame) : base(list)
         {
-            this.timeFrameInMinutes = timeFrameInMinutes;
+            this.timeFrame = timeFrame;
         }
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
-        readonly int timeFrameInMinutes;
-        public int TimeFrameInMinutes { get { return timeFrameInMinutes; } }
+        readonly TimeFrame timeFrame;
+        public TimeFrame TimeFrame { get { return timeFrame; } }
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
     }*/
 }

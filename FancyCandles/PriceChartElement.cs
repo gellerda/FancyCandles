@@ -146,10 +146,10 @@ namespace FancyCandles
         }        
         //---------------------------------------------------------------------------------------------------------------------------------------
         public static readonly DependencyProperty CandlesSourceProperty
-            = DependencyProperty.Register("CandlesSource", typeof(IList<ICandle>), typeof(PriceChartElement), new UIPropertyMetadata(null));
-        public IList<ICandle> CandlesSource
+            = DependencyProperty.Register("CandlesSource", typeof(ICandlesSource), typeof(PriceChartElement), new UIPropertyMetadata(null));
+        public ICandlesSource CandlesSource
         {
-            get { return (IList<ICandle>)GetValue(CandlesSourceProperty); }
+            get { return (ICandlesSource)GetValue(CandlesSourceProperty); }
             set { SetValue(CandlesSourceProperty, value); }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -322,7 +322,8 @@ namespace FancyCandles
             string strL = MyNumberFormatting.PriceToString(cndl.L, priceNumberFormat, Culture, decimalSeparator, decimalSeparatorArray);
             string strC = MyNumberFormatting.PriceToString(cndl.C, priceNumberFormat, Culture, decimalSeparator, decimalSeparatorArray);
             string strV = MyNumberFormatting.VolumeToString(cndl.V, Culture, decimalSeparator, decimalSeparatorArray);
-            string tooltipText = $"{cndl.t.ToString("g", Culture)}\nO= {strO}\nH= {strH}\nL= {strL}\nC= {strC}\nV= {strV}";
+            string strT = cndl.t.ToString((CandlesSource.TimeFrame < 0) ? "G" : "g", Culture);
+            string tooltipText = $"{strT}\nO= {strO}\nH= {strH}\nL= {strL}\nC= {strC}\nV= {strV}";
             ((ToolTip)ToolTip).Content = tooltipText;
         }
         //---------------------------------------------------------------------------------------------------------------------------------------

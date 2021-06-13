@@ -303,7 +303,6 @@
                                 TimeAxisHeight="{Binding Path=TimeAxisHeight, Mode=OneWay}"
                                 CandlesSource="{Binding Path=CandlesSource, Mode=OneWay}"
                                 AxisTickColor="{Binding Path=AxisTickColor, Mode=OneWay}"
-                                TimeFrame="{Binding Path=CandlesSource.TimeFrameInMinutes, Mode=OneWay}"
                                 VisibleCandlesRange="{Binding Path=VisibleCandlesRange, Mode=OneWay}"
                                 IsGridlinesEnabled="{Binding Path=IsVerticalGridlinesEnabled, Mode=OneWay}"
                                 GridlinesPen="{Binding Path=VerticalGridlinesPen, Mode=OneWay}"

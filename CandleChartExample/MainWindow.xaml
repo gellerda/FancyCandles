@@ -7,12 +7,12 @@
         xmlns:fc="clr-namespace:FancyCandles;assembly=FancyCandles"
         xmlns:fci="clr-namespace:FancyCandles.Indicators;assembly=FancyCandles"        
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="MainWindow" Height="650" Width="800">
     <Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="200"/>
+            <RowDefinition Height="220"/>
         </Grid.RowDefinitions>
 
         <fc:CandleChart CandlesSource="{Binding Path=Candles}"
@@ -41,11 +41,12 @@
                 <Button Width="150" Margin="10 0 0 0" Click="OnAddNewCandle">Add New Candle</Button>
             </StackPanel>
 
-            <Button Width="280" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesBySmallerOne">Replace the Candle Collection by a Smaller One</Button>
-            <Button Width="280" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesByBiggerOne">Replace the Candle Collection by a Bigger One</Button>
-            <Button Width="280" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesByEmptyOne">Replace the Candle Collection by an Empty One</Button>
-            <Button Width="280" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesByDailyOne">Replace the Candle Collection by a Daily One</Button>
-            <Button Width="280" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesByWeeklyOne">Replace the Candle Collection by a Weekly One</Button>
+            <Button Width="300" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesBySmallerOne">Replace the Candle Collection by a Smaller M5 One</Button>
+            <Button Width="300" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesByBiggerOne">Replace the Candle Collection by a Bigger M5 One</Button>
+            <Button Width="300" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesByEmptyOne">Replace the Candle Collection by an Empty M5 One</Button>
+            <Button Width="300" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesByDailyOne">Replace the Candle Collection by a Daily One</Button>
+            <Button Width="300" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesByWeeklyOne">Replace the Candle Collection by a Weekly One</Button>
+            <Button Width="300" Margin="0 10 0 0" HorizontalAlignment="Left" Click="OnReplaceCandlesBy10SecondOne">Replace the Candle Collection by a 10-Second One</Button>
         </StackPanel>
 
     </Grid>

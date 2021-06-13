@@ -10,18 +10,18 @@ namespace FancyCandles
     public interface ICandlesSourceProvider
     {
         List<ISecurityInfo> SecCatalog { get; }
-        //ReadOnlyObservableCollection<ICandle> GetCandlesSource(int secCatalog_i, int timeFrameInMinutes);
-        CandlesSourceFromProvider GetCandlesSource(int secCatalog_i, int timeFrameInMinutes);
+        //ReadOnlyObservableCollection<ICandle> GetCandlesSource(int secCatalog_i, TimeFrame timeFrame);
+        CandlesSourceFromProvider GetCandlesSource(int secCatalog_i, TimeFrame timeFrame);
     }
     //*****************************************************************************************************************************************************************************
     public class CandlesSourceFromProvider : ReadOnlyObservableCollection<ICandle>, ICandlesSource
     {
         //---------------------------------------------------------------------------------------------------------------------------------------
-        public CandlesSourceFromProvider(ObservableCollection<ICandle> candlesSource, ICandlesSourceProvider parentProvider, int secCatalogIndex, int timeFrameInMinutes) : base(candlesSource)
+        public CandlesSourceFromProvider(ObservableCollection<ICandle> candlesSource, ICandlesSourceProvider parentProvider, int secCatalogIndex, TimeFrame timeFrame) : base(candlesSource)
         {
             this.parentProvider = parentProvider;
             this.secCatalogIndex = secCatalogIndex; 
-            this.timeFrameInMinutes = timeFrameInMinutes;
+            this.timeFrame = timeFrame;
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
         private readonly ICandlesSourceProvider parentProvider;
@@ -36,10 +36,10 @@ namespace FancyCandles
             get { return secCatalogIndex; }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
-        private readonly int timeFrameInMinutes;
-        public int TimeFrameInMinutes
+        private readonly TimeFrame timeFrame;
+        public TimeFrame TimeFrame
         {
-            get { return timeFrameInMinutes; }
+            get { return timeFrame; }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
     }

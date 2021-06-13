@@ -1900,15 +1900,15 @@ references:
   commentId: T:FancyCandles.CandlesSourceFromProvider
   fullName: FancyCandles.CandlesSourceFromProvider
   nameWithType: CandlesSourceFromProvider
-- uid: FancyCandles.CandlesSourceFromProvider.#ctor(System.Collections.ObjectModel.ObservableCollection{FancyCandles.ICandle},FancyCandles.ICandlesSourceProvider,System.Int32,System.Int32)
-  name: CandlesSourceFromProvider(ObservableCollection<ICandle>, ICandlesSourceProvider, Int32, Int32)
-  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider__ctor_System_Collections_ObjectModel_ObservableCollection_FancyCandles_ICandle__FancyCandles_ICandlesSourceProvider_System_Int32_System_Int32_
-  commentId: M:FancyCandles.CandlesSourceFromProvider.#ctor(System.Collections.ObjectModel.ObservableCollection{FancyCandles.ICandle},FancyCandles.ICandlesSourceProvider,System.Int32,System.Int32)
-  name.vb: CandlesSourceFromProvider(ObservableCollection(Of ICandle), ICandlesSourceProvider, Int32, Int32)
-  fullName: FancyCandles.CandlesSourceFromProvider.CandlesSourceFromProvider(System.Collections.ObjectModel.ObservableCollection<FancyCandles.ICandle>, FancyCandles.ICandlesSourceProvider, System.Int32, System.Int32)
-  fullName.vb: FancyCandles.CandlesSourceFromProvider.CandlesSourceFromProvider(System.Collections.ObjectModel.ObservableCollection(Of FancyCandles.ICandle), FancyCandles.ICandlesSourceProvider, System.Int32, System.Int32)
-  nameWithType: CandlesSourceFromProvider.CandlesSourceFromProvider(ObservableCollection<ICandle>, ICandlesSourceProvider, Int32, Int32)
-  nameWithType.vb: CandlesSourceFromProvider.CandlesSourceFromProvider(ObservableCollection(Of ICandle), ICandlesSourceProvider, Int32, Int32)
+- uid: FancyCandles.CandlesSourceFromProvider.#ctor(System.Collections.ObjectModel.ObservableCollection{FancyCandles.ICandle},FancyCandles.ICandlesSourceProvider,System.Int32,FancyCandles.TimeFrame)
+  name: CandlesSourceFromProvider(ObservableCollection<ICandle>, ICandlesSourceProvider, Int32, TimeFrame)
+  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider__ctor_System_Collections_ObjectModel_ObservableCollection_FancyCandles_ICandle__FancyCandles_ICandlesSourceProvider_System_Int32_FancyCandles_TimeFrame_
+  commentId: M:FancyCandles.CandlesSourceFromProvider.#ctor(System.Collections.ObjectModel.ObservableCollection{FancyCandles.ICandle},FancyCandles.ICandlesSourceProvider,System.Int32,FancyCandles.TimeFrame)
+  name.vb: CandlesSourceFromProvider(ObservableCollection(Of ICandle), ICandlesSourceProvider, Int32, TimeFrame)
+  fullName: FancyCandles.CandlesSourceFromProvider.CandlesSourceFromProvider(System.Collections.ObjectModel.ObservableCollection<FancyCandles.ICandle>, FancyCandles.ICandlesSourceProvider, System.Int32, FancyCandles.TimeFrame)
+  fullName.vb: FancyCandles.CandlesSourceFromProvider.CandlesSourceFromProvider(System.Collections.ObjectModel.ObservableCollection(Of FancyCandles.ICandle), FancyCandles.ICandlesSourceProvider, System.Int32, FancyCandles.TimeFrame)
+  nameWithType: CandlesSourceFromProvider.CandlesSourceFromProvider(ObservableCollection<ICandle>, ICandlesSourceProvider, Int32, TimeFrame)
+  nameWithType.vb: CandlesSourceFromProvider.CandlesSourceFromProvider(ObservableCollection(Of ICandle), ICandlesSourceProvider, Int32, TimeFrame)
 - uid: FancyCandles.CandlesSourceFromProvider.#ctor*
   name: CandlesSourceFromProvider
   href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider__ctor_
@@ -1942,19 +1942,19 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandlesSourceFromProvider.SecCatalogIndex
   nameWithType: CandlesSourceFromProvider.SecCatalogIndex
-- uid: FancyCandles.CandlesSourceFromProvider.TimeFrameInMinutes
-  name: TimeFrameInMinutes
-  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider_TimeFrameInMinutes
-  commentId: P:FancyCandles.CandlesSourceFromProvider.TimeFrameInMinutes
-  fullName: FancyCandles.CandlesSourceFromProvider.TimeFrameInMinutes
-  nameWithType: CandlesSourceFromProvider.TimeFrameInMinutes
-- uid: FancyCandles.CandlesSourceFromProvider.TimeFrameInMinutes*
-  name: TimeFrameInMinutes
-  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider_TimeFrameInMinutes_
-  commentId: Overload:FancyCandles.CandlesSourceFromProvider.TimeFrameInMinutes
+- uid: FancyCandles.CandlesSourceFromProvider.TimeFrame
+  name: TimeFrame
+  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider_TimeFrame
+  commentId: P:FancyCandles.CandlesSourceFromProvider.TimeFrame
+  fullName: FancyCandles.CandlesSourceFromProvider.TimeFrame
+  nameWithType: CandlesSourceFromProvider.TimeFrame
+- uid: FancyCandles.CandlesSourceFromProvider.TimeFrame*
+  name: TimeFrame
+  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider_TimeFrame_
+  commentId: Overload:FancyCandles.CandlesSourceFromProvider.TimeFrame
   isSpec: "True"
-  fullName: FancyCandles.CandlesSourceFromProvider.TimeFrameInMinutes
-  nameWithType: CandlesSourceFromProvider.TimeFrameInMinutes
+  fullName: FancyCandles.CandlesSourceFromProvider.TimeFrame
+  nameWithType: CandlesSourceFromProvider.TimeFrame
 - uid: FancyCandles.ICandle
   name: ICandle
   href: api/FancyCandles.ICandle.html
@@ -2045,31 +2045,31 @@ references:
   commentId: T:FancyCandles.ICandlesSource
   fullName: FancyCandles.ICandlesSource
   nameWithType: ICandlesSource
-- uid: FancyCandles.ICandlesSource.TimeFrameInMinutes
-  name: TimeFrameInMinutes
-  href: api/FancyCandles.ICandlesSource.html#FancyCandles_ICandlesSource_TimeFrameInMinutes
-  commentId: P:FancyCandles.ICandlesSource.TimeFrameInMinutes
-  fullName: FancyCandles.ICandlesSource.TimeFrameInMinutes
-  nameWithType: ICandlesSource.TimeFrameInMinutes
-- uid: FancyCandles.ICandlesSource.TimeFrameInMinutes*
-  name: TimeFrameInMinutes
-  href: api/FancyCandles.ICandlesSource.html#FancyCandles_ICandlesSource_TimeFrameInMinutes_
-  commentId: Overload:FancyCandles.ICandlesSource.TimeFrameInMinutes
+- uid: FancyCandles.ICandlesSource.TimeFrame
+  name: TimeFrame
+  href: api/FancyCandles.ICandlesSource.html#FancyCandles_ICandlesSource_TimeFrame
+  commentId: P:FancyCandles.ICandlesSource.TimeFrame
+  fullName: FancyCandles.ICandlesSource.TimeFrame
+  nameWithType: ICandlesSource.TimeFrame
+- uid: FancyCandles.ICandlesSource.TimeFrame*
+  name: TimeFrame
+  href: api/FancyCandles.ICandlesSource.html#FancyCandles_ICandlesSource_TimeFrame_
+  commentId: Overload:FancyCandles.ICandlesSource.TimeFrame
   isSpec: "True"
-  fullName: FancyCandles.ICandlesSource.TimeFrameInMinutes
-  nameWithType: ICandlesSource.TimeFrameInMinutes
+  fullName: FancyCandles.ICandlesSource.TimeFrame
+  nameWithType: ICandlesSource.TimeFrame
 - uid: FancyCandles.ICandlesSourceProvider
   name: ICandlesSourceProvider
   href: api/FancyCandles.ICandlesSourceProvider.html
   commentId: T:FancyCandles.ICandlesSourceProvider
   fullName: FancyCandles.ICandlesSourceProvider
   nameWithType: ICandlesSourceProvider
-- uid: FancyCandles.ICandlesSourceProvider.GetCandlesSource(System.Int32,System.Int32)
-  name: GetCandlesSource(Int32, Int32)
-  href: api/FancyCandles.ICandlesSourceProvider.html#FancyCandles_ICandlesSourceProvider_GetCandlesSource_System_Int32_System_Int32_
-  commentId: M:FancyCandles.ICandlesSourceProvider.GetCandlesSource(System.Int32,System.Int32)
-  fullName: FancyCandles.ICandlesSourceProvider.GetCandlesSource(System.Int32, System.Int32)
-  nameWithType: ICandlesSourceProvider.GetCandlesSource(Int32, Int32)
+- uid: FancyCandles.ICandlesSourceProvider.GetCandlesSource(System.Int32,FancyCandles.TimeFrame)
+  name: GetCandlesSource(Int32, TimeFrame)
+  href: api/FancyCandles.ICandlesSourceProvider.html#FancyCandles_ICandlesSourceProvider_GetCandlesSource_System_Int32_FancyCandles_TimeFrame_
+  commentId: M:FancyCandles.ICandlesSourceProvider.GetCandlesSource(System.Int32,FancyCandles.TimeFrame)
+  fullName: FancyCandles.ICandlesSourceProvider.GetCandlesSource(System.Int32, FancyCandles.TimeFrame)
+  nameWithType: ICandlesSourceProvider.GetCandlesSource(Int32, TimeFrame)
 - uid: FancyCandles.ICandlesSourceProvider.GetCandlesSource*
   name: GetCandlesSource
   href: api/FancyCandles.ICandlesSourceProvider.html#FancyCandles_ICandlesSourceProvider_GetCandlesSource_
@@ -2802,3 +2802,166 @@ references:
   commentId: F:FancyCandles.SecurityTypes.Undefined
   fullName: FancyCandles.SecurityTypes.Undefined
   nameWithType: SecurityTypes.Undefined
+- uid: FancyCandles.TimeFrame
+  name: TimeFrame
+  href: api/FancyCandles.TimeFrame.html
+  commentId: T:FancyCandles.TimeFrame
+  fullName: FancyCandles.TimeFrame
+  nameWithType: TimeFrame
+- uid: FancyCandles.TimeFrame.Daily
+  name: Daily
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_Daily
+  commentId: F:FancyCandles.TimeFrame.Daily
+  fullName: FancyCandles.TimeFrame.Daily
+  nameWithType: TimeFrame.Daily
+- uid: FancyCandles.TimeFrame.H1
+  name: H1
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_H1
+  commentId: F:FancyCandles.TimeFrame.H1
+  fullName: FancyCandles.TimeFrame.H1
+  nameWithType: TimeFrame.H1
+- uid: FancyCandles.TimeFrame.H2
+  name: H2
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_H2
+  commentId: F:FancyCandles.TimeFrame.H2
+  fullName: FancyCandles.TimeFrame.H2
+  nameWithType: TimeFrame.H2
+- uid: FancyCandles.TimeFrame.H3
+  name: H3
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_H3
+  commentId: F:FancyCandles.TimeFrame.H3
+  fullName: FancyCandles.TimeFrame.H3
+  nameWithType: TimeFrame.H3
+- uid: FancyCandles.TimeFrame.H4
+  name: H4
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_H4
+  commentId: F:FancyCandles.TimeFrame.H4
+  fullName: FancyCandles.TimeFrame.H4
+  nameWithType: TimeFrame.H4
+- uid: FancyCandles.TimeFrame.M1
+  name: M1
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_M1
+  commentId: F:FancyCandles.TimeFrame.M1
+  fullName: FancyCandles.TimeFrame.M1
+  nameWithType: TimeFrame.M1
+- uid: FancyCandles.TimeFrame.M10
+  name: M10
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_M10
+  commentId: F:FancyCandles.TimeFrame.M10
+  fullName: FancyCandles.TimeFrame.M10
+  nameWithType: TimeFrame.M10
+- uid: FancyCandles.TimeFrame.M15
+  name: M15
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_M15
+  commentId: F:FancyCandles.TimeFrame.M15
+  fullName: FancyCandles.TimeFrame.M15
+  nameWithType: TimeFrame.M15
+- uid: FancyCandles.TimeFrame.M2
+  name: M2
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_M2
+  commentId: F:FancyCandles.TimeFrame.M2
+  fullName: FancyCandles.TimeFrame.M2
+  nameWithType: TimeFrame.M2
+- uid: FancyCandles.TimeFrame.M20
+  name: M20
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_M20
+  commentId: F:FancyCandles.TimeFrame.M20
+  fullName: FancyCandles.TimeFrame.M20
+  nameWithType: TimeFrame.M20
+- uid: FancyCandles.TimeFrame.M3
+  name: M3
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_M3
+  commentId: F:FancyCandles.TimeFrame.M3
+  fullName: FancyCandles.TimeFrame.M3
+  nameWithType: TimeFrame.M3
+- uid: FancyCandles.TimeFrame.M30
+  name: M30
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_M30
+  commentId: F:FancyCandles.TimeFrame.M30
+  fullName: FancyCandles.TimeFrame.M30
+  nameWithType: TimeFrame.M30
+- uid: FancyCandles.TimeFrame.M5
+  name: M5
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_M5
+  commentId: F:FancyCandles.TimeFrame.M5
+  fullName: FancyCandles.TimeFrame.M5
+  nameWithType: TimeFrame.M5
+- uid: FancyCandles.TimeFrame.Monthly
+  name: Monthly
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_Monthly
+  commentId: F:FancyCandles.TimeFrame.Monthly
+  fullName: FancyCandles.TimeFrame.Monthly
+  nameWithType: TimeFrame.Monthly
+- uid: FancyCandles.TimeFrame.S1
+  name: S1
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_S1
+  commentId: F:FancyCandles.TimeFrame.S1
+  fullName: FancyCandles.TimeFrame.S1
+  nameWithType: TimeFrame.S1
+- uid: FancyCandles.TimeFrame.S10
+  name: S10
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_S10
+  commentId: F:FancyCandles.TimeFrame.S10
+  fullName: FancyCandles.TimeFrame.S10
+  nameWithType: TimeFrame.S10
+- uid: FancyCandles.TimeFrame.S15
+  name: S15
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_S15
+  commentId: F:FancyCandles.TimeFrame.S15
+  fullName: FancyCandles.TimeFrame.S15
+  nameWithType: TimeFrame.S15
+- uid: FancyCandles.TimeFrame.S2
+  name: S2
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_S2
+  commentId: F:FancyCandles.TimeFrame.S2
+  fullName: FancyCandles.TimeFrame.S2
+  nameWithType: TimeFrame.S2
+- uid: FancyCandles.TimeFrame.S20
+  name: S20
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_S20
+  commentId: F:FancyCandles.TimeFrame.S20
+  fullName: FancyCandles.TimeFrame.S20
+  nameWithType: TimeFrame.S20
+- uid: FancyCandles.TimeFrame.S3
+  name: S3
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_S3
+  commentId: F:FancyCandles.TimeFrame.S3
+  fullName: FancyCandles.TimeFrame.S3
+  nameWithType: TimeFrame.S3
+- uid: FancyCandles.TimeFrame.S30
+  name: S30
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_S30
+  commentId: F:FancyCandles.TimeFrame.S30
+  fullName: FancyCandles.TimeFrame.S30
+  nameWithType: TimeFrame.S30
+- uid: FancyCandles.TimeFrame.S5
+  name: S5
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_S5
+  commentId: F:FancyCandles.TimeFrame.S5
+  fullName: FancyCandles.TimeFrame.S5
+  nameWithType: TimeFrame.S5
+- uid: FancyCandles.TimeFrame.Weekly
+  name: Weekly
+  href: api/FancyCandles.TimeFrame.html#FancyCandles_TimeFrame_Weekly
+  commentId: F:FancyCandles.TimeFrame.Weekly
+  fullName: FancyCandles.TimeFrame.Weekly
+  nameWithType: TimeFrame.Weekly
+- uid: FancyCandles.TimeFrameExtensionMethods
+  name: TimeFrameExtensionMethods
+  href: api/FancyCandles.TimeFrameExtensionMethods.html
+  commentId: T:FancyCandles.TimeFrameExtensionMethods
+  fullName: FancyCandles.TimeFrameExtensionMethods
+  nameWithType: TimeFrameExtensionMethods
+- uid: FancyCandles.TimeFrameExtensionMethods.ToMinutes(FancyCandles.TimeFrame)
+  name: ToMinutes(TimeFrame)
+  href: api/FancyCandles.TimeFrameExtensionMethods.html#FancyCandles_TimeFrameExtensionMethods_ToMinutes_FancyCandles_TimeFrame_
+  commentId: M:FancyCandles.TimeFrameExtensionMethods.ToMinutes(FancyCandles.TimeFrame)
+  fullName: FancyCandles.TimeFrameExtensionMethods.ToMinutes(FancyCandles.TimeFrame)
+  nameWithType: TimeFrameExtensionMethods.ToMinutes(TimeFrame)
+- uid: FancyCandles.TimeFrameExtensionMethods.ToMinutes*
+  name: ToMinutes
+  href: api/FancyCandles.TimeFrameExtensionMethods.html#FancyCandles_TimeFrameExtensionMethods_ToMinutes_
+  commentId: Overload:FancyCandles.TimeFrameExtensionMethods.ToMinutes
+  isSpec: "True"
+  fullName: FancyCandles.TimeFrameExtensionMethods.ToMinutes
+  nameWithType: TimeFrameExtensionMethods.ToMinutes

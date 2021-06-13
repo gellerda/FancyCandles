@@ -89,7 +89,7 @@ namespace FancyCandles
             ICandlesSourceProvider candleProvider = parentCandleChart.CandleProvider;
 
             int secCatalog_i = candleProvider.SecCatalog.IndexOf(secList.SelectedItem as ISecurityInfo);
-            ICandlesSource newCandleSource = candleProvider.GetCandlesSource(secCatalog_i, parentCandleChart.CandlesSource.TimeFrameInMinutes);
+            ICandlesSource newCandleSource = candleProvider.GetCandlesSource(secCatalog_i, parentCandleChart.CandlesSource.TimeFrame);
             parentCandleChart.CandlesSource = newCandleSource;
 
             DialogResult = true;

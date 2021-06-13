@@ -62,10 +62,10 @@ namespace FancyCandles
             DependencyProperty.Register("Culture", typeof(CultureInfo), typeof(VolumeChartElement), new FrameworkPropertyMetadata(CultureInfo.CurrentCulture) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
         public static readonly DependencyProperty CandlesSourceProperty
-             = DependencyProperty.Register("CandlesSource", typeof(IList<ICandle>), typeof(VolumeChartElement), new FrameworkPropertyMetadata(null));
-        public IList<ICandle> CandlesSource
+             = DependencyProperty.Register("CandlesSource", typeof(ICandlesSource), typeof(VolumeChartElement), new FrameworkPropertyMetadata(null));
+        public ICandlesSource CandlesSource
         {
-            get { return (IList<ICandle>)GetValue(CandlesSourceProperty); }
+            get { return (ICandlesSource)GetValue(CandlesSourceProperty); }
             set { SetValue(CandlesSourceProperty, value); }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -188,7 +188,8 @@ namespace FancyCandles
             //Vector uv = new Vector(mousePos.X/ RenderSize.Width, mousePos.Y / RenderSize.Height);
             int cndl_i = VisibleCandlesRange.Start_i + (int)(mousePos.X / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap));
             ICandle cndl = CandlesSource[cndl_i];
-            string tooltipText = $"{cndl.t.ToString("g", Culture)}\nV= {MyNumberFormatting.VolumeToString(cndl.V, Culture, decimalSeparator, decimalSeparatorArray)}";
+            string strT = cndl.t.ToString((CandlesSource.TimeFrame < 0) ? "G" : "g", Culture);
+            string tooltipText = $"{strT}\nV= {MyNumberFormatting.VolumeToString(cndl.V, Culture, decimalSeparator, decimalSeparatorArray)}";
             ((ToolTip)ToolTip).Content = tooltipText;
         }
         //---------------------------------------------------------------------------------------------------------------------------------------

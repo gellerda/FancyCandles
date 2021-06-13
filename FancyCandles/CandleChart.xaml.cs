@@ -1906,11 +1906,11 @@ namespace FancyCandles
         private DiscreteRandomVariableSample numberOfFractionalDigitsSample;
         private readonly int numberOfObservationsToStopRecalculatingNumberOfFractionalDigits = 500;
 
-        /// <summary>Gets or sets the data source for the candles of this chart.</summary>
+        ///<summary>Gets or sets the data source for the candles of this chart.</summary>
         ///<value>The data source for the candles of this chart. The default value is null.</value>
         ///<remarks>
         ///<para>Note that the timeframe is an immutable characteristic of a candle collection. 
-        ///Therefore <see cref="ICandlesSource.TimeFrameInMinutes"/> is the readonly property of the <see cref="ICandlesSource"/> interface.
+        ///Therefore <see cref="ICandlesSource.TimeFrame"/> is the readonly property of the <see cref="ICandlesSource"/> interface.
         ///The only way to change the timeframe of your <see cref="CandleChart"/> is to change the value of the <see cref="CandlesSource"/> property 
         ///to a whole new candle collection with a new timeframe.</para>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
@@ -2203,14 +2203,14 @@ namespace FancyCandles
                 return;
 
             ICandle cndl = CandlesSource[VisibleCandlesRange.Count / 2];
-            if (visibleCandlesRangeCenter < cndl.t) //MyDateAndTime.YYMMDDHHMM_to_Datetime(cndl.YYMMDD, cndl.HHMM))
+            if (visibleCandlesRangeCenter < cndl.t) 
             {
                 VisibleCandlesRange = new IntRange(0, VisibleCandlesRange.Count);
                 return;
             }
 
             cndl = CandlesSource[CandlesSource.Count - 1 - VisibleCandlesRange.Count / 2];
-            if (visibleCandlesRangeCenter > cndl.t) // MyDateAndTime.YYMMDDHHMM_to_Datetime(cndl.YYMMDD, cndl.HHMM))
+            if (visibleCandlesRangeCenter > cndl.t) 
             {
                 VisibleCandlesRange = new IntRange(CandlesSource.Count - VisibleCandlesRange.Count, VisibleCandlesRange.Count);
                 return;

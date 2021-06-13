@@ -87,15 +87,6 @@ namespace FancyCandles
             = DependencyProperty.Register("IsGridlinesEnabled", typeof(bool), typeof(TimeTicksElement),
                 new FrameworkPropertyMetadata(true) { AffectsRender = true });
         //---------------------------------------------------------------------------------------------------------------------------------------
-        public int TimeFrame
-        {
-            get { return (int)GetValue(TimeFrameProperty); }
-            set { SetValue(TimeFrameProperty, value); }
-        }
-        public static readonly DependencyProperty TimeFrameProperty
-            = DependencyProperty.Register("TimeFrame", typeof(int), typeof(TimeTicksElement),
-                new FrameworkPropertyMetadata(0) { AffectsRender = true });
-        //---------------------------------------------------------------------------------------------------------------------------------------
         private Pen axisTickPen;
 
         public Brush AxisTickColor
@@ -210,12 +201,12 @@ namespace FancyCandles
             thisElement.ReCalc_TimeTicksTimeFrame();
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
-        public IList<ICandle> CandlesSource
+        public ICandlesSource CandlesSource
         {
-            get { return (IList<ICandle>)GetValue(CandlesSourceProperty); }
+            get { return (ICandlesSource)GetValue(CandlesSourceProperty); }
             set { SetValue(CandlesSourceProperty, value); }
         }
-        public static readonly DependencyProperty CandlesSourceProperty = DependencyProperty.Register("CandlesSource", typeof(IList<ICandle>), typeof(TimeTicksElement), 
+        public static readonly DependencyProperty CandlesSourceProperty = DependencyProperty.Register("CandlesSource", typeof(ICandlesSource), typeof(TimeTicksElement), 
                                                                             new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnCandlesSourceChanged)) { AffectsRender = true });
 
         private static void OnCandlesSourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
@@ -224,27 +215,27 @@ namespace FancyCandles
             thisElement.ReCalc_TimeTicksTimeFrame();
         }
         //----------------------------------------------------------------------------------------------------------------------------------
-        // Таймфрейм в минутах, с которым отображаются метки на оси времени. Совпадает с одним из общепринятых таймфреймов - М5, М10, М15, М20, М30 и т.д.
+        // Таймфрейм в минутах, с которым отображаются метки на оси времени. Совпадает с одним из общепринятых таймфреймов - M1, М5, М10, М15, М20, М30 и т.д.
         // Таймфрейм меток часто меняется и никак не связан с таймфреймом свечей.
         int TimeTicksTimeFrame;
 
         void ReCalc_TimeTicksTimeFrame()
         {
-            if (TimeFrame == 0 || CandleWidthAndGap.Width == 0.0 || TickLabelFontSize == 0.0) return;
+            if (CandlesSource == null || CandlesSource.TimeFrame == 0 || CandleWidthAndGap.Width == 0.0 || TickLabelFontSize == 0.0) return;
 
-            double minutesCoveredByOneTimeTickLabel = threeCharTickLabelWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap) * TimeFrame;
+            double minutesCoveredByOneTimeTickLabel = threeCharTickLabelWidth / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap) * CandlesSource.TimeFrame.ToMinutes();
             TimeTicksTimeFrame = MyDateAndTime.CeilMinutesToConventionalTimeFrame(minutesCoveredByOneTimeTickLabel);
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
         protected override void OnRender(DrawingContext drawingContext)
         {
-            if (CandlesSource == null || VisibleCandlesRange == IntRange.Undefined || TimeFrame == 0 || TimeTicksTimeFrame == 0) return;
+            if (CandlesSource == null || VisibleCandlesRange == IntRange.Undefined || (int)CandlesSource.TimeFrame == 0 || TimeTicksTimeFrame == 0) return;
 
             double halfTimePanelHeight = TimeAxisHeight / 2.0;
             double topTimePanelY = RenderSize.Height - TimeAxisHeight;
             double centerTimePanelY = RenderSize.Height - TimeAxisHeight / 2.0;
 
-            if (TimeFrame < 60)
+            if ((int)CandlesSource.TimeFrame < 30.0)
                 OnRender_TimeAndDay(drawingContext, axisTickPen);
             else
                 OnRender_DayAndMonth(drawingContext, axisTickPen);
@@ -295,7 +286,7 @@ namespace FancyCandles
             for (int i = VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - 1; i >= VisibleCandlesRange.Start_i; i--)
             {
                 ICandle cndl = CandlesSource[i];
-                ICandle prev_cndl = i > 0 ? CandlesSource[i - 1] : CandlesSource[0];
+                ICandle prev_cndl = i > 0 ? CandlesSource[i - 1] : cndl;
 
                 // Если cndl - это начало нового дня:
                 if (i > 0 && cndl.t.Date != prev_cndl.t.Date)
@@ -335,7 +326,7 @@ namespace FancyCandles
                 }
 
                 // Если cndl - это начало нового часа:
-                if (MyDateAndTime.IsTimeMultipleOf(cndl.t, 60) || (i > 0 && !MyDateAndTime.IsInSameHour(cndl.t, prev_cndl.t)))
+                if ( (MyDateAndTime.IsMinutesMultipleOf(cndl.t, 60) && cndl.t.Second == 0) || !MyDateAndTime.IsInSameHour(cndl.t, prev_cndl.t))
                 {
                     if ((time_csi - i) >= timeLabelWidthInCandles)
                     {
@@ -350,7 +341,7 @@ namespace FancyCandles
                     }
                 }
                 // Если cndl внутри часа:
-                else if (MyDateAndTime.IsTimeMultipleOf(cndl.t, TimeTicksTimeFrame))
+                else if (MyDateAndTime.IsMinutesMultipleOf(cndl.t, TimeTicksTimeFrame) && (cndl.t.Second==0 || cndl.t.Minute!=prev_cndl.t.Minute))
                 {
                     if (time_csi == -1)
                     {
@@ -378,11 +369,10 @@ namespace FancyCandles
             int month_csi = -1;
             bool isMonthStart = false, isYearStart = false;
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            double markLineHeight = RenderSize.Height / 8.0;
-            double halfRenderSizeHeight = RenderSize.Height / 2.0;
             double topTimePanelY = RenderSize.Height - TimeAxisHeight;
             double centerTimePanelY = RenderSize.Height - TimeAxisHeight / 2.0;
             double smallMarkLineY = topTimePanelY + TimeAxisHeight / 8.0;
+            int tf = (int)CandlesSource.TimeFrame;
 
             void DrawDayTick()
             {
@@ -394,7 +384,7 @@ namespace FancyCandles
                 if (GridlinesPen != null)
                 {
                     // Если таймфрейм Daily и более. Младшими считаются линии для дней внутри месяца.
-                    if (TimeFrame > 1000)
+                    if (tf > 1000)
                     {
                         if (!HideMinorGridlines || isMonthStart)
                             drawingContext.DrawLine(GridlinesPen, new Point(x, 0), new Point(x, topTimePanelY));

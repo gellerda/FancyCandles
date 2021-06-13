@@ -20,7 +20,7 @@ namespace CandleChartExample
     public partial class MainWindow : Window
     {
         private double freq;
-        private int timeFrameInMinutes = 5;
+        private TimeFrame timeFrame = TimeFrame.M5;
         private int numberOfDecimalDigits = 2;
         //-----------------------------------------------------------------------------------------------------------------
         public CandlesSource Candles
@@ -43,7 +43,7 @@ namespace CandleChartExample
         //-----------------------------------------------------------------------------------------------------------------
         private CandlesSource GenerateNewCandlesSource(int candlesCount)
         {
-            CandlesSource newCandles = new CandlesSource(timeFrameInMinutes);
+            CandlesSource newCandles = new CandlesSource(timeFrame);
 
             for (int i = 0; i < candlesCount; i++)
                 newCandles.Add(CalculateCandle(i));
@@ -58,9 +58,8 @@ namespace CandleChartExample
             DateTime t0 = new DateTime(2010, 10, 7, 10, 0, 0);
             double p0 = Math.Round(Math.Sin(freq * i) + slope * i, numberOfDecimalDigits);
             double p1 = Math.Round(Math.Sin(freq * i + 1) + slope * i, numberOfDecimalDigits);
-            //double p0 = Math.Sin(freq * i) + slope * i;
-            //double p1 = Math.Sin(freq * i + 1) + slope * i;
-            return new Candle(t0.AddMinutes(i * timeFrameInMinutes), shiftY + p0, shiftY + 1 + p0, shiftY - 1 + p0, shiftY + p1, (i%3 == 0)?0:i);
+            DateTime t = (timeFrame>=0) ? t0.AddMinutes((int)timeFrame * i) : t0.AddSeconds(-(int)timeFrame * i);
+            return new Candle(t, shiftY + p0, shiftY + 1 + p0, shiftY - 1 + p0, shiftY + p1, (i%3 == 0)?0:i);
         }
         //-----------------------------------------------------------------------------------------------------------------
         private void OnChangeLastCandle(object sender, RoutedEventArgs e)
@@ -88,35 +87,42 @@ namespace CandleChartExample
         //-----------------------------------------------------------------------------------------------------------------
         private void OnReplaceCandlesBySmallerOne(object sender, RoutedEventArgs e)
         {
-            timeFrameInMinutes = 5;
+            timeFrame = TimeFrame.M5;
             freq = 0.8;
             Candles = GenerateNewCandlesSource(30);
         }
         //-----------------------------------------------------------------------------------------------------------------
         private void OnReplaceCandlesByBiggerOne(object sender, RoutedEventArgs e)
         {
-            timeFrameInMinutes = 5;
+            timeFrame = TimeFrame.M5;
             freq = 0.8;
             Candles = GenerateNewCandlesSource(800);
         }
         //-----------------------------------------------------------------------------------------------------------------
         private void OnReplaceCandlesByEmptyOne(object sender, RoutedEventArgs e)
         {
-            timeFrameInMinutes = 5;
+            timeFrame = TimeFrame.M5;
             freq = 0.8;
             Candles = GenerateNewCandlesSource(0);
         }
         //-----------------------------------------------------------------------------------------------------------------
         private void OnReplaceCandlesByDailyOne(object sender, RoutedEventArgs e)
         {
-            timeFrameInMinutes = 1440;
+            timeFrame = TimeFrame.Daily;
             freq = 0.8;
             Candles = GenerateNewCandlesSource(500);
         }
         //-----------------------------------------------------------------------------------------------------------------
         private void OnReplaceCandlesByWeeklyOne(object sender, RoutedEventArgs e)
         {
-            timeFrameInMinutes = 1440*7;
+            timeFrame = TimeFrame.Weekly;
+            freq = 0.8;
+            Candles = GenerateNewCandlesSource(500);
+        }
+        //-----------------------------------------------------------------------------------------------------------------
+        private void OnReplaceCandlesBy10SecondOne(object sender, RoutedEventArgs e)
+        {
+            timeFrame = TimeFrame.S10;
             freq = 0.8;
             Candles = GenerateNewCandlesSource(500);
         }
