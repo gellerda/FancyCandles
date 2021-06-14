@@ -82,6 +82,7 @@
 
         <!-- Обертка для ItemsControl нужна для определения размеров. -->
         <Grid x:Name="priceChartContainer" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+              ClipToBounds="True"
               Style="{StaticResource rowSpanPriceChartIfVolumeDisabled}"
               SizeChanged="OnPanelCandlesContainerSizeChanged" MouseWheel="OnMouseWheel" MouseMove="OnMouseMoveInsidePriceChartContainer" Panel.ZIndex="2">
 
@@ -108,7 +109,7 @@
                 BearishCandleFill="{Binding ElementName=thisUserControl, Path=BearishCandleFill, Mode=OneWay}" 
                 BullishCandleStroke="{Binding ElementName=thisUserControl, Path=BullishCandleStroke, Mode=OneWay}"
                 BearishCandleStroke="{Binding ElementName=thisUserControl, Path=BearishCandleStroke, Mode=OneWay}" 
-                ToolTipService.PlacementTarget="{Binding ElementName=priceChartContainer, Path=., Mode=OneWay}"
+                ToolTipService.PlacementTarget="{Binding ElementName=priceChartContainer}"
                 ToolTipService.Placement="Relative"
                 RenderOptions.EdgeMode="Aliased" RenderOptions.BitmapScalingMode="NearestNeighbor">
 
