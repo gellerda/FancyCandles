@@ -59,6 +59,14 @@ namespace FancyCandles
             }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
+        public int MaxNumberOfFractionalDigitsInPrice
+        {
+            get { return (int)GetValue(MaxNumberOfFractionalDigitsInPriceProperty); }
+            set { SetValue(MaxNumberOfFractionalDigitsInPriceProperty, value); }
+        }
+        public static readonly DependencyProperty MaxNumberOfFractionalDigitsInPriceProperty =
+            DependencyProperty.Register("MaxNumberOfFractionalDigitsInPrice", typeof(int), typeof(PriceChartElement), new FrameworkPropertyMetadata(0));
+        //---------------------------------------------------------------------------------------------------------------------------------------
         public CultureInfo Culture
         {
             get { return (CultureInfo)GetValue(CultureProperty); }
@@ -138,10 +146,10 @@ namespace FancyCandles
         }        
         //---------------------------------------------------------------------------------------------------------------------------------------
         public static readonly DependencyProperty CandlesSourceProperty
-            = DependencyProperty.Register("CandlesSource", typeof(IList<ICandle>), typeof(PriceChartElement), new UIPropertyMetadata(null));
-        public IList<ICandle> CandlesSource
+            = DependencyProperty.Register("CandlesSource", typeof(ICandlesSource), typeof(PriceChartElement), new UIPropertyMetadata(null));
+        public ICandlesSource CandlesSource
         {
-            get { return (IList<ICandle>)GetValue(CandlesSourceProperty); }
+            get { return (ICandlesSource)GetValue(CandlesSourceProperty); }
             set { SetValue(CandlesSourceProperty, value); }
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -303,12 +311,19 @@ namespace FancyCandles
         {
             string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
             char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
+            string priceNumberFormat = $"N{MaxNumberOfFractionalDigitsInPrice}";
 
             Point mousePos = e.GetPosition(this);
             //Vector uv = new Vector(mousePos.X/ RenderSize.Width, mousePos.Y / RenderSize.Height);
             int cndl_i = VisibleCandlesRange.Start_i + (int)(mousePos.X / (CandleWidthAndGap.Width + CandleWidthAndGap.Gap));
             ICandle cndl = CandlesSource[cndl_i];
-            string tooltipText = $"{cndl.t.ToString("g", Culture)}\nO= {cndl.O.PriceToString(Culture, decimalSeparator, decimalSeparatorArray)}\nH= {cndl.H.PriceToString(Culture, decimalSeparator, decimalSeparatorArray)}\nL= {cndl.L.PriceToString(Culture, decimalSeparator, decimalSeparatorArray)}\nC= {cndl.C.PriceToString(Culture, decimalSeparator, decimalSeparatorArray)}\nV= {cndl.V.VolumeToString(Culture, decimalSeparator, decimalSeparatorArray)}";
+            string strO = MyNumberFormatting.PriceToString(cndl.O, priceNumberFormat, Culture, decimalSeparator, decimalSeparatorArray);
+            string strH = MyNumberFormatting.PriceToString(cndl.H, priceNumberFormat, Culture, decimalSeparator, decimalSeparatorArray);
+            string strL = MyNumberFormatting.PriceToString(cndl.L, priceNumberFormat, Culture, decimalSeparator, decimalSeparatorArray);
+            string strC = MyNumberFormatting.PriceToString(cndl.C, priceNumberFormat, Culture, decimalSeparator, decimalSeparatorArray);
+            string strV = MyNumberFormatting.VolumeToString(cndl.V, Culture, decimalSeparator, decimalSeparatorArray);
+            string strT = cndl.t.ToString((CandlesSource.TimeFrame < 0) ? "G" : "g", Culture);
+            string tooltipText = $"{strT}\nO= {strO}\nH= {strH}\nL= {strL}\nC= {strC}\nV= {strV}";
             ((ToolTip)ToolTip).Content = tooltipText;
         }
         //---------------------------------------------------------------------------------------------------------------------------------------

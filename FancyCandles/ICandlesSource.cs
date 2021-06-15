@@ -24,8 +24,8 @@ namespace FancyCandles
     ///<seealso cref = "ICandle">Interface ICandle</seealso>
     public interface ICandlesSource : IList<ICandle> 
     {
-        ///<summary>Gets the timeframe (in minutes) of the candle collection.</summary>
-        ///<value>The timeframe (in minutes) of the candle collection.</value>
-        int TimeFrameInMinutes { get; }
+        ///<summary>Gets the time frame of the candle collection.</summary>
+        ///<value>The time frame of the candle collection.</value>
+        TimeFrame TimeFrame { get; }
     }
 }

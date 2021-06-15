@@ -73,6 +73,7 @@
     <Compile Include="MyDateAndTime.cs" />
     <Compile Include="MyNumberFormatting.cs" />
     <Compile Include="MyWpfMath.cs" />
+    <Compile Include="DiscreteRandomVariableSample.cs" />
     <Compile Include="PriceChartElement.cs" />
     <Compile Include="Indicators\OverlayIndicator.cs" />
     <Compile Include="CandleChartPropertiesWindow.xaml.cs">
@@ -82,6 +83,7 @@
     <Compile Include="SelectCandleSourceWindow.xaml.cs">
       <DependentUpon>SelectCandleSourceWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimeFrame.cs" />
     <Compile Include="TimeTick.cs" />
     <Compile Include="TimeTicksElement.cs" />
     <Compile Include="VolumeChartElement.cs" />

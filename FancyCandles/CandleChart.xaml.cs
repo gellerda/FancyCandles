@@ -1440,6 +1440,8 @@ namespace FancyCandles
         public static double DefaultGapBetweenPriceTickLabels { get { return 0.0; } }
         //----------------------------------------------------------------------------------------------------------------------------------
         private int maxNumberOfCharsInPrice = 0;
+        private readonly double correctPriceValueProbability = 0.93;
+
         /// <summary>Gets the maximal number of chars in a price for the current candle collection.</summary>
         ///<value>The maximal number of chars in a price for the current candle collection.</value>
         ///<remarks>
@@ -1480,26 +1482,27 @@ namespace FancyCandles
             if (CandlesSource == null) return;
 
             if (CandlesSource.Count == 0)
+                MaxNumberOfFractionalDigitsInPrice = 0;
+            else
+                MaxNumberOfFractionalDigitsInPrice = numberOfFractionalDigitsSample.MaxValueAmongTopFrequent(correctPriceValueProbability);
+
+            string priceNumberFormat = $"N{MaxNumberOfFractionalDigitsInPrice}";
+
+            if (CandlesSource.Count == 0)
                 MaxNumberOfCharsInPrice = MyNumberFormatting.MaxVolumeStringLength;
             else
             {
                 string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
                 char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
 
-                int charsInPrice = CandlesSource.Select(c => c.H.PriceToString(Culture,decimalSeparator,decimalSeparatorArray).Length).Max();
+                int charsInPrice = CandlesSource.Select(c => MyNumberFormatting.PriceToString(c.H, priceNumberFormat, Culture, decimalSeparator, decimalSeparatorArray).Length).Max();
 
                 int charsInVolume = 0;
                 if (IsVolumePanelVisible)
-                    //charsInVolume = CandlesSource.Select(c => c.V.MyToString(Culture, decimalSeparator, decimalSeparatorArray).Length).Max();
                     charsInVolume = MyNumberFormatting.MaxVolumeStringLength;
 
                 MaxNumberOfCharsInPrice = Math.Max(charsInPrice, charsInVolume);
             }
-
-            if (CandlesSource.Count == 0)
-                MaxNumberOfFractionalDigitsInPrice = 0;
-            else
-                MaxNumberOfFractionalDigitsInPrice = CandlesSource.Select(c => c.H.NumberOfFractionalDigits()).Max();
         }
 
         private void Update_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice(ICandle newCandle)
@@ -1507,21 +1510,19 @@ namespace FancyCandles
             string decimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
             char[] decimalSeparatorArray = decimalSeparator.ToCharArray();
 
-            int L1 = newCandle.H.PriceToString(Culture, decimalSeparator, decimalSeparatorArray).Length;
+            MaxNumberOfFractionalDigitsInPrice = numberOfFractionalDigitsSample.MaxValueAmongTopFrequent(correctPriceValueProbability);
+            string priceNumberFormat = $"N{MaxNumberOfFractionalDigitsInPrice}";
+
+            int L1 = MyNumberFormatting.PriceToString(newCandle.H, priceNumberFormat, Culture, decimalSeparator, decimalSeparatorArray).Length;
 
             int L2 = 0;
             if (IsVolumePanelVisible)
-                //L2 = newCandle.V.MyToString(Culture, decimalSeparator, decimalSeparatorArray).Length;
                 L2 = MyNumberFormatting.MaxVolumeStringLength;
 
             int L = Math.Max(L1, L2);
 
             if (L > MaxNumberOfCharsInPrice)
                 MaxNumberOfCharsInPrice = L;
-
-            int FL = newCandle.H.NumberOfFractionalDigits();
-            if (FL > MaxNumberOfFractionalDigitsInPrice)
-                MaxNumberOfFractionalDigitsInPrice = FL;
         }
         //----------------------------------------------------------------------------------------------------------------------------------
         #endregion **********************************************************************************************************************************************
@@ -1902,11 +1903,14 @@ namespace FancyCandles
         public static readonly DependencyProperty CandlesSourceProviderProperty =
             DependencyProperty.Register("CandlesSourceProvider", typeof(ICandlesSourceProvider), typeof(CandleChart), new PropertyMetadata(null));
         //----------------------------------------------------------------------------------------------------------------------------------
-        /// <summary>Gets or sets the data source for the candles of this chart.</summary>
+        private DiscreteRandomVariableSample numberOfFractionalDigitsSample;
+        private readonly int numberOfObservationsToStopRecalculatingNumberOfFractionalDigits = 500;
+
+        ///<summary>Gets or sets the data source for the candles of this chart.</summary>
         ///<value>The data source for the candles of this chart. The default value is null.</value>
         ///<remarks>
         ///<para>Note that the timeframe is an immutable characteristic of a candle collection. 
-        ///Therefore <see cref="ICandlesSource.TimeFrameInMinutes"/> is the readonly property of the <see cref="ICandlesSource"/> interface.
+        ///Therefore <see cref="ICandlesSource.TimeFrame"/> is the readonly property of the <see cref="ICandlesSource"/> interface.
         ///The only way to change the timeframe of your <see cref="CandleChart"/> is to change the value of the <see cref="CandlesSource"/> property 
         ///to a whole new candle collection with a new timeframe.</para>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
@@ -1963,6 +1967,16 @@ namespace FancyCandles
                 INotifyCollectionChanged newCandlesSource = e.NewValue as INotifyCollectionChanged;
                 if (newCandlesSource != null)
                     newCandlesSource.CollectionChanged += thisCandleChart.OnCandlesSourceCollectionChanged;
+
+                thisCandleChart.numberOfFractionalDigitsSample = new DiscreteRandomVariableSample(15);
+                for (int i = 0; i < thisCandleChart.CandlesSource.Count; i++)
+                {
+                    ICandle cndl = thisCandleChart.CandlesSource[i];
+                    thisCandleChart.numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(cndl.O));
+                    thisCandleChart.numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(cndl.H));
+                    thisCandleChart.numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(cndl.L));
+                    thisCandleChart.numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(cndl.C));
+                }
             }
 
             thisCandleChart.SetCandlesSourceForAll_OverlayIndicators();
@@ -1994,8 +2008,15 @@ namespace FancyCandles
             //different kind of changes that may have occurred in collection
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                ICandle newCandle = CandlesSource[e.NewStartingIndex];
-                Update_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice(newCandle);
+                if (numberOfFractionalDigitsSample.NumberOfObservations < numberOfObservationsToStopRecalculatingNumberOfFractionalDigits)
+                {
+                    ICandle newCandle = CandlesSource[e.NewStartingIndex];
+                    numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.O));
+                    numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.H));
+                    numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.L));
+                    numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.C));
+                    Update_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice(newCandle);
+                }
 
                 int maxVisibleCandlesCount = (int)(priceChartContainer.ActualWidth / (CandleWidth + CandleGap));
 
@@ -2015,8 +2036,15 @@ namespace FancyCandles
             }
             if (e.Action == NotifyCollectionChangedAction.Replace)
             {
-                ICandle newCandle = CandlesSource[e.NewStartingIndex];
-                Update_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice(newCandle);
+                if (numberOfFractionalDigitsSample.NumberOfObservations < numberOfObservationsToStopRecalculatingNumberOfFractionalDigits)
+                {
+                    ICandle newCandle = CandlesSource[e.NewStartingIndex];
+                    numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.O));
+                    numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.H));
+                    numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.L));
+                    numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.C));
+                    Update_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice(newCandle);
+                }
 
                 if (e.NewStartingIndex == (CandlesSource.Count-1))
                     CurrentPrice = CandlesSource[CandlesSource.Count - 1].C;
@@ -2175,14 +2203,14 @@ namespace FancyCandles
                 return;
 
             ICandle cndl = CandlesSource[VisibleCandlesRange.Count / 2];
-            if (visibleCandlesRangeCenter < cndl.t) //MyDateAndTime.YYMMDDHHMM_to_Datetime(cndl.YYMMDD, cndl.HHMM))
+            if (visibleCandlesRangeCenter < cndl.t) 
             {
                 VisibleCandlesRange = new IntRange(0, VisibleCandlesRange.Count);
                 return;
             }
 
             cndl = CandlesSource[CandlesSource.Count - 1 - VisibleCandlesRange.Count / 2];
-            if (visibleCandlesRangeCenter > cndl.t) // MyDateAndTime.YYMMDDHHMM_to_Datetime(cndl.YYMMDD, cndl.HHMM))
+            if (visibleCandlesRangeCenter > cndl.t) 
             {
                 VisibleCandlesRange = new IntRange(CandlesSource.Count - VisibleCandlesRange.Count, VisibleCandlesRange.Count);
                 return;

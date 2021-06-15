@@ -24,15 +24,6 @@ namespace FancyCandles
     class MyDateAndTime
     {
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
-        // Являются ли дни yymmdd_1 и int yymmdd_2 следующими друг за другом днями. Порядок важен.
-        public static bool IsDayByDay(int yymmdd_1, int yymmdd_2)
-        {
-            DateTime dt1 = YYMMDD_to_Datetime(yymmdd_1);
-            DateTime dt2 = YYMMDD_to_Datetime(yymmdd_2);
-            DateTime d = dt1.AddDays(1);
-            return d.Year == dt2.Year && d.Month == dt2.Month && d.Day == dt2.Day;
-        }
-        //------------------------------------------------------------------------------------------------------------------------------------------------------------
         public static int CeilMinutesToConventionalTimeFrame(double minutes)
         {
             if (minutes > 240.0) return 1440;
@@ -44,10 +35,41 @@ namespace FancyCandles
             else if (minutes > 15.0) return 20;
             else if (minutes > 10.0) return 15;
             else if (minutes > 5.0) return 10;
-            else return 5;
+            else if (minutes > 1.0) return 5;
+            else return 1;
         }
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
-        public static int CeilMinutesToConventionalTimeFrameMultiplesToBase(double minutes, int baseTimeFrame)
+        public static bool IsInSameHour(int HHMM_1, int HHMM_2)
+        {
+            int HH_1 = HHMM_1 / 100;
+            int HH_2 = HHMM_2 / 100;
+            return HH_1 == HH_2;
+        }
+
+        public static bool IsInSameHour(DateTime t1, DateTime t2)
+        {
+            return (t1.Date == t2.Date && t1.Hour == t2.Hour);
+        }
+        //------------------------------------------------------------------------------------------------------------------------------------------------------------
+        public static bool IsMinutesMultipleOf(DateTime t, int timeStep)
+        {
+            int m = 60 * (t.Hour - 10) + t.Minute;
+            return m % timeStep == 0 ? true : false;
+        }
+        //------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------------------------------------------------------------------
+        // Являются ли дни yymmdd_1 и int yymmdd_2 следующими друг за другом днями. Порядок важен.
+        /*public static bool IsDayByDay(int yymmdd_1, int yymmdd_2)
+        {
+            DateTime dt1 = YYMMDD_to_Datetime(yymmdd_1);
+            DateTime dt2 = YYMMDD_to_Datetime(yymmdd_2);
+            DateTime d = dt1.AddDays(1);
+            return d.Year == dt2.Year && d.Month == dt2.Month && d.Day == dt2.Day;
+        }*/
+        //------------------------------------------------------------------------------------------------------------------------------------------------------------
+        /*public static int CeilMinutesToConventionalTimeFrameMultiplesToBase(double minutes, int baseTimeFrame)
         {
             if (minutes > 240.0) return 1440;
             else if (minutes > 180.0) return 240;
@@ -59,36 +81,44 @@ namespace FancyCandles
             else if (minutes > 10.0) return 15;
             else if (minutes > 5.0) return 10;
             else return 5;
-        }
+        }*/
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
         // Если временной отрезок [t0, t1] принять за единичный, то возвращает значение параметра, соответствующего моменту времени t. 
         // Момент времени t может может лежать за пределами [t0, t1]. Тогда значение параметра будет либо < 0, либо > 1.
-        public static double GetLinearParameter(DateTime t0, DateTime t1, DateTime t)
+        /*public static double GetLinearParameter(DateTime t0, DateTime t1, DateTime t)
         {
             if (t == t0) return 0;
             if (t == t1) return 1;
             return (t - t0).TotalMinutes / (t1 - t0).TotalMinutes;
-        }
+        }*/
 
-        public static DateTime Lerp(DateTime t0, DateTime t1, double t)
+        /*public static DateTime Lerp(DateTime t0, DateTime t1, double t)
         {
             if (t == 0.0) return t0;
             if (t == 1.0) return t1;
             return t0 + TimeSpan.FromMinutes(t * (t1 - t0).TotalMinutes);
-        }
+        }*/
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
-        public static DateTime DaySessionStart(DateTime t)
+        /*public static DateTime DaySessionStart(DateTime t)
         {
             return new DateTime(t.Year, t.Month, t.Day, 10, 0, 0);
-        }
+        }*/
 
-        public static DateTime DaySessionEnd(DateTime t)
+        /*public static DateTime DaySessionEnd(DateTime t)
         {
             return new DateTime(t.Year, t.Month, t.Day, 18, 40, 0);
-        }
+        }*/
+        //------------------------------------------------------------------------------------------------------------------------------------------------------------
+        // Кратно ли время HHMM количеству минут timeStep.
+        /*public static bool IsTimeMultipleOf(int HHMM, int timeStep)
+        {
+            DateTime t = HHMM_to_Datetime(HHMM);
+            int m = 60 * (t.Hour - 10) + t.Minute;
+            return m % timeStep == 0 ? true : false;
+        }*/
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
         // Возвращает ближайший к t момент времени, кратный timeFrameInMinutes.
-        public static DateTime RoundTime(DateTime t, int timeFrameInMinutes)
+        /*public static DateTime RoundTime(DateTime t, int timeFrameInMinutes)
         {
             int m = 60 * (t.Hour) + t.Minute;
             int ost = m % timeFrameInMinutes;
@@ -101,10 +131,10 @@ namespace FancyCandles
 
             int hh = m / 60;
             return new DateTime(t.Year, t.Month, t.Day, hh, m - hh * 60, 0);
-        }
+        }*/
 
         // t и результат округления должны лежать в диапазоне [fromHour:fromMinute, toHour:toMinute] - обязательно from < to
-        public static DateTime RoundTime(DateTime t, int timeFrameInMinutes, int fromHour, int fromMinute, int toHour, int toMinute)
+        /*public static DateTime RoundTime(DateTime t, int timeFrameInMinutes, int fromHour, int fromMinute, int toHour, int toMinute)
         {
             int m = 60 * (t.Hour) + t.Minute;
             int ost = m % timeFrameInMinutes;
@@ -131,21 +161,21 @@ namespace FancyCandles
                 return prev_t;
             else
                 return next_t;
-        }
+        }*/
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
         // Находит в будущем ближайший DateTime, кратный timeFrameInMinutes. Если t кратен timeFrameInMinutes, то возвращает t.
-        public static DateTime CeilTime(DateTime t, int timeFrameInMinutes)
+        /*public static DateTime CeilTime(DateTime t, int timeFrameInMinutes)
         {
             int m = 60 * (t.Hour) + t.Minute;
             if (m % timeFrameInMinutes == 0) return t;
             m = (m / timeFrameInMinutes + 1) * timeFrameInMinutes;
             return (new DateTime(t.Year, t.Month, t.Day, 0, 0, 0)).AddMinutes(m);
-            /*int hh = m / 60;
-            return new DateTime(t.Year, t.Month, t.Day, hh, m - hh * 60, 0);*/
-        }
+            //int hh = m / 60;
+            //return new DateTime(t.Year, t.Month, t.Day, hh, m - hh * 60, 0);
+        }*/
 
         // t и результат округления должны лежать в диапазоне [fromHour:fromMinute, toHour:toMinute] - обязательно from < to
-        public static DateTime CeilTime(DateTime t, int timeFrameInMinutes, int fromHour, int fromMinute, int toHour, int toMinute)
+        /*public static DateTime CeilTime(DateTime t, int timeFrameInMinutes, int fromHour, int fromMinute, int toHour, int toMinute)
         {
             DateTime return_t = CeilTime(t, timeFrameInMinutes);
 
@@ -155,21 +185,21 @@ namespace FancyCandles
             if (return_t.Hour < fromHour || (return_t.Hour == fromHour && return_t.Minute < fromMinute))
                 return new DateTime(return_t.Year, return_t.Month, return_t.Day, fromHour, fromMinute, 0);
             return return_t;
-        }
+        }*/
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
         // Находит в прошлом ближайший DateTime, кратный timeFrameInMinutes. Если t кратен timeFrameInMinutes, то возвращает t.
-        public static DateTime FloorTime(DateTime t, int timeFrameInMinutes)
+        /*public static DateTime FloorTime(DateTime t, int timeFrameInMinutes)
         {
             int m = 60 * (t.Hour) + t.Minute;
             if (m % timeFrameInMinutes == 0) return t;
             m = (m / timeFrameInMinutes) * timeFrameInMinutes;
             return (new DateTime(t.Year, t.Month, t.Day, 0, 0, 0)).AddMinutes(m);
-            /*int hh = m / 60;
-            return new DateTime(t.Year, t.Month, t.Day, hh, m - hh * 60, 0);*/
-        }
+            //int hh = m / 60;
+            //return new DateTime(t.Year, t.Month, t.Day, hh, m - hh * 60, 0);
+        }*/
 
         // t и результат округления должны лежать в диапазоне [fromHour:fromMinute, toHour:toMinute] - обязательно from < to
-        public static DateTime FloorTime(DateTime t, int timeFrameInMinutes, int fromHour, int fromMinute, int toHour, int toMinute)
+        /*public static DateTime FloorTime(DateTime t, int timeFrameInMinutes, int fromHour, int fromMinute, int toHour, int toMinute)
         {
             DateTime return_t = FloorTime(t, timeFrameInMinutes);
 
@@ -180,33 +210,7 @@ namespace FancyCandles
                 return new DateTime(return_t.Year, return_t.Month, return_t.Day, toHour, toMinute, 0);
 
             return return_t;
-        }
-        //------------------------------------------------------------------------------------------------------------------------------------------------------------
-        public static bool IsInSameHour(int HHMM_1, int HHMM_2)
-        {
-            int HH_1 = HHMM_1 / 100;
-            int HH_2 = HHMM_2 / 100;
-            return HH_1 == HH_2;
-        }
-
-        public static bool IsInSameHour(DateTime t1, DateTime t2)
-        {
-            return (t1.Date == t2.Date && t1.Hour == t2.Hour);
-        }
-        //------------------------------------------------------------------------------------------------------------------------------------------------------------
-        // Кратно ли время HHMM количеству минут timeStep.
-        public static bool IsTimeMultipleOf(int HHMM, int timeStep)
-        {
-            DateTime t = HHMM_to_Datetime(HHMM);
-            int m = 60 * (t.Hour - 10) + t.Minute;
-            return m % timeStep == 0 ? true : false;
-        }
-
-        public static bool IsTimeMultipleOf(DateTime t, int timeStep)
-        {
-            int m = 60 * (t.Hour - 10) + t.Minute;
-            return m % timeStep == 0 ? true : false;
-        }
+        }*/
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
         /* Вариант с использованием строковых функций. Предположительно более медленный
         public static DateTime YYMMDDHHMM_to_Datetime(int YYMMDD, int HHMM)
@@ -244,7 +248,7 @@ namespace FancyCandles
 
             return new DateTime(year, month, day, hour, min, 0);
         }*/
-        public static DateTime YYMMDDHHMM_to_Datetime(int YYMMDD, int HHMM)
+        /*public static DateTime YYMMDDHHMM_to_Datetime(int YYMMDD, int HHMM)
         {
             int hour = HHMM / 100;
             int min = HHMM - hour * 100;
@@ -256,9 +260,9 @@ namespace FancyCandles
             year += 2000;
 
             return new DateTime(year, month, day, hour, min, 0);
-        }
+        }*/
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
-        public static DateTime HHMM_to_Datetime(int HHMM)
+        /*public static DateTime HHMM_to_Datetime(int HHMM)
         {
             int hour, min;
             if (HHMM >= 1000)
@@ -278,9 +282,9 @@ namespace FancyCandles
             }
 
             return new DateTime(1, 1, 1, hour, min, 0);
-        }
+        }*/
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
-        public static DateTime YYMMDD_to_Datetime(int YYMMDD)
+        /*public static DateTime YYMMDD_to_Datetime(int YYMMDD)
         {
             int year, month, day;
             if (YYMMDD >= 100000)
@@ -297,17 +301,17 @@ namespace FancyCandles
             }
 
             return new DateTime(year, month, day);
-        }
+        }*/
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
-        public static int Datetime_to_YYMMDD(DateTime t)
+        /*public static int Datetime_to_YYMMDD(DateTime t)
         {
             return (t.Year - 2000) * 10000 + t.Month * 100 + t.Day;
-        }
+        }*/
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
-        public static int Datetime_to_HHMM(DateTime t)
+        /*public static int Datetime_to_HHMM(DateTime t)
         {
             return t.Hour * 100 + t.Minute;
-        }
+        }*/
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------------------------------------------------------------------------

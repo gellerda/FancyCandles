@@ -82,6 +82,7 @@
 
         <!-- Обертка для ItemsControl нужна для определения размеров. -->
         <Grid x:Name="priceChartContainer" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+              ClipToBounds="True"
               Style="{StaticResource rowSpanPriceChartIfVolumeDisabled}"
               SizeChanged="OnPanelCandlesContainerSizeChanged" MouseWheel="OnMouseWheel" MouseMove="OnMouseMoveInsidePriceChartContainer" Panel.ZIndex="2">
 
@@ -100,6 +101,7 @@
             <local:PriceChartElement x:Name="priceChart" 
                 CandlesSource="{Binding ElementName=thisUserControl, Path=CandlesSource, Mode=OneWay}"
                 Culture="{Binding ElementName=thisUserControl, Path=Culture, Mode=OneWay}"
+                MaxNumberOfFractionalDigitsInPrice ="{Binding ElementName=thisUserControl, Path=MaxNumberOfFractionalDigitsInPrice, Mode=OneWay}"
                 Indicators="{Binding ElementName=thisUserControl, Path=OverlayIndicators,Mode=OneWay}"
                 VisibleCandlesRange="{Binding ElementName=thisUserControl, Path=VisibleCandlesRange, Mode=OneWay}"
                 VisibleCandlesExtremums="{Binding ElementName=thisUserControl, Path=VisibleCandlesExtremums, Mode=OneWay}"
@@ -107,7 +109,7 @@
                 BearishCandleFill="{Binding ElementName=thisUserControl, Path=BearishCandleFill, Mode=OneWay}" 
                 BullishCandleStroke="{Binding ElementName=thisUserControl, Path=BullishCandleStroke, Mode=OneWay}"
                 BearishCandleStroke="{Binding ElementName=thisUserControl, Path=BearishCandleStroke, Mode=OneWay}" 
-                ToolTipService.PlacementTarget="{Binding ElementName=priceChartContainer, Path=., Mode=OneWay}"
+                ToolTipService.PlacementTarget="{Binding ElementName=priceChartContainer}"
                 ToolTipService.Placement="Relative"
                 RenderOptions.EdgeMode="Aliased" RenderOptions.BitmapScalingMode="NearestNeighbor">
 
@@ -273,6 +275,7 @@
                                  ChartBottomMargin="{Binding Path=PriceChartBottomMargin, Mode=OneWay}"
                                  ChartTopMargin="{Binding Path=PriceChartTopMargin, Mode=OneWay}"
                                  PriceAxisWidth="{Binding Path=PriceAxisWidth, Mode=OneWay}"
+                                 MaxNumberOfFractionalDigitsInPrice ="{Binding Path=MaxNumberOfFractionalDigitsInPrice, Mode=OneWay}"
                                  VisibleCandlesExtremums="{Binding Path=VisibleCandlesExtremums, Mode=OneWay}"
                                  IsGridlinesEnabled="{Binding Path=IsHorizontalGridlinesEnabled, Mode=OneWay}"
                                  GridlinesPen="{Binding Path=HorizontalGridlinesPen, Mode=OneWay}"
@@ -301,7 +304,6 @@
                                 TimeAxisHeight="{Binding Path=TimeAxisHeight, Mode=OneWay}"
                                 CandlesSource="{Binding Path=CandlesSource, Mode=OneWay}"
                                 AxisTickColor="{Binding Path=AxisTickColor, Mode=OneWay}"
-                                TimeFrame="{Binding Path=CandlesSource.TimeFrameInMinutes, Mode=OneWay}"
                                 VisibleCandlesRange="{Binding Path=VisibleCandlesRange, Mode=OneWay}"
                                 IsGridlinesEnabled="{Binding Path=IsVerticalGridlinesEnabled, Mode=OneWay}"
                                 GridlinesPen="{Binding Path=VerticalGridlinesPen, Mode=OneWay}"

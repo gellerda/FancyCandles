@@ -149,6 +149,8 @@ namespace FancyCandles.Indicators
                 double localIndicatorValue = (1.0 - (indicatorValue - visibleCandlesExtremums.PriceLow) / range) * RenderHeight;
                 double cndlCenterX = cndl_i * candleWidthPlusGap + 0.5 * candleWidth;
 
+                //ClipLineSegment(prevCndlCenterX, prevLocalIndicatorValue, cndlCenterX, localIndicatorValue, RenderHeight, out Point newPoint0, out Point newPoint1);
+                //drawingContext.DrawLine(Pen, newPoint0, newPoint1);
                 drawingContext.DrawLine(Pen, new Point(prevCndlCenterX, prevLocalIndicatorValue), new Point(cndlCenterX, localIndicatorValue));
 
                 prevCndlCenterX = cndlCenterX;

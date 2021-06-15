@@ -120,5 +120,51 @@ namespace FancyCandles.Indicators
         //---------------------------------------------------------------------------------------------------------------------------------------
         //---------------------------------------------------------------------------------------------------------------------------------------
         //---------------------------------------------------------------------------------------------------------------------------------------
+        /*
+        ///<summary>Removes portions of line segment outside the drawing area area.</summary>
+        ///<value>True if some portion of line segment is inside the drawing area. False - you don't need to draw anything.</value>
+        ///<param name="x0">Coordinate X of the first ending point of the line segment to clip.</param>
+        ///<param name="y0">Coordinate Y of the first ending point of the line segment to clip.</param>
+        ///<param name="x1">Coordinate X of the second ending point of the line segment to clip.</param>
+        ///<param name="y1">Coordinate Y of the second ending point of the line segment to clip.</param>
+        ///<param name="renderHeight">The Height of the drawing area.</param>
+        ///<param name="newPoint0">First new ending point of line segment to draw.</param>
+        ///<param name="newPoint1">Second new ending point of line segment to draw.</param>
+        ///<remarks>
+        ///Drawing area: 0 &lt;= y &lt;= RenderHeight. 
+        ///Line segment: (x0,y0) - (x1,y1).
+        ///</remarks>
+        protected static bool ClipLineSegment(double x0, double y0, double x1, double y1, double renderHeight, out Point newPoint0, out Point newPoint1)
+        {
+            if (y0 >= 0.0 && y1 >= 0.0 && y0 <= renderHeight && y1 <= renderHeight)
+            {
+                newPoint0 = new Point(x0, y0);
+                newPoint1 = new Point(x1, y1);
+                return true;
+            }
+
+            if ((y0 < 0.0 && y1 < 0.0) || (y0 > renderHeight && y1 > renderHeight))
+            {
+                newPoint0 = newPoint1 = new Point();
+                return false;
+            }
+
+            if (y0 < 0)
+                newPoint0 = new Point(x0 - y0 * (x1 - x0) / (y1 - y0), 0.0);
+            else if (y0 > renderHeight)
+                newPoint0 = new Point(x0 - (y0 - renderHeight) * (x1 - x0) / (y1 - y0), renderHeight);
+            else 
+                newPoint0 = new Point(x0, y0);
+
+            if (y1 < 0)
+                newPoint1 = new Point(x1 - y1 * (x0 - x1) / (y0 - y1), 0.0);
+            else if (y1 > renderHeight)
+                newPoint1 = new Point(x1 - (y1 - renderHeight) * (x0 - x1) / (y0 - y1), renderHeight);
+            else
+                newPoint1 = new Point(x1, y1);
+
+            return true;
+        }*/
+        //---------------------------------------------------------------------------------------------------------------------------------------
     }
 }
