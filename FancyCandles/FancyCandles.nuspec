@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>FancyCandles</id>
-    <version>2.5.0</version>
+    <version>2.5.1</version>
     <title>FancyCandles for WPF</title>
     <authors>Dennis Geller</authors>
     <owners>Dennis Geller</owners>
@@ -11,11 +11,8 @@
 	<icon>images\icon.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>A candlestick chart control for WPF.</description>
-    <releaseNotes>v.2.5.0.
--Add support for second time frames.	
--Add the TimeFrame enum.
--Rename the ICandlesSource.TimeFrameInMinutes property to ICandlesSource.TimeFrame and make it to be of type TimeFrame.
--Fix incorrect formatting of price values.
+    <releaseNotes>v.2.5.1.
+-Clip the overlay indicator lines with the chart area bounds.
 </releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags>candlestick price chart candle OHLC WPF control</tags>
