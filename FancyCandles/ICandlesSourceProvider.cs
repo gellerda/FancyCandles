@@ -11,6 +11,6 @@ namespace FancyCandles
     {
         List<ISecurityInfo> SecCatalog { get; }
         //ReadOnlyObservableCollection<ICandle> GetCandlesSource(int secCatalog_i, int timeFrameInMinutes);
-        ICandlesSource GetCandlesSource(string secID, int timeFrameInMinutes);
+        ICandlesSource GetCandlesSource(string secID, TimeFrame timeFrame);
     }
 }
