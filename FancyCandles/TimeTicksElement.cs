@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using System.Globalization;
+using System.Diagnostics; // Debug.WriteLine("Error...");
+using System.Collections.Specialized;
 
 namespace FancyCandles
 {
@@ -213,6 +215,25 @@ namespace FancyCandles
         {
             TimeTicksElement thisElement = (TimeTicksElement)obj;
             thisElement.ReCalc_TimeTicksTimeFrame();
+
+            if (e.OldValue != null && e.OldValue is INotifyCollectionChanged)
+                (e.OldValue as INotifyCollectionChanged).CollectionChanged -= thisElement.OnCandlesSourceCollectionChanged;
+
+            if (e.NewValue != null && e.NewValue is INotifyCollectionChanged)
+                (e.NewValue as INotifyCollectionChanged).CollectionChanged += thisElement.OnCandlesSourceCollectionChanged;
+        }
+
+        private void OnCandlesSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Replace)
+            {
+                if (e.NewStartingIndex >= VisibleCandlesRange.Start_i && 
+                    e.NewStartingIndex < (VisibleCandlesRange.Start_i + VisibleCandlesRange.Count - 1))
+                    InvalidateVisual();
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Add) { /* your code */ }
+            else if (e.Action == NotifyCollectionChangedAction.Remove) { /* your code */ }
+            else if (e.Action == NotifyCollectionChangedAction.Move) { /* your code */ }
         }
         //----------------------------------------------------------------------------------------------------------------------------------
         // Таймфрейм в минутах, с которым отображаются метки на оси времени. Совпадает с одним из общепринятых таймфреймов - M1, М5, М10, М15, М20, М30 и т.д.
@@ -231,7 +252,6 @@ namespace FancyCandles
         {
             if (CandlesSource == null || VisibleCandlesRange == IntRange.Undefined || (int)CandlesSource.TimeFrame == 0 || TimeTicksTimeFrame == 0) return;
 
-            double halfTimePanelHeight = TimeAxisHeight / 2.0;
             double topTimePanelY = RenderSize.Height - TimeAxisHeight;
             double centerTimePanelY = RenderSize.Height - TimeAxisHeight / 2.0;
 

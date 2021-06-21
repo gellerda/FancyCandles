@@ -47,6 +47,7 @@
         <local:CandleDrawingParametersToPointConverter x:Key="candleDrawingParametersToPointConverter"/>
         <local:CandleDrawingParametersConverter x:Key="candleDrawingParametersConverter"/>
         <local:CandleProviderSecCatalogIsNotEmptyConverter x:Key="candleProviderSecCatalogIsNotEmptyConverter"/>
+        <local:CandlesSourceIsFromProviderConverter x:Key="candlesSourceIsFromProviderConverter"/>
 
         <Style x:Key="rowSpanPriceChartIfVolumeDisabled">
             <Style.Triggers>
@@ -89,11 +90,18 @@
             <!-- Нужно заполнить весь контейнер прозрачным содержимым, а иначе перекрестие не работает: -->
             <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent">
                 <Rectangle.ContextMenu>
-                    <ContextMenu>
+                    <ContextMenu x:Name="priceChartContextMenu">
                         <MenuItem Header="Settings" Click="OpenCandleChartPropertiesWindow"/>
                         <MenuItem Header="Load Settings" Click="OpenLoadSettingsDialog"/>
                         <MenuItem Header="Save Settings As" Click="OpenSaveSettingsAsDialog"/>
                         <MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandlesSourceProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/>
+                        <MenuItem Header="Time Frame" ItemsSource="{Binding Path=CandlesSourceProvider.SupportedTimeFrames, Mode=OneWay}" IsEnabled="{Binding Path=CandlesSource, Converter={StaticResource candlesSourceIsFromProviderConverter}}">
+                            <MenuItem.ItemTemplate>
+                                <DataTemplate>
+                                    <MenuItem Header="{Binding Path=.}" Click="ChangeCurrentTimeFrame"/>
+                                </DataTemplate>
+                            </MenuItem.ItemTemplate>
+                        </MenuItem>
                     </ContextMenu>
                 </Rectangle.ContextMenu>
             </Rectangle>
@@ -198,6 +206,13 @@
                         <MenuItem Header="Load Settings" Click="OpenLoadSettingsDialog"></MenuItem>
                         <MenuItem Header="Save Settings As" Click="OpenSaveSettingsAsDialog"></MenuItem>
                         <MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandlesSourceProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/>
+                        <MenuItem Header="Time Frame" ItemsSource="{Binding Path=CandlesSourceProvider.SupportedTimeFrames, Mode=OneWay}" IsEnabled="{Binding Path=CandlesSource, Converter={StaticResource candlesSourceIsFromProviderConverter}}">
+                            <MenuItem.ItemTemplate>
+                                <DataTemplate>
+                                    <MenuItem Header="{Binding Path=.}" Click="ChangeCurrentTimeFrame"/>
+                                </DataTemplate>
+                            </MenuItem.ItemTemplate>
+                        </MenuItem>
                     </ContextMenu>
                 </Rectangle.ContextMenu>
             </Rectangle>

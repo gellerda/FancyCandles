@@ -28,4 +28,31 @@ namespace FancyCandles
         ///<value>The time frame of the candle collection.</value>
         TimeFrame TimeFrame { get; }
     }
+
+    ///<summary>Represents a collection of candles obtained from <see cref="ICandlesSourceProvider"/>, that can be used as a value for the <see cref="CandleChart.CandlesSource"/> property of the <see cref="CandleChart"/> class.</summary>
+    ///<seealso cref = "ICandlesSourceProvider">Interface ICandlesSourceProvider</seealso>
+    public interface ICandlesSourceFromProvider : ICandlesSource
+    {
+        ///<summary>Gets the unique ID of the security, this candle collection relates to.</summary>
+        ///<value>The unique ID of the security, this candle collection relates to.</value>
+        ///<remarks>
+        ///<see cref="ICandlesSourceProvider"/> widely operates with the <see cref="ISecurityInfo.SecID"/> value.
+        ///<see cref="ISecurityInfo.SecID"/> allows you to uniquely identify one security among others this <see cref="ICandlesSourceProvider"/> provide you access to.
+        ///</remarks>
+        string SecID { get; }
+    }
+
+    ///<summary>Represents some resource that a counter of its users.</summary>
+    public interface IResourceWithUserCounter
+    {
+        ///<summary>Gets the number of users of this resource.</summary>
+        ///<value>Gets the number of users of this resource.</value>
+        int UserCount { get; }
+
+        ///<summary>Increments the number of users of this resource.</summary>
+        void IncreaseUserCount();
+
+        ///<summary>Decrements the number of users of this resource.</summary>
+        void DecreaseUserCount();
+    }
 }

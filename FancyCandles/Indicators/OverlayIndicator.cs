@@ -110,12 +110,14 @@ namespace FancyCandles.Indicators
             { }
         }
         //---------------- INotifyPropertyChanged ----------------------------------------------------------
+#pragma warning  disable CS1591
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+#pragma warning  restore CS1591
         //---------------------------------------------------------------------------------------------------------------------------------------
         //---------------------------------------------------------------------------------------------------------------------------------------
         //---------------------------------------------------------------------------------------------------------------------------------------

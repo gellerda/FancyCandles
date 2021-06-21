@@ -36,7 +36,6 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using Microsoft.Win32;
 using FancyCandles.Indicators;
-using System.Windows.Media;
 
 namespace FancyCandles
 {
@@ -113,6 +112,8 @@ namespace FancyCandles
             InitialCandleGap = DefaultInitialCandleGap;
 
             InitializeComponent();
+
+            priceChartContextMenu.DataContext = this;
 
             VisibleCandlesRange = IntRange.Undefined;
             VisibleCandlesExtremums = new CandleExtremums(0.0, 0.0, 0L, 0L);
@@ -1895,11 +1896,35 @@ namespace FancyCandles
 
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
+        private void ChangeCurrentTimeFrame(object sender, RoutedEventArgs e)
+        {
+            if (!(CandlesSource is ICandlesSourceFromProvider) || CandlesSourceProvider == null) return;
+
+            TimeFrame newTimeFrame = (TimeFrame)((MenuItem)sender).Header;
+            string secID = (CandlesSource as ICandlesSourceFromProvider).SecID;
+            ICandlesSource newCandleSource = CandlesSourceProvider.GetCandlesSource(secID, newTimeFrame);
+            CandlesSource = newCandleSource;
+
+            ISecurityInfo secInfo = CandlesSourceProvider.GetSecFromCatalog(secID);
+            SetCurrentValue(LegendTextProperty, $"{secInfo.Ticker}, {newTimeFrame}");
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------
+        ///<summary>Gets or sets the provider of candle collections, that can be used as a value for the <see cref="CandlesSource"/> property.</summary>
+        ///<value>The provider of candle collections, which can be used as a value for the <see cref="CandlesSource"/> property.</value>
+        ///<remarks>
+        ///Using the <see cref="CandlesSourceProvider"/> property is optional. You can set the <see cref="CandlesSource"/> property to populate your <see cref="CandleChart"/> with candle data and it's absolutely ok. 
+        ///But if you want to provide the ability to select a security and time frame from the <see cref="CandleChart"/> context menu you have to set the <see cref="CandlesSourceProvider"/> property.
+        ///<see cref="ICandlesSourceProvider"/> provides a list of available securities and time frames and, of course, a candle data to use with <see cref="CandleChart"/>.
+        ///Setting this property makes the <c>Select New Security</c> and <c>Time Frame</c> items of the <see cref="CandleChart"/> context menu enabled. 
+        ///When a user of your application has selected a new security or time frame, a new value will be assigned to the <see cref="CandlesSource"/> property. 
+        ///</remarks>
         public ICandlesSourceProvider CandlesSourceProvider
         {
             get { return (ICandlesSourceProvider)GetValue(CandlesSourceProviderProperty); }
             set { SetValue(CandlesSourceProviderProperty, value); }
         }
+        /// <summary>Identifies the <see cref="CandlesSourceProvider"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
         public static readonly DependencyProperty CandlesSourceProviderProperty =
             DependencyProperty.Register("CandlesSourceProvider", typeof(ICandlesSourceProvider), typeof(CandleChart), new PropertyMetadata(null));
         //----------------------------------------------------------------------------------------------------------------------------------
@@ -1957,25 +1982,36 @@ namespace FancyCandles
 
             if (e.OldValue != null)
             {
-                INotifyCollectionChanged oldCandlesSource = e.OldValue as INotifyCollectionChanged;
-                if (oldCandlesSource != null)
-                    oldCandlesSource.CollectionChanged -= thisCandleChart.OnCandlesSourceCollectionChanged;
+                if (e.OldValue is INotifyCollectionChanged)
+                    (e.OldValue as INotifyCollectionChanged).CollectionChanged -= thisCandleChart.OnCandlesSourceCollectionChanged;
+
+                (e.OldValue as IResourceWithUserCounter)?.DecreaseUserCount();
             }
 
             if (e.NewValue != null)
             {
-                INotifyCollectionChanged newCandlesSource = e.NewValue as INotifyCollectionChanged;
-                if (newCandlesSource != null)
-                    newCandlesSource.CollectionChanged += thisCandleChart.OnCandlesSourceCollectionChanged;
+                if (e.NewValue is INotifyCollectionChanged)
+                    (e.NewValue as INotifyCollectionChanged).CollectionChanged += thisCandleChart.OnCandlesSourceCollectionChanged;
+
+                (e.NewValue as IResourceWithUserCounter)?.IncreaseUserCount();
 
                 thisCandleChart.numberOfFractionalDigitsSample = new DiscreteRandomVariableSample(15);
                 for (int i = 0; i < thisCandleChart.CandlesSource.Count; i++)
                 {
                     ICandle cndl = thisCandleChart.CandlesSource[i];
-                    thisCandleChart.numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(cndl.O));
-                    thisCandleChart.numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(cndl.H));
-                    thisCandleChart.numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(cndl.L));
-                    thisCandleChart.numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(cndl.C));
+                    if (cndl.O != 0.0 && cndl.H != 0.0 && cndl.L != 0.0 && cndl.C != 0.0 )
+                    {
+                        thisCandleChart.numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(cndl.O));
+                        thisCandleChart.numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(cndl.H));
+                        thisCandleChart.numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(cndl.L));
+                        thisCandleChart.numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(cndl.C));
+                    }
+                }
+
+                if (e.NewValue is ICandlesSourceFromProvider && thisCandleChart.CandlesSourceProvider != null)
+                {
+                    ISecurityInfo secInfo = thisCandleChart.CandlesSourceProvider.GetSecFromCatalog((thisCandleChart.CandlesSource as ICandlesSourceFromProvider).SecID);
+                    thisCandleChart.SetCurrentValue(LegendTextProperty, $"{secInfo.Ticker}, {thisCandleChart.CandlesSource.TimeFrame}");
                 }
             }
 
@@ -2011,10 +2047,13 @@ namespace FancyCandles
                 if (numberOfFractionalDigitsSample.NumberOfObservations < numberOfObservationsToStopRecalculatingNumberOfFractionalDigits)
                 {
                     ICandle newCandle = CandlesSource[e.NewStartingIndex];
-                    numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.O));
-                    numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.H));
-                    numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.L));
-                    numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.C));
+                    if (newCandle.O != 0.0 && newCandle.H != 0.0 && newCandle.L != 0.0 && newCandle.C != 0.0)
+                    {
+                        numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.O));
+                        numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.H));
+                        numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.L));
+                        numberOfFractionalDigitsSample.AddNewObservation(MyNumberFormatting.NumberOfFractionalDigits(newCandle.C));
+                    }
                     Update_MaxNumberOfCharsInPrice_and_MaxNumberOfFractionalDigitsInPrice(newCandle);
                 }
 
@@ -2034,7 +2073,7 @@ namespace FancyCandles
                         VisibleCandlesRange = new IntRange(VisibleCandlesRange.Start_i + 1, VisibleCandlesRange.Count);
                 }
             }
-            if (e.Action == NotifyCollectionChangedAction.Replace)
+            else if (e.Action == NotifyCollectionChangedAction.Replace)
             {
                 if (numberOfFractionalDigitsSample.NumberOfObservations < numberOfObservationsToStopRecalculatingNumberOfFractionalDigits)
                 {
@@ -2053,8 +2092,8 @@ namespace FancyCandles
                 if (vc_i >= 0 && vc_i < VisibleCandlesRange.Count)
                     ReCalc_VisibleCandlesExtremums_AfterOneCandleChanged(e.NewStartingIndex);
             }
-            if (e.Action == NotifyCollectionChangedAction.Remove) { /* your code */ }
-            if (e.Action == NotifyCollectionChangedAction.Move) { /* your code */ }
+            else if (e.Action == NotifyCollectionChangedAction.Remove) { /* your code */ }
+            else if (e.Action == NotifyCollectionChangedAction.Move) { /* your code */ }
         }
         //----------------------------------------------------------------------------------------------------------------------------------
         CandleExtremums visibleCandlesExtremums;

@@ -29,7 +29,6 @@ using System.Globalization;
 using System.ComponentModel;
 using System.Runtime.CompilerServices; // [CallerMemberName]
 using System.Diagnostics;
-using System.Globalization;
 
 namespace FancyCandles
 {

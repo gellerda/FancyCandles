@@ -223,25 +223,6 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.CandleGap
   nameWithType: CandleChart.CandleGap
-- uid: FancyCandles.CandleChart.CandleProvider
-  name: CandleProvider
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandleProvider
-  commentId: P:FancyCandles.CandleChart.CandleProvider
-  fullName: FancyCandles.CandleChart.CandleProvider
-  nameWithType: CandleChart.CandleProvider
-- uid: FancyCandles.CandleChart.CandleProvider*
-  name: CandleProvider
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandleProvider_
-  commentId: Overload:FancyCandles.CandleChart.CandleProvider
-  isSpec: "True"
-  fullName: FancyCandles.CandleChart.CandleProvider
-  nameWithType: CandleChart.CandleProvider
-- uid: FancyCandles.CandleChart.CandleProviderProperty
-  name: CandleProviderProperty
-  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandleProviderProperty
-  commentId: F:FancyCandles.CandleChart.CandleProviderProperty
-  fullName: FancyCandles.CandleChart.CandleProviderProperty
-  nameWithType: CandleChart.CandleProviderProperty
 - uid: FancyCandles.CandleChart.CandlesSource
   name: CandlesSource
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSource
@@ -261,6 +242,25 @@ references:
   commentId: F:FancyCandles.CandleChart.CandlesSourceProperty
   fullName: FancyCandles.CandleChart.CandlesSourceProperty
   nameWithType: CandleChart.CandlesSourceProperty
+- uid: FancyCandles.CandleChart.CandlesSourceProvider
+  name: CandlesSourceProvider
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSourceProvider
+  commentId: P:FancyCandles.CandleChart.CandlesSourceProvider
+  fullName: FancyCandles.CandleChart.CandlesSourceProvider
+  nameWithType: CandleChart.CandlesSourceProvider
+- uid: FancyCandles.CandleChart.CandlesSourceProvider*
+  name: CandlesSourceProvider
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSourceProvider_
+  commentId: Overload:FancyCandles.CandleChart.CandlesSourceProvider
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.CandlesSourceProvider
+  nameWithType: CandleChart.CandlesSourceProvider
+- uid: FancyCandles.CandleChart.CandlesSourceProviderProperty
+  name: CandlesSourceProviderProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandlesSourceProviderProperty
+  commentId: F:FancyCandles.CandleChart.CandlesSourceProviderProperty
+  fullName: FancyCandles.CandleChart.CandlesSourceProviderProperty
+  nameWithType: CandleChart.CandlesSourceProviderProperty
 - uid: FancyCandles.CandleChart.CandleWidth
   name: CandleWidth
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CandleWidth
@@ -1894,67 +1894,6 @@ references:
   commentId: F:FancyCandles.CandleExtremums.VolumeLow
   fullName: FancyCandles.CandleExtremums.VolumeLow
   nameWithType: CandleExtremums.VolumeLow
-- uid: FancyCandles.CandlesSourceFromProvider
-  name: CandlesSourceFromProvider
-  href: api/FancyCandles.CandlesSourceFromProvider.html
-  commentId: T:FancyCandles.CandlesSourceFromProvider
-  fullName: FancyCandles.CandlesSourceFromProvider
-  nameWithType: CandlesSourceFromProvider
-- uid: FancyCandles.CandlesSourceFromProvider.#ctor(System.Collections.ObjectModel.ObservableCollection{FancyCandles.ICandle},FancyCandles.ICandlesSourceProvider,System.Int32,FancyCandles.TimeFrame)
-  name: CandlesSourceFromProvider(ObservableCollection<ICandle>, ICandlesSourceProvider, Int32, TimeFrame)
-  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider__ctor_System_Collections_ObjectModel_ObservableCollection_FancyCandles_ICandle__FancyCandles_ICandlesSourceProvider_System_Int32_FancyCandles_TimeFrame_
-  commentId: M:FancyCandles.CandlesSourceFromProvider.#ctor(System.Collections.ObjectModel.ObservableCollection{FancyCandles.ICandle},FancyCandles.ICandlesSourceProvider,System.Int32,FancyCandles.TimeFrame)
-  name.vb: CandlesSourceFromProvider(ObservableCollection(Of ICandle), ICandlesSourceProvider, Int32, TimeFrame)
-  fullName: FancyCandles.CandlesSourceFromProvider.CandlesSourceFromProvider(System.Collections.ObjectModel.ObservableCollection<FancyCandles.ICandle>, FancyCandles.ICandlesSourceProvider, System.Int32, FancyCandles.TimeFrame)
-  fullName.vb: FancyCandles.CandlesSourceFromProvider.CandlesSourceFromProvider(System.Collections.ObjectModel.ObservableCollection(Of FancyCandles.ICandle), FancyCandles.ICandlesSourceProvider, System.Int32, FancyCandles.TimeFrame)
-  nameWithType: CandlesSourceFromProvider.CandlesSourceFromProvider(ObservableCollection<ICandle>, ICandlesSourceProvider, Int32, TimeFrame)
-  nameWithType.vb: CandlesSourceFromProvider.CandlesSourceFromProvider(ObservableCollection(Of ICandle), ICandlesSourceProvider, Int32, TimeFrame)
-- uid: FancyCandles.CandlesSourceFromProvider.#ctor*
-  name: CandlesSourceFromProvider
-  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider__ctor_
-  commentId: Overload:FancyCandles.CandlesSourceFromProvider.#ctor
-  isSpec: "True"
-  fullName: FancyCandles.CandlesSourceFromProvider.CandlesSourceFromProvider
-  nameWithType: CandlesSourceFromProvider.CandlesSourceFromProvider
-- uid: FancyCandles.CandlesSourceFromProvider.ParentProvider
-  name: ParentProvider
-  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider_ParentProvider
-  commentId: P:FancyCandles.CandlesSourceFromProvider.ParentProvider
-  fullName: FancyCandles.CandlesSourceFromProvider.ParentProvider
-  nameWithType: CandlesSourceFromProvider.ParentProvider
-- uid: FancyCandles.CandlesSourceFromProvider.ParentProvider*
-  name: ParentProvider
-  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider_ParentProvider_
-  commentId: Overload:FancyCandles.CandlesSourceFromProvider.ParentProvider
-  isSpec: "True"
-  fullName: FancyCandles.CandlesSourceFromProvider.ParentProvider
-  nameWithType: CandlesSourceFromProvider.ParentProvider
-- uid: FancyCandles.CandlesSourceFromProvider.SecCatalogIndex
-  name: SecCatalogIndex
-  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider_SecCatalogIndex
-  commentId: P:FancyCandles.CandlesSourceFromProvider.SecCatalogIndex
-  fullName: FancyCandles.CandlesSourceFromProvider.SecCatalogIndex
-  nameWithType: CandlesSourceFromProvider.SecCatalogIndex
-- uid: FancyCandles.CandlesSourceFromProvider.SecCatalogIndex*
-  name: SecCatalogIndex
-  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider_SecCatalogIndex_
-  commentId: Overload:FancyCandles.CandlesSourceFromProvider.SecCatalogIndex
-  isSpec: "True"
-  fullName: FancyCandles.CandlesSourceFromProvider.SecCatalogIndex
-  nameWithType: CandlesSourceFromProvider.SecCatalogIndex
-- uid: FancyCandles.CandlesSourceFromProvider.TimeFrame
-  name: TimeFrame
-  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider_TimeFrame
-  commentId: P:FancyCandles.CandlesSourceFromProvider.TimeFrame
-  fullName: FancyCandles.CandlesSourceFromProvider.TimeFrame
-  nameWithType: CandlesSourceFromProvider.TimeFrame
-- uid: FancyCandles.CandlesSourceFromProvider.TimeFrame*
-  name: TimeFrame
-  href: api/FancyCandles.CandlesSourceFromProvider.html#FancyCandles_CandlesSourceFromProvider_TimeFrame_
-  commentId: Overload:FancyCandles.CandlesSourceFromProvider.TimeFrame
-  isSpec: "True"
-  fullName: FancyCandles.CandlesSourceFromProvider.TimeFrame
-  nameWithType: CandlesSourceFromProvider.TimeFrame
 - uid: FancyCandles.ICandle
   name: ICandle
   href: api/FancyCandles.ICandle.html
@@ -2058,18 +1997,37 @@ references:
   isSpec: "True"
   fullName: FancyCandles.ICandlesSource.TimeFrame
   nameWithType: ICandlesSource.TimeFrame
+- uid: FancyCandles.ICandlesSourceFromProvider
+  name: ICandlesSourceFromProvider
+  href: api/FancyCandles.ICandlesSourceFromProvider.html
+  commentId: T:FancyCandles.ICandlesSourceFromProvider
+  fullName: FancyCandles.ICandlesSourceFromProvider
+  nameWithType: ICandlesSourceFromProvider
+- uid: FancyCandles.ICandlesSourceFromProvider.SecID
+  name: SecID
+  href: api/FancyCandles.ICandlesSourceFromProvider.html#FancyCandles_ICandlesSourceFromProvider_SecID
+  commentId: P:FancyCandles.ICandlesSourceFromProvider.SecID
+  fullName: FancyCandles.ICandlesSourceFromProvider.SecID
+  nameWithType: ICandlesSourceFromProvider.SecID
+- uid: FancyCandles.ICandlesSourceFromProvider.SecID*
+  name: SecID
+  href: api/FancyCandles.ICandlesSourceFromProvider.html#FancyCandles_ICandlesSourceFromProvider_SecID_
+  commentId: Overload:FancyCandles.ICandlesSourceFromProvider.SecID
+  isSpec: "True"
+  fullName: FancyCandles.ICandlesSourceFromProvider.SecID
+  nameWithType: ICandlesSourceFromProvider.SecID
 - uid: FancyCandles.ICandlesSourceProvider
   name: ICandlesSourceProvider
   href: api/FancyCandles.ICandlesSourceProvider.html
   commentId: T:FancyCandles.ICandlesSourceProvider
   fullName: FancyCandles.ICandlesSourceProvider
   nameWithType: ICandlesSourceProvider
-- uid: FancyCandles.ICandlesSourceProvider.GetCandlesSource(System.Int32,FancyCandles.TimeFrame)
-  name: GetCandlesSource(Int32, TimeFrame)
-  href: api/FancyCandles.ICandlesSourceProvider.html#FancyCandles_ICandlesSourceProvider_GetCandlesSource_System_Int32_FancyCandles_TimeFrame_
-  commentId: M:FancyCandles.ICandlesSourceProvider.GetCandlesSource(System.Int32,FancyCandles.TimeFrame)
-  fullName: FancyCandles.ICandlesSourceProvider.GetCandlesSource(System.Int32, FancyCandles.TimeFrame)
-  nameWithType: ICandlesSourceProvider.GetCandlesSource(Int32, TimeFrame)
+- uid: FancyCandles.ICandlesSourceProvider.GetCandlesSource(System.String,FancyCandles.TimeFrame)
+  name: GetCandlesSource(String, TimeFrame)
+  href: api/FancyCandles.ICandlesSourceProvider.html#FancyCandles_ICandlesSourceProvider_GetCandlesSource_System_String_FancyCandles_TimeFrame_
+  commentId: M:FancyCandles.ICandlesSourceProvider.GetCandlesSource(System.String,FancyCandles.TimeFrame)
+  fullName: FancyCandles.ICandlesSourceProvider.GetCandlesSource(System.String, FancyCandles.TimeFrame)
+  nameWithType: ICandlesSourceProvider.GetCandlesSource(String, TimeFrame)
 - uid: FancyCandles.ICandlesSourceProvider.GetCandlesSource*
   name: GetCandlesSource
   href: api/FancyCandles.ICandlesSourceProvider.html#FancyCandles_ICandlesSourceProvider_GetCandlesSource_
@@ -2077,6 +2035,19 @@ references:
   isSpec: "True"
   fullName: FancyCandles.ICandlesSourceProvider.GetCandlesSource
   nameWithType: ICandlesSourceProvider.GetCandlesSource
+- uid: FancyCandles.ICandlesSourceProvider.GetSecFromCatalog(System.String)
+  name: GetSecFromCatalog(String)
+  href: api/FancyCandles.ICandlesSourceProvider.html#FancyCandles_ICandlesSourceProvider_GetSecFromCatalog_System_String_
+  commentId: M:FancyCandles.ICandlesSourceProvider.GetSecFromCatalog(System.String)
+  fullName: FancyCandles.ICandlesSourceProvider.GetSecFromCatalog(System.String)
+  nameWithType: ICandlesSourceProvider.GetSecFromCatalog(String)
+- uid: FancyCandles.ICandlesSourceProvider.GetSecFromCatalog*
+  name: GetSecFromCatalog
+  href: api/FancyCandles.ICandlesSourceProvider.html#FancyCandles_ICandlesSourceProvider_GetSecFromCatalog_
+  commentId: Overload:FancyCandles.ICandlesSourceProvider.GetSecFromCatalog
+  isSpec: "True"
+  fullName: FancyCandles.ICandlesSourceProvider.GetSecFromCatalog
+  nameWithType: ICandlesSourceProvider.GetSecFromCatalog
 - uid: FancyCandles.ICandlesSourceProvider.SecCatalog
   name: SecCatalog
   href: api/FancyCandles.ICandlesSourceProvider.html#FancyCandles_ICandlesSourceProvider_SecCatalog
@@ -2090,6 +2061,19 @@ references:
   isSpec: "True"
   fullName: FancyCandles.ICandlesSourceProvider.SecCatalog
   nameWithType: ICandlesSourceProvider.SecCatalog
+- uid: FancyCandles.ICandlesSourceProvider.SupportedTimeFrames
+  name: SupportedTimeFrames
+  href: api/FancyCandles.ICandlesSourceProvider.html#FancyCandles_ICandlesSourceProvider_SupportedTimeFrames
+  commentId: P:FancyCandles.ICandlesSourceProvider.SupportedTimeFrames
+  fullName: FancyCandles.ICandlesSourceProvider.SupportedTimeFrames
+  nameWithType: ICandlesSourceProvider.SupportedTimeFrames
+- uid: FancyCandles.ICandlesSourceProvider.SupportedTimeFrames*
+  name: SupportedTimeFrames
+  href: api/FancyCandles.ICandlesSourceProvider.html#FancyCandles_ICandlesSourceProvider_SupportedTimeFrames_
+  commentId: Overload:FancyCandles.ICandlesSourceProvider.SupportedTimeFrames
+  isSpec: "True"
+  fullName: FancyCandles.ICandlesSourceProvider.SupportedTimeFrames
+  nameWithType: ICandlesSourceProvider.SupportedTimeFrames
 - uid: FancyCandles.Indicators
   name: FancyCandles.Indicators
   href: api/FancyCandles.Indicators.html
@@ -2684,6 +2668,51 @@ references:
   isSpec: "True"
   fullName: FancyCandles.IntRange.Undefined
   nameWithType: IntRange.Undefined
+- uid: FancyCandles.IResourceWithUserCounter
+  name: IResourceWithUserCounter
+  href: api/FancyCandles.IResourceWithUserCounter.html
+  commentId: T:FancyCandles.IResourceWithUserCounter
+  fullName: FancyCandles.IResourceWithUserCounter
+  nameWithType: IResourceWithUserCounter
+- uid: FancyCandles.IResourceWithUserCounter.DecreaseUserCount
+  name: DecreaseUserCount()
+  href: api/FancyCandles.IResourceWithUserCounter.html#FancyCandles_IResourceWithUserCounter_DecreaseUserCount
+  commentId: M:FancyCandles.IResourceWithUserCounter.DecreaseUserCount
+  fullName: FancyCandles.IResourceWithUserCounter.DecreaseUserCount()
+  nameWithType: IResourceWithUserCounter.DecreaseUserCount()
+- uid: FancyCandles.IResourceWithUserCounter.DecreaseUserCount*
+  name: DecreaseUserCount
+  href: api/FancyCandles.IResourceWithUserCounter.html#FancyCandles_IResourceWithUserCounter_DecreaseUserCount_
+  commentId: Overload:FancyCandles.IResourceWithUserCounter.DecreaseUserCount
+  isSpec: "True"
+  fullName: FancyCandles.IResourceWithUserCounter.DecreaseUserCount
+  nameWithType: IResourceWithUserCounter.DecreaseUserCount
+- uid: FancyCandles.IResourceWithUserCounter.IncreaseUserCount
+  name: IncreaseUserCount()
+  href: api/FancyCandles.IResourceWithUserCounter.html#FancyCandles_IResourceWithUserCounter_IncreaseUserCount
+  commentId: M:FancyCandles.IResourceWithUserCounter.IncreaseUserCount
+  fullName: FancyCandles.IResourceWithUserCounter.IncreaseUserCount()
+  nameWithType: IResourceWithUserCounter.IncreaseUserCount()
+- uid: FancyCandles.IResourceWithUserCounter.IncreaseUserCount*
+  name: IncreaseUserCount
+  href: api/FancyCandles.IResourceWithUserCounter.html#FancyCandles_IResourceWithUserCounter_IncreaseUserCount_
+  commentId: Overload:FancyCandles.IResourceWithUserCounter.IncreaseUserCount
+  isSpec: "True"
+  fullName: FancyCandles.IResourceWithUserCounter.IncreaseUserCount
+  nameWithType: IResourceWithUserCounter.IncreaseUserCount
+- uid: FancyCandles.IResourceWithUserCounter.UserCount
+  name: UserCount
+  href: api/FancyCandles.IResourceWithUserCounter.html#FancyCandles_IResourceWithUserCounter_UserCount
+  commentId: P:FancyCandles.IResourceWithUserCounter.UserCount
+  fullName: FancyCandles.IResourceWithUserCounter.UserCount
+  nameWithType: IResourceWithUserCounter.UserCount
+- uid: FancyCandles.IResourceWithUserCounter.UserCount*
+  name: UserCount
+  href: api/FancyCandles.IResourceWithUserCounter.html#FancyCandles_IResourceWithUserCounter_UserCount_
+  commentId: Overload:FancyCandles.IResourceWithUserCounter.UserCount
+  isSpec: "True"
+  fullName: FancyCandles.IResourceWithUserCounter.UserCount
+  nameWithType: IResourceWithUserCounter.UserCount
 - uid: FancyCandles.ISecurityInfo
   name: ISecurityInfo
   href: api/FancyCandles.ISecurityInfo.html
@@ -2703,6 +2732,19 @@ references:
   isSpec: "True"
   fullName: FancyCandles.ISecurityInfo.ExchangeName
   nameWithType: ISecurityInfo.ExchangeName
+- uid: FancyCandles.ISecurityInfo.SecID
+  name: SecID
+  href: api/FancyCandles.ISecurityInfo.html#FancyCandles_ISecurityInfo_SecID
+  commentId: P:FancyCandles.ISecurityInfo.SecID
+  fullName: FancyCandles.ISecurityInfo.SecID
+  nameWithType: ISecurityInfo.SecID
+- uid: FancyCandles.ISecurityInfo.SecID*
+  name: SecID
+  href: api/FancyCandles.ISecurityInfo.html#FancyCandles_ISecurityInfo_SecID_
+  commentId: Overload:FancyCandles.ISecurityInfo.SecID
+  isSpec: "True"
+  fullName: FancyCandles.ISecurityInfo.SecID
+  nameWithType: ISecurityInfo.SecID
 - uid: FancyCandles.ISecurityInfo.SecurityName
   name: SecurityName
   href: api/FancyCandles.ISecurityInfo.html#FancyCandles_ISecurityInfo_SecurityName

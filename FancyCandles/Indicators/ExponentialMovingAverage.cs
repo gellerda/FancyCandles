@@ -98,6 +98,7 @@ namespace FancyCandles.Indicators
             return ema;
         }
         //---------------------------------------------------------------------------------------------------------------------------------------
+#pragma warning  disable CS1591
         protected override void ReCalcAllIndicatorValues()
         {
             indicatorValues = new List<double>();
@@ -119,6 +120,7 @@ namespace FancyCandles.Indicators
             //if (CandlesSource.Count == 1) return;
             indicatorValues.Add(CalcIndicatorValue(CandlesSource.Count - 1));
         }
+#pragma warning  restore CS1591
         //---------------------------------------------------------------------------------------------------------------------------------------
         ///<summary>Implements the <see cref="OverlayIndicator.OnRender"/> abstract method inherited from the <see cref="OverlayIndicator"/> base class.</summary>
         ///<param name="drawingContext">Provides methods for drawing lines and shapes on the price chart area.</param>
