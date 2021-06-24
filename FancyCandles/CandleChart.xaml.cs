@@ -1922,7 +1922,7 @@ namespace FancyCandles
         ///<para>
         ///Take a note, that the <see cref="CandlesSource"/> property support <see cref="IResourceWithUserCounter"/> types. 
         ///Every time you sets the <see cref="CandlesSource"/> property value, it calls the <see cref="IResourceWithUserCounter.IncreaseUserCount"/> method of the new value and the 
-        ///the <see cref="IResourceWithUserCounter.DecreaseUserCount"/> method of the old value if they implements the <see cref="IResourceWithUserCounter"/> interface. 
+        ///the <see cref="IResourceWithUserCounter.DecreaseUserCount"/> method of the old value if they implement the <see cref="IResourceWithUserCounter"/> interface. 
         ///It can be helpful in some scenarios where you want to optimize the number of candle sources in your application and delete those that are not in use.
         ///</para>
         ///</remarks>
