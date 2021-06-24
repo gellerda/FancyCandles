@@ -991,6 +991,19 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.DefaultVolumeHistogramTopMargin
   nameWithType: CandleChart.DefaultVolumeHistogramTopMargin
+- uid: FancyCandles.CandleChart.DefaultWaitIndicatorForeground
+  name: DefaultWaitIndicatorForeground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultWaitIndicatorForeground
+  commentId: P:FancyCandles.CandleChart.DefaultWaitIndicatorForeground
+  fullName: FancyCandles.CandleChart.DefaultWaitIndicatorForeground
+  nameWithType: CandleChart.DefaultWaitIndicatorForeground
+- uid: FancyCandles.CandleChart.DefaultWaitIndicatorForeground*
+  name: DefaultWaitIndicatorForeground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultWaitIndicatorForeground_
+  commentId: Overload:FancyCandles.CandleChart.DefaultWaitIndicatorForeground
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.DefaultWaitIndicatorForeground
+  nameWithType: CandleChart.DefaultWaitIndicatorForeground
 - uid: FancyCandles.CandleChart.DisabledFill
   name: DisabledFill
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DisabledFill
@@ -1838,6 +1851,25 @@ references:
   commentId: F:FancyCandles.CandleChart.VolumeHistogramTopMarginProperty
   fullName: FancyCandles.CandleChart.VolumeHistogramTopMarginProperty
   nameWithType: CandleChart.VolumeHistogramTopMarginProperty
+- uid: FancyCandles.CandleChart.WaitIndicatorForeground
+  name: WaitIndicatorForeground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_WaitIndicatorForeground
+  commentId: P:FancyCandles.CandleChart.WaitIndicatorForeground
+  fullName: FancyCandles.CandleChart.WaitIndicatorForeground
+  nameWithType: CandleChart.WaitIndicatorForeground
+- uid: FancyCandles.CandleChart.WaitIndicatorForeground*
+  name: WaitIndicatorForeground
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_WaitIndicatorForeground_
+  commentId: Overload:FancyCandles.CandleChart.WaitIndicatorForeground
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.WaitIndicatorForeground
+  nameWithType: CandleChart.WaitIndicatorForeground
+- uid: FancyCandles.CandleChart.WaitIndicatorForegroundProperty
+  name: WaitIndicatorForegroundProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_WaitIndicatorForegroundProperty
+  commentId: F:FancyCandles.CandleChart.WaitIndicatorForegroundProperty
+  fullName: FancyCandles.CandleChart.WaitIndicatorForegroundProperty
+  nameWithType: CandleChart.WaitIndicatorForegroundProperty
 - uid: FancyCandles.CandleExtremums
   name: CandleExtremums
   href: api/FancyCandles.CandleExtremums.html

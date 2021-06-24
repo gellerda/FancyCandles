@@ -196,6 +196,30 @@ namespace FancyCandles
         public static readonly DependencyProperty IsCurrentPriceLabelVisibleProperty =
             DependencyProperty.Register("IsCurrentPriceLabelVisible", typeof(bool), typeof(CandleChart), new PropertyMetadata(true));
         //----------------------------------------------------------------------------------------------------------------------------------
+        /// <summary>Gets or sets the color of the wait indicator.</summary>
+        ///<value>The color of the wait indicator. The default is determined by the <see cref="DefaultWaitIndicatorForeground"/> values.</value>
+        ///<remarks>
+        ///The wait indicator is located in the center of the price chart area. It becomes visible when a candle data is loading.
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="WaitIndicatorForegroundProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
+        public Brush WaitIndicatorForeground
+        {
+            get { return (Brush)GetValue(WaitIndicatorForegroundProperty); }
+            set { SetValue(WaitIndicatorForegroundProperty, value); }
+        }
+        /// <summary>Identifies the <see cref="WaitIndicatorForeground"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty WaitIndicatorForegroundProperty =
+            DependencyProperty.Register("WaitIndicatorForeground", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultWaitIndicatorForeground));
+
+        ///<summary>Gets the default value for the WaitIndicatorForeground property.</summary>
+        ///<value>The default value for the <see cref="WaitIndicatorForeground"/> property: <c>Brushes.DarkGray</c>.</value>
+        public static Brush DefaultWaitIndicatorForeground { get { return (Brush)Brushes.DarkGray.GetCurrentValueAsFrozen(); } }
+        //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the background of the price chart and volume diagram areas.</summary>
         ///<value>The background of the price chart and volume diagram areas. The default is determined by the <see cref="DefaultChartAreaBackground"/> values.</value>
         ///<remarks>

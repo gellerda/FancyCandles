@@ -29,6 +29,20 @@ using System.Reflection;
 namespace FancyCandles
 {
     //*******************************************************************************************************************************************************************
+    class IsCandlesLoadingConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            int? candlesSourceCount = value as int?;
+            return candlesSourceCount != null && candlesSourceCount == 0;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    //*******************************************************************************************************************************************************************
     class CandleProviderSecCatalogIsNotEmptyConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
