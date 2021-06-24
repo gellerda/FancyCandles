@@ -1,0 +1,33 @@
+﻿<Window x:Class="CandlesSourceProviderExample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CandlesSourceProviderExample"
+        xmlns:fc="clr-namespace:FancyCandles;assembly=FancyCandles"
+        xmlns:fci="clr-namespace:FancyCandles.Indicators;assembly=FancyCandles"        
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        
+        <fc:CandleChart CandlesSourceProvider="{Binding Path=CandlesProvider}"
+                        VolumeBarWidthToCandleWidthRatio="0.5">
+            <fc:CandleChart.OverlayIndicators>
+                <local:ObservableOverlayIndicatorCollection>
+                    <fci:SimpleMovingAverage N="7">
+                        <fci:SimpleMovingAverage.Pen>
+                            <Pen Thickness="1" Brush="Magenta" />
+                        </fci:SimpleMovingAverage.Pen>
+                    </fci:SimpleMovingAverage>
+
+                    <fci:ExponentialMovingAverage Smoothing="0.1">
+                        <fci:ExponentialMovingAverage.Pen>
+                            <Pen Thickness="1" Brush="Blue" />
+                        </fci:ExponentialMovingAverage.Pen>
+                    </fci:ExponentialMovingAverage>
+                </local:ObservableOverlayIndicatorCollection>
+            </fc:CandleChart.OverlayIndicators>
+        </fc:CandleChart>
+        
+    </Grid>
+</Window>

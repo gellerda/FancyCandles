@@ -9,7 +9,7 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.CandleChart.html",
-          "hash": "Hmw9gcggAsMrrS5Zr/FBnQ=="
+          "hash": "gC8ytcX2I5yCd4pt2c7awg=="
         }
       },
       "is_incremental": false,
@@ -24,7 +24,7 @@
           "hash": "LeV2dQdFv03mKjB0q15qyw=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -36,7 +36,7 @@
           "hash": "rfIkdFy1dT2peFhyPZm/Hg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -84,7 +84,7 @@
           "hash": "I82rYHxugdpbQ44XhNEaNQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -96,7 +96,7 @@
           "hash": "cQ7D53A6uLDNbhYdQytHfg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -156,7 +156,7 @@
           "hash": "I5DTc4J4R/UEtTRqN7Kw+Q=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -168,7 +168,7 @@
           "hash": "B6jkZtwblgooP5fhvt06QA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -177,7 +177,7 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.TimeFrame.html",
-          "hash": "RglJEaZwyF8HGNqU670pXQ=="
+          "hash": "f5eKrK6NYL36HviGKkJDBA=="
         }
       },
       "is_incremental": false,
@@ -189,7 +189,7 @@
       "output": {
         ".html": {
           "relative_path": "api/FancyCandles.TimeFrameExtensionMethods.html",
-          "hash": "BvMkzjCttO0KAMsdaJX9Uw=="
+          "hash": "ReauMvruUs+WQtaiJW9wsA=="
         }
       },
       "is_incremental": false,
@@ -216,7 +216,7 @@
           "hash": "jSd7Rh8TxHFWBaWdceYJCQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -539,7 +539,7 @@
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 17,
-          "skipped_file_count": 1
+          "skipped_file_count": 14
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,

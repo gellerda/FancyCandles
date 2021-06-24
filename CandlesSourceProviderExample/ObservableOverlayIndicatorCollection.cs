@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace CandleChartExample
+namespace CandlesSourceProviderExample
 {
     public class ObservableOverlayIndicatorCollection : ObservableCollection<FancyCandles.Indicators.OverlayIndicator>
     {

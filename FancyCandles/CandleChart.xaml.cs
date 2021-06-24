@@ -1912,11 +1912,19 @@ namespace FancyCandles
         ///<summary>Gets or sets the provider of candle collections, that can be used as a value for the <see cref="CandlesSource"/> property.</summary>
         ///<value>The provider of candle collections, which can be used as a value for the <see cref="CandlesSource"/> property.</value>
         ///<remarks>
+        ///<para>
         ///Using the <see cref="CandlesSourceProvider"/> property is optional. You can set the <see cref="CandlesSource"/> property to populate your <see cref="CandleChart"/> with candle data and it's absolutely ok. 
         ///But if you want to provide the ability to select a security and time frame from the <see cref="CandleChart"/> context menu you have to set the <see cref="CandlesSourceProvider"/> property.
         ///<see cref="ICandlesSourceProvider"/> provides a list of available securities and time frames and, of course, a candle data to use with <see cref="CandleChart"/>.
         ///Setting this property makes the <c>Select New Security</c> and <c>Time Frame</c> items of the <see cref="CandleChart"/> context menu enabled. 
         ///When a user of your application has selected a new security or time frame, a new value will be assigned to the <see cref="CandlesSource"/> property. 
+        ///</para>
+        ///<para>
+        ///Take a note, that the <see cref="CandlesSource"/> property support <see cref="IResourceWithUserCounter"/> types. 
+        ///Every time you sets the <see cref="CandlesSource"/> property value, it calls the <see cref="IResourceWithUserCounter.IncreaseUserCount"/> method of the new value and the 
+        ///the <see cref="IResourceWithUserCounter.DecreaseUserCount"/> method of the old value if they implements the <see cref="IResourceWithUserCounter"/> interface. 
+        ///It can be helpful in some scenarios where you want to optimize the number of candle sources in your application and delete those that are not in use.
+        ///</para>
         ///</remarks>
         public ICandlesSourceProvider CandlesSourceProvider
         {
@@ -1934,11 +1942,19 @@ namespace FancyCandles
         ///<summary>Gets or sets the data source for the candles of this chart.</summary>
         ///<value>The data source for the candles of this chart. The default value is null.</value>
         ///<remarks>
-        ///<para>Note that the timeframe is an immutable characteristic of a candle collection. 
+        ///<para>
+        ///Note that the timeframe is an immutable characteristic of a candle collection. 
         ///Therefore <see cref="ICandlesSource.TimeFrame"/> is the readonly property of the <see cref="ICandlesSource"/> interface.
         ///The only way to change the timeframe of your <see cref="CandleChart"/> is to change the value of the <see cref="CandlesSource"/> property 
-        ///to a whole new candle collection with a new timeframe.</para>
-        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///to a whole new candle collection with a new timeframe.
+        ///</para>
+        ///<para>
+        ///Take a note, that the <see cref="CandlesSource"/> property support <see cref="IResourceWithUserCounter"/> types. 
+        ///Every time you sets the <see cref="CandlesSource"/> property value, it calls the <see cref="IResourceWithUserCounter.IncreaseUserCount"/> method of the new value and the 
+        ///the <see cref="IResourceWithUserCounter.DecreaseUserCount"/> method of the old value if they implements the <see cref="IResourceWithUserCounter"/> interface. 
+        ///It can be helpful in some scenarios where you want to optimize the number of candle sources in your application and delete those that are not in use.
+        ///</para>
+        //////<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
         ///<tr><td>Identifier field</td><td><see cref="CandlesSourceProperty"/></td></tr> 
         ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
         ///</remarks>

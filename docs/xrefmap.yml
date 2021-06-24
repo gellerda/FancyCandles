@@ -3007,3 +3007,16 @@ references:
   isSpec: "True"
   fullName: FancyCandles.TimeFrameExtensionMethods.ToMinutes
   nameWithType: TimeFrameExtensionMethods.ToMinutes
+- uid: FancyCandles.TimeFrameExtensionMethods.ToSeconds(FancyCandles.TimeFrame)
+  name: ToSeconds(TimeFrame)
+  href: api/FancyCandles.TimeFrameExtensionMethods.html#FancyCandles_TimeFrameExtensionMethods_ToSeconds_FancyCandles_TimeFrame_
+  commentId: M:FancyCandles.TimeFrameExtensionMethods.ToSeconds(FancyCandles.TimeFrame)
+  fullName: FancyCandles.TimeFrameExtensionMethods.ToSeconds(FancyCandles.TimeFrame)
+  nameWithType: TimeFrameExtensionMethods.ToSeconds(TimeFrame)
+- uid: FancyCandles.TimeFrameExtensionMethods.ToSeconds*
+  name: ToSeconds
+  href: api/FancyCandles.TimeFrameExtensionMethods.html#FancyCandles_TimeFrameExtensionMethods_ToSeconds_
+  commentId: Overload:FancyCandles.TimeFrameExtensionMethods.ToSeconds
+  isSpec: "True"
+  fullName: FancyCandles.TimeFrameExtensionMethods.ToSeconds
+  nameWithType: TimeFrameExtensionMethods.ToSeconds
