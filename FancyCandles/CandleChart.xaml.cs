@@ -197,7 +197,7 @@ namespace FancyCandles
             DependencyProperty.Register("IsCurrentPriceLabelVisible", typeof(bool), typeof(CandleChart), new PropertyMetadata(true));
         //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the color of the wait indicator.</summary>
-        ///<value>The color of the wait indicator. The default is determined by the <see cref="DefaultWaitIndicatorForeground"/> values.</value>
+        ///<value>The color of the wait indicator. The default is determined by the <see cref="DefaultWaitIndicatorForeground"/> value.</value>
         ///<remarks>
         ///The wait indicator is located in the center of the price chart area. It becomes visible when a candle data is loading.
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
@@ -211,8 +211,8 @@ namespace FancyCandles
             get { return (Brush)GetValue(WaitIndicatorForegroundProperty); }
             set { SetValue(WaitIndicatorForegroundProperty, value); }
         }
-        /// <summary>Identifies the <see cref="WaitIndicatorForeground"/> dependency property.</summary>
-        /// <value><see cref="DependencyProperty"/></value>
+        ///<summary>Identifies the <see cref="WaitIndicatorForeground"/> dependency property.</summary>
+        ///<value><see cref="DependencyProperty"/></value>
         public static readonly DependencyProperty WaitIndicatorForegroundProperty =
             DependencyProperty.Register("WaitIndicatorForeground", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultWaitIndicatorForeground));
 

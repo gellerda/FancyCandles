@@ -159,9 +159,14 @@
                             <fp:StandardColorPicker SelectedColor="{Binding ChartAreaBackground, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
                         </StackPanel>
 
-                        <StackPanel Style="{StaticResource settingsItem}" ToolTip="While loading data the whole chart is covered by a semitransparent plain-coloured layer.">
+                        <StackPanel Style="{StaticResource settingsItem}" ToolTip="While disabled the whole chart is covered by a semitransparent plain-coloured layer.">
                             <TextBlock Style="{StaticResource horizontalCaption}">Color in disabled mode:</TextBlock>
                             <fp:StandardColorPickerWithAChannel SelectedColor="{Binding DisabledFill, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+                        </StackPanel>
+                        
+                        <StackPanel Style="{StaticResource settingsItem}" ToolTip="While loading data the wait indicator in the center of the price chart area becomes visible.">
+                            <TextBlock Style="{StaticResource horizontalCaption}">Wait indicator color:</TextBlock>
+                            <fp:StandardColorPickerWithAChannel SelectedColor="{Binding WaitIndicatorForeground, Converter={StaticResource symColorBrushStringConverter}, Mode=TwoWay}" VerticalAlignment="Bottom"/>
                         </StackPanel>
 
                         <GroupBox Header="Scrollbar">
@@ -177,7 +182,7 @@
                                 </StackPanel>
                             </StackPanel>
                         </GroupBox>
-                    
+
                     </StackPanel>
 
                     <!-- Vertical separation line -->
