@@ -6,7 +6,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FancyCandles"
         mc:Ignorable="d"
-        Title="SelectCandleSourceWindow" Height="450" Width="800">
+        WindowStartupLocation="CenterOwner"
+        Title="SelectCandleSourceWindow" Height="350" Width="500">
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -14,27 +16,25 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0">
-            <Label Content="Find by:"/>
+        <StackPanel Orientation="Horizontal" Margin="5 0 5 10">
+            <Label Content="Filter:" VerticalAlignment="Bottom" FontStyle="Italic" Margin="0 0 0 -2"/>
+                
+            <StackPanel>
+                <Label Content="Ticker" Margin="0 0 0 -5"/>
+                <TextBox x:Name="tickerFilterText"
+                            Width="60"
+                            Text="{Binding Path=TickerFilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
             
-            <StackPanel Orientation="Horizontal">
-                <StackPanel>
-                    <Label Content="Ticker"/>
-                    <TextBox x:Name="tickerFilterText" Margin="0 0 0 10"
-                             Width="60"
-                             Text="{Binding Path=TickerFilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
-            
-                <StackPanel>
-                    <Label Content="Name"/>
-                    <TextBox x:Name="nameFilterText" Margin="0 0 0 10"
-                             Width="210"
-                             Text="{Binding Path=NameFilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
+            <StackPanel>
+                <Label Content="Name" Margin="0 0 0 -5"/>
+                <TextBox x:Name="nameFilterText"
+                            Width="210"
+                            Text="{Binding Path=NameFilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" x:Name="secListContainer" Height="Auto">
+        <StackPanel Grid.Row="1" x:Name="secListContainer" Height="Auto" Margin="5 0 5 0">
             <ListView x:Name="secList"
                       MaxHeight="{Binding ElementName=secListContainer, Path=ActualHeight}"
                       ItemsSource="{Binding Path=SecsView}" 
@@ -44,7 +44,7 @@
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Ticker}" Width="{Binding ElementName=tickerFilterText, Path=Width, Mode=TwoWay}">Ticker</GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=SecurityName}" Width="{Binding ElementName=nameFilterText, Path=Width, Mode=TwoWay}">Name</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=SecurityType}" Width="60">Type</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=SecurityType}" Width="120">Type</GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>

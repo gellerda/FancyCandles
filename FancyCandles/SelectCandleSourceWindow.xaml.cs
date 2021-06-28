@@ -24,6 +24,8 @@ namespace FancyCandles
         {
             InitializeComponent();
 
+            Owner = Application.Current.MainWindow;
+
             SecsView = CollectionViewSource.GetDefaultView(parentCandleChart.CandlesSourceProvider.SecCatalog);
             SecsView.Filter = SecFilter;
 
