@@ -1924,7 +1924,8 @@ namespace FancyCandles
         {
             if (!(CandlesSource is ICandlesSourceFromProvider) || CandlesSourceProvider == null) return;
 
-            TimeFrame newTimeFrame = (TimeFrame)((MenuItem)sender).Header;
+            //TimeFrame newTimeFrame = (TimeFrame)((MenuItem)sender).Header;
+            TimeFrame newTimeFrame = (TimeFrame)((MenuItem)e.OriginalSource).Header;
             string secID = (CandlesSource as ICandlesSourceFromProvider).SecID;
             ICandlesSource newCandleSource = CandlesSourceProvider.GetCandlesSource(secID, newTimeFrame);
             CandlesSource = newCandleSource;
