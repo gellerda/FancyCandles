@@ -605,6 +605,13 @@ namespace FancyCandles
         //----------------------------------------------------------------------------------------------------------------------------------
         #region LEGEND PROPERTIES *******************************************************************************************************************************
 
+        private readonly static string loadingLegendText = "Loading...";
+
+        private string CreateLegendText(ISecurityInfo secInfo)
+        {
+            return $"{secInfo.Ticker}, {CandlesSource.TimeFrame}";
+        } 
+
         ///<summary>Gets or sets the text of the legend.</summary>
         ///<value>The text of the legend. The default is determined by the <see cref="DefaultLegendText"/> value.</value>
         ///<remarks>
@@ -2051,8 +2058,15 @@ namespace FancyCandles
 
                 if (e.NewValue is ICandlesSourceFromProvider && thisCandleChart.CandlesSourceProvider != null)
                 {
-                    ISecurityInfo secInfo = thisCandleChart.CandlesSourceProvider.GetSecFromCatalog((thisCandleChart.CandlesSource as ICandlesSourceFromProvider).SecID);
-                    thisCandleChart.SetCurrentValue(LegendTextProperty, $"{secInfo.Ticker}, {thisCandleChart.CandlesSource.TimeFrame}");
+                    try
+                    {
+                        ISecurityInfo secInfo = thisCandleChart.CandlesSourceProvider.GetSecFromCatalog((thisCandleChart.CandlesSource as ICandlesSourceFromProvider).SecID);
+                        thisCandleChart.SetCurrentValue(LegendTextProperty, thisCandleChart.CreateLegendText(secInfo));
+                    }
+                    catch 
+                    {
+                        thisCandleChart.SetCurrentValue(LegendTextProperty, loadingLegendText);
+                    }
                 }
             }
 
@@ -2085,6 +2099,12 @@ namespace FancyCandles
             //different kind of changes that may have occurred in collection
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
+                if (CandlesSource.Count == 1 && LegendText == loadingLegendText)
+                {
+                    ISecurityInfo secInfo = CandlesSourceProvider.GetSecFromCatalog((CandlesSource as ICandlesSourceFromProvider).SecID);
+                    SetCurrentValue(LegendTextProperty, CreateLegendText(secInfo));
+                }
+
                 if (numberOfFractionalDigitsSample.NumberOfObservations < numberOfObservationsToStopRecalculatingNumberOfFractionalDigits)
                 {
                     ICandle newCandle = CandlesSource[e.NewStartingIndex];

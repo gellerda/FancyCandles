@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>FancyCandles</id>
-    <version>2.6.2</version>
+    <version>2.6.3</version>
     <title>FancyCandles for WPF</title>
     <authors>Dennis Geller</authors>
     <owners>Dennis Geller</owners>
@@ -11,8 +11,8 @@
 	<icon>images\icon.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>A candlestick chart control for WPF.</description>
-    <releaseNotes>v.2.6.2.
-- Tune up the context menu style.
+    <releaseNotes>v.2.6.3.
+- Tune up the SelectCandleSourceWindow style.
 </releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags>candlestick price chart candle OHLC WPF control</tags>
