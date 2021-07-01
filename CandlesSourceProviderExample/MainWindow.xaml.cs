@@ -17,6 +17,34 @@ namespace CandlesSourceProviderExample
 {
     public partial class MainWindow : Window
     {
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // This snippet of code fixes a problem of incorrect popup, tips and context menu location.
+        // Read more about it: https://stackoverflow.com/questions/18113597/wpf-handedness-with-popups
+        private static readonly System.Reflection.FieldInfo _menuDropAlignmentField;
+
+        static MainWindow()
+        {
+            _menuDropAlignmentField = typeof(SystemParameters).GetField("_menuDropAlignment", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+            System.Diagnostics.Debug.Assert(_menuDropAlignmentField != null);
+
+            EnsureStandardPopupAlignment();
+            SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
+        }
+
+        private static void SystemParameters_StaticPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            EnsureStandardPopupAlignment();
+        }
+
+        private static void EnsureStandardPopupAlignment()
+        {
+            if (SystemParameters.MenuDropAlignment && _menuDropAlignmentField != null)
+            {
+                _menuDropAlignmentField.SetValue(null, false);
+            }
+        }
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         public MyCandlesSourceProvider CandlesProvider { get; private set; }
 
         public MainWindow()

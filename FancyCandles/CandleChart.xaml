@@ -41,12 +41,7 @@
         <local:NotBoolToVisibilityConverter x:Key="notBoolToVisibilityConverter"/>
         <local:SquareBoolToVisibilityConverter x:Key="squareBoolToVisibilityConverter"/>
         <local:VerticalCrossLineVisibilityConverter x:Key="verticalCrossLineVisibilityConverter"/>
-        <local:IntRangeToPointConverter x:Key="intRangeToPointConverter"/>
-        <local:CandleExtremumsToPriceExtremumsPointConverter x:Key="candleExtremumsToPriceExtremumsPointConverter"/>
-        <local:CandleDrawingParametersToPointConverter x:Key="candleDrawingParametersToPointConverter"/>
         <local:CandleDrawingParametersConverter x:Key="candleDrawingParametersConverter"/>
-        <local:CandleProviderSecCatalogIsNotEmptyConverter x:Key="candleProviderSecCatalogIsNotEmptyConverter"/>
-        <local:CandlesSourceIsFromProviderConverter x:Key="candlesSourceIsFromProviderConverter"/>
 
         <Style x:Key="rowSpanPriceChartIfVolumeDisabled">
             <Style.Triggers>
@@ -96,7 +91,9 @@
                     <ContentPresenter Grid.Column="1" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" HorizontalAlignment="Left" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="2" Margin="{TemplateBinding Padding}" Opacity="0.7" Text="{TemplateBinding InputGestureText}" VerticalAlignment="Center"/>
                     <Path x:Name="RightArrow" Grid.Column="4" Data="M0,0L4,3.5 0,7z" Fill="#FF212121" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                    <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" HorizontalOffset="-2" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" Placement="Right" VerticalOffset="-3">
+                    <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" HorizontalOffset="-2" 
+                           IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" 
+                           PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" Placement="Right" VerticalOffset="-3">
                         <Border x:Name="SubMenuBorder" BorderBrush="{DynamicResource contextMenuBorderBrush}" BorderThickness="1" Background="{DynamicResource contextMenuBackground}" Padding="0 2 0 2">
                             <Grid RenderOptions.ClearTypeHint="Enabled">
                                 <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Cycle" Grid.IsSharedSizeScope="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabNavigation="Cycle"/>
@@ -161,7 +158,6 @@
         </ControlTemplate>
 
     </UserControl.Resources>
-
     
     <Grid DataContext="{Binding ElementName=thisUserControl, Path=.}" Background="{Binding Path=Background, Mode=OneWay}">
         <Grid.RowDefinitions>
@@ -199,10 +195,15 @@
                         <MenuItem Header="Settings" Click="OpenCandleChartPropertiesWindow"/>
                         <MenuItem Header="Load Settings" Click="OpenLoadSettingsDialog"/>
                         <MenuItem Header="Save Settings As" Click="OpenSaveSettingsAsDialog"/>
-                        <MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandlesSourceProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/>
+                        <MenuItem Header="Select New Security" Command="{Binding Path=OpenSelectCandleSourceWindowCommand, Mode=OneWay}"/>
                         <MenuItem Header="Time Frame" ItemsSource="{Binding Path=CandlesSourceProvider.SupportedTimeFrames, Mode=OneWay}" 
-                                  IsEnabled="{Binding Path=CandlesSource, Converter={StaticResource candlesSourceIsFromProviderConverter}}" 
-                                  Click="ChangeCurrentTimeFrame">
+                                  Command="{Binding Path=ChangeCurrentTimeframeCommand}">
+                            <MenuItem.ItemContainerStyle>
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Command" Value="{Binding Path=PlacementTarget.DataContext.ChangeCurrentTimeframeCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                    <Setter Property="CommandParameter" Value="{Binding Path=.}"/>
+                                </Style>
+                            </MenuItem.ItemContainerStyle>
                         </MenuItem>
                     </ContextMenu>
                 </Rectangle.ContextMenu>
@@ -309,18 +310,19 @@
             <!-- Нужно заполнить весь контейнер прозрачным содержимым, а иначе перекрестие не работает: -->
             <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent">
                 <Rectangle.ContextMenu>
-                    <ContextMenu>
+                    <ContextMenu x:Name="volumeHistogramContextMenu">
                         <MenuItem Header="Settings" Click="OpenCandleChartPropertiesWindow"/>
                         <MenuItem Header="Load Settings" Click="OpenLoadSettingsDialog"/>
                         <MenuItem Header="Save Settings As" Click="OpenSaveSettingsAsDialog"/>
-                        <MenuItem Header="Select New Security" Click="OpenSelectCandleSourceWindow" IsEnabled="{Binding Path=CandlesSourceProvider, Converter={StaticResource candleProviderSecCatalogIsNotEmptyConverter}}"/>
+                        <MenuItem Header="Select New Security" Command="{Binding Path=OpenSelectCandleSourceWindowCommand, Mode=OneWay}"/>
                         <MenuItem Header="Time Frame" ItemsSource="{Binding Path=CandlesSourceProvider.SupportedTimeFrames, Mode=OneWay}" 
-                                  IsEnabled="{Binding Path=CandlesSource, Converter={StaticResource candlesSourceIsFromProviderConverter}}">
-                            <MenuItem.ItemTemplate>
-                                <DataTemplate>
-                                    <MenuItem Header="{Binding Path=.}" Click="ChangeCurrentTimeFrame"/>
-                                </DataTemplate>
-                            </MenuItem.ItemTemplate>
+                                  Command="{Binding Path=ChangeCurrentTimeframeCommand}">
+                            <MenuItem.ItemContainerStyle>
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Command" Value="{Binding Path=PlacementTarget.DataContext.ChangeCurrentTimeframeCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                    <Setter Property="CommandParameter" Value="{Binding Path=.}"/>
+                                </Style>
+                            </MenuItem.ItemContainerStyle>
                         </MenuItem>
                     </ContextMenu>
                 </Rectangle.ContextMenu>

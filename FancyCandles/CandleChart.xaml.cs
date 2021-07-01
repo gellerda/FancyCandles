@@ -114,6 +114,7 @@ namespace FancyCandles
             InitializeComponent();
 
             priceChartContextMenu.DataContext = this;
+            volumeHistogramContextMenu.DataContext = this;
 
             VisibleCandlesRange = IntRange.Undefined;
             VisibleCandlesExtremums = new CandleExtremums(0.0, 0.0, 0L, 0L);
@@ -138,14 +139,28 @@ namespace FancyCandles
             }
         }
         //----------------------------------------------------------------------------------------------------------------------------------
-        private void OpenSelectCandleSourceWindow(object sender, RoutedEventArgs e)
+        private FancyPrimitives.RelayCommand openSelectCandleSourceWindowCommand;
+        /// <summary>Gets the Command that opens the dialog window for selecting a new financial instrument.</summary>
+        ///<value>The Command that opens the dialog window for selecting a new financial instrument.</value>
+        public FancyPrimitives.RelayCommand OpenSelectCandleSourceWindowCommand
         {
-            SelectCandleSourceWindow popup = new SelectCandleSourceWindow(this);
-            if (popup.ShowDialog() == true)
+            get
             {
-            }
-            else
-            {
+                return openSelectCandleSourceWindowCommand ??
+                  (openSelectCandleSourceWindowCommand = new FancyPrimitives.RelayCommand(nothing =>
+                  {
+                      SelectCandleSourceWindow popup = new SelectCandleSourceWindow(this);
+                      if (popup.ShowDialog() == true)
+                      {
+                      }
+                      else
+                      {
+                      }
+                  },
+                  nothing =>
+                  {
+                      return CandlesSourceProvider != null && CandlesSourceProvider.SecCatalog.Count > 0;
+                  }));
             }
         }
         //----------------------------------------------------------------------------------------------------------------------------------
@@ -1927,18 +1942,48 @@ namespace FancyCandles
 
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
-        private void ChangeCurrentTimeFrame(object sender, RoutedEventArgs e)
+        private void ChangeCurrentTimeFrame(TimeFrame newTimeFrame)
         {
-            if (!(CandlesSource is ICandlesSourceFromProvider) || CandlesSourceProvider == null) return;
-
-            //TimeFrame newTimeFrame = (TimeFrame)((MenuItem)sender).Header;
-            TimeFrame newTimeFrame = (TimeFrame)((MenuItem)e.OriginalSource).Header;
             string secID = (CandlesSource as ICandlesSourceFromProvider).SecID;
             ICandlesSource newCandleSource = CandlesSourceProvider.GetCandlesSource(secID, newTimeFrame);
             CandlesSource = newCandleSource;
 
             ISecurityInfo secInfo = CandlesSourceProvider.GetSecFromCatalog(secID);
             SetCurrentValue(LegendTextProperty, $"{secInfo.Ticker}, {newTimeFrame}");
+        }
+
+        private void ChangeCurrentTimeFrame(object sender, RoutedEventArgs e)
+        {
+            if (!(CandlesSource is ICandlesSourceFromProvider) || CandlesSourceProvider == null) return;
+
+            TimeFrame newTimeFrame = (TimeFrame)((MenuItem)e.OriginalSource).Header;
+            ChangeCurrentTimeFrame(newTimeFrame);
+        }
+
+        private FancyPrimitives.RelayCommand changeCurrentTimeframeCommand;
+        /// <summary>Gets the Command for changing the current time frame.</summary>
+        ///<value>The command for changing the current time frame.</value>
+        ///<remarks>
+        ///This command can be executed only if the current <see cref="CandlesSource"/> value is of type <see cref="ICandlesSourceFromProvider"/> 
+        ///and <see cref="ICandlesSourceProvider.SecCatalog"/> of <see cref="CandlesSourceProvider"/> contains the current financial instrument.
+        ///It gets the new <see cref="ICandlesSource"/> value from <see cref="CandlesSourceProvider"/> of the same financial instrument but of the new time frame 
+        ///and assigns it to the <see cref="CandlesSource"/> property.
+        ///The command receives the new <see cref="TimeFrame"/> value as a command parameter;
+        ///</remarks>
+        public FancyPrimitives.RelayCommand ChangeCurrentTimeframeCommand
+        {
+            get
+            {
+                return changeCurrentTimeframeCommand ??
+                  (changeCurrentTimeframeCommand = new FancyPrimitives.RelayCommand(newTimeFrame =>
+                  {
+                      ChangeCurrentTimeFrame((TimeFrame)newTimeFrame);
+                  },
+                  nothing =>
+                  {
+                      return (CandlesSource is ICandlesSourceFromProvider) && (CandlesSourceProvider != null && ((ICandlesSourceProvider)CandlesSourceProvider).SecCatalog.Count > 0);
+                  } ));
+            }
         }
         //----------------------------------------------------------------------------------------------------------------------------------
         ///<summary>Gets or sets the provider of candle collections, that can be used as a value for the <see cref="CandlesSource"/> property.</summary>

@@ -43,32 +43,6 @@ namespace FancyCandles
         }
     }
     //*******************************************************************************************************************************************************************
-    class CandleProviderSecCatalogIsNotEmptyConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (value != null && ((ICandlesSourceProvider)value).SecCatalog.Count>0);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    //*******************************************************************************************************************************************************************
-    class CandlesSourceIsFromProviderConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (value is ICandlesSourceFromProvider);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    //*******************************************************************************************************************************************************************
     class TypeToStaticNamePropertyConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -287,48 +261,6 @@ namespace FancyCandles
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         { throw new NotImplementedException(); }
-    }
-    //*******************************************************************************************************************************************************************
-    class IntRangeToPointConverter : IValueConverter
-    {
-        public object Convert(object intRange_value, Type targetType, object parameter, CultureInfo culture)
-        {
-            IntRange ir = (IntRange)intRange_value;
-            return new Point(ir.Start_i, ir.Count);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    //*******************************************************************************************************************************************************************
-    class CandleExtremumsToPriceExtremumsPointConverter : IValueConverter
-    {
-        public object Convert(object candleExtremums_value, Type targetType, object parameter, CultureInfo culture)
-        {
-            CandleExtremums cndlExtr = (CandleExtremums)candleExtremums_value;
-            return new Point(cndlExtr.PriceLow, cndlExtr.PriceHigh);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    //*******************************************************************************************************************************************************************
-    class CandleDrawingParametersToPointConverter : IValueConverter
-    {
-        public object Convert(object CandleDrawingParameters_value, Type targetType, object parameter, CultureInfo culture)
-        {
-            CandleDrawingParameters drawingParams = (CandleDrawingParameters)CandleDrawingParameters_value;
-            return new Point(drawingParams.Width, drawingParams.Gap);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
     }
     //*******************************************************************************************************************************************************************
     class SquareBoolToVisibilityConverter : IMultiValueConverter
