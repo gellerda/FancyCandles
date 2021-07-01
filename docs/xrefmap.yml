@@ -274,6 +274,19 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.CandleWidth
   nameWithType: CandleChart.CandleWidth
+- uid: FancyCandles.CandleChart.ChangeCurrentTimeframeCommand
+  name: ChangeCurrentTimeframeCommand
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_ChangeCurrentTimeframeCommand
+  commentId: P:FancyCandles.CandleChart.ChangeCurrentTimeframeCommand
+  fullName: FancyCandles.CandleChart.ChangeCurrentTimeframeCommand
+  nameWithType: CandleChart.ChangeCurrentTimeframeCommand
+- uid: FancyCandles.CandleChart.ChangeCurrentTimeframeCommand*
+  name: ChangeCurrentTimeframeCommand
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_ChangeCurrentTimeframeCommand_
+  commentId: Overload:FancyCandles.CandleChart.ChangeCurrentTimeframeCommand
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.ChangeCurrentTimeframeCommand
+  nameWithType: CandleChart.ChangeCurrentTimeframeCommand
 - uid: FancyCandles.CandleChart.ChartAreaBackground
   name: ChartAreaBackground
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_ChartAreaBackground
@@ -1507,6 +1520,19 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.OnPropertyChanged
   nameWithType: CandleChart.OnPropertyChanged
+- uid: FancyCandles.CandleChart.OpenSelectCandleSourceWindowCommand
+  name: OpenSelectCandleSourceWindowCommand
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_OpenSelectCandleSourceWindowCommand
+  commentId: P:FancyCandles.CandleChart.OpenSelectCandleSourceWindowCommand
+  fullName: FancyCandles.CandleChart.OpenSelectCandleSourceWindowCommand
+  nameWithType: CandleChart.OpenSelectCandleSourceWindowCommand
+- uid: FancyCandles.CandleChart.OpenSelectCandleSourceWindowCommand*
+  name: OpenSelectCandleSourceWindowCommand
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_OpenSelectCandleSourceWindowCommand_
+  commentId: Overload:FancyCandles.CandleChart.OpenSelectCandleSourceWindowCommand
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.OpenSelectCandleSourceWindowCommand
+  nameWithType: CandleChart.OpenSelectCandleSourceWindowCommand
 - uid: FancyCandles.CandleChart.OverlayIndicators
   name: OverlayIndicators
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_OverlayIndicators
