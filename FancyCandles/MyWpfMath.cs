@@ -223,8 +223,7 @@ namespace FancyCandles
         //----------------------------------------------------------------------------------------------------------------------------------
         public static double TheMostRoundValueInsideRange(double x0, double x1)
         {
-            HighestDecimalPlace(x0, out int max10Pow);
-            double max10PowValue = Math.Pow(10.0, max10Pow);
+            double max10PowValue = HighestDecimalPlace(Math.Abs(x0), out int max10Pow);
             double mostR = Math.Ceiling(x0 / max10PowValue) * max10PowValue;
             while (mostR > x1)
             {
