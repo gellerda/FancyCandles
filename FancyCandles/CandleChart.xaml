@@ -447,7 +447,7 @@
         <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" MouseWheel="OnMouseWheel"/>
         <!-- ============================================================================================================================================================== -->
         <!-- Цена перекрестия для графика цены -->
-        <Grid  Grid.Row="0" Grid.Column="1">
+        <Grid  Grid.Row="0" Grid.Column="1" Style="{StaticResource rowSpanPriceChartIfVolumeDisabled}">
             <Grid.Visibility>
                 <MultiBinding Converter="{StaticResource squareBoolToVisibilityConverter}">
                     <Binding Path="IsCrossPriceLabelVisible" Mode="OneWay"/>
