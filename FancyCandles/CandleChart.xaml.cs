@@ -259,6 +259,29 @@ namespace FancyCandles
         ///<value>The default value for the <see cref="ChartAreaBackground"/> property: <c>#FFFFFDE9</c>.</value>
         public static Brush DefaultChartAreaBackground { get { return (Brush)Brushes.Cornsilk.GetCurrentValueAsFrozen(); } }
         //----------------------------------------------------------------------------------------------------------------------------------
+        /// <summary>Gets or sets the border color of the price chart and volume diagram areas.</summary>
+        ///<value>The border color of the price chart and volume diagram areas. The default is determined by the <see cref="DefaultChartAreaBorderColor"/> values.</value>
+        ///<remarks>
+        ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 
+        ///<tr><td>Identifier field</td><td><see cref="ChartAreaBorderColorProperty"/></td></tr> 
+        ///<tr><td>Metadata properties set to <c>True</c></td><td>-</td></tr> </table>
+        ///</remarks>
+        [UndoableProperty]
+        [JsonProperty]
+        public Brush ChartAreaBorderColor
+        {
+            get { return (Brush)GetValue(ChartAreaBorderColorProperty); }
+            set { SetValue(ChartAreaBorderColorProperty, value); }
+        }
+        /// <summary>Identifies the <see cref="ChartAreaBorderColor"/> dependency property.</summary>
+        /// <value><see cref="DependencyProperty"/></value>
+        public static readonly DependencyProperty ChartAreaBorderColorProperty =
+            DependencyProperty.Register("ChartAreaBorderColor", typeof(Brush), typeof(CandleChart), new PropertyMetadata(DefaultChartAreaBorderColor));
+
+        ///<summary>Gets the default value for the ChartAreaBorderColor property.</summary>
+        ///<value>The default value for the <see cref="ChartAreaBorderColor"/> property: <c>Black</c>.</value>
+        public static Brush DefaultChartAreaBorderColor { get { return (Brush)Brushes.Black.GetCurrentValueAsFrozen(); } }
+        //----------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Gets or sets the fill brush for the rectangle, that covers this chart control if it has been disabled.</summary>
         ///<value>The fill brush for the rectangle, that covers this chart control if it has been disabled. The default is determined by the <see cref="DefaultDisabledFill"/>values.</value>
         ///<remarks>
@@ -1308,8 +1331,8 @@ namespace FancyCandles
         #endregion **********************************************************************************************************************************************
         //----------------------------------------------------------------------------------------------------------------------------------
         #region COMMON PROPERTIES FOR THE PRICE AXIS AND THE TIME AXIS*******************************************************************************************
-        ///<summary>Gets or sets the color of lines, ticks and its labels for all the axises.</summary>
-        ///<value>The color of lines, ticks and its labels for all the axises. The default is determined by the <see cref="DefaultAxisTickColor"/> value.</value>
+        ///<summary>Gets or sets the color of ticks and its labels for all the axises.</summary>
+        ///<value>The color of ticks and its labels for all the axises. The default is determined by the <see cref="DefaultAxisTickColor"/> value.</value>
         ///<remarks> 
         ///<h3>Dependency Property Information</h3>
         ///<table border="1" frame="hsides" rules="rows" style="margin: 0 0 10 20"> 

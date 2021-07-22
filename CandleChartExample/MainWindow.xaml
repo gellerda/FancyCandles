@@ -16,7 +16,8 @@
         </Grid.RowDefinitions>
 
         <fc:CandleChart CandlesSource="{Binding Path=Candles}"
-                        VolumeBarWidthToCandleWidthRatio="0.5" 
+                        VolumeBarWidthToCandleWidthRatio="0.5"
+                        ChartAreaBorderColor="IndianRed"
                         Grid.Row="0">
             <fc:CandleChart.OverlayIndicators>
                 <local:ObservableOverlayIndicatorCollection>

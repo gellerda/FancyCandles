@@ -306,6 +306,25 @@ references:
   commentId: F:FancyCandles.CandleChart.ChartAreaBackgroundProperty
   fullName: FancyCandles.CandleChart.ChartAreaBackgroundProperty
   nameWithType: CandleChart.ChartAreaBackgroundProperty
+- uid: FancyCandles.CandleChart.ChartAreaBorderColor
+  name: ChartAreaBorderColor
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_ChartAreaBorderColor
+  commentId: P:FancyCandles.CandleChart.ChartAreaBorderColor
+  fullName: FancyCandles.CandleChart.ChartAreaBorderColor
+  nameWithType: CandleChart.ChartAreaBorderColor
+- uid: FancyCandles.CandleChart.ChartAreaBorderColor*
+  name: ChartAreaBorderColor
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_ChartAreaBorderColor_
+  commentId: Overload:FancyCandles.CandleChart.ChartAreaBorderColor
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.ChartAreaBorderColor
+  nameWithType: CandleChart.ChartAreaBorderColor
+- uid: FancyCandles.CandleChart.ChartAreaBorderColorProperty
+  name: ChartAreaBorderColorProperty
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_ChartAreaBorderColorProperty
+  commentId: F:FancyCandles.CandleChart.ChartAreaBorderColorProperty
+  fullName: FancyCandles.CandleChart.ChartAreaBorderColorProperty
+  nameWithType: CandleChart.ChartAreaBorderColorProperty
 - uid: FancyCandles.CandleChart.CrossLinesBrush
   name: CrossLinesBrush
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_CrossLinesBrush
@@ -550,6 +569,19 @@ references:
   isSpec: "True"
   fullName: FancyCandles.CandleChart.DefaultChartAreaBackground
   nameWithType: CandleChart.DefaultChartAreaBackground
+- uid: FancyCandles.CandleChart.DefaultChartAreaBorderColor
+  name: DefaultChartAreaBorderColor
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultChartAreaBorderColor
+  commentId: P:FancyCandles.CandleChart.DefaultChartAreaBorderColor
+  fullName: FancyCandles.CandleChart.DefaultChartAreaBorderColor
+  nameWithType: CandleChart.DefaultChartAreaBorderColor
+- uid: FancyCandles.CandleChart.DefaultChartAreaBorderColor*
+  name: DefaultChartAreaBorderColor
+  href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultChartAreaBorderColor_
+  commentId: Overload:FancyCandles.CandleChart.DefaultChartAreaBorderColor
+  isSpec: "True"
+  fullName: FancyCandles.CandleChart.DefaultChartAreaBorderColor
+  nameWithType: CandleChart.DefaultChartAreaBorderColor
 - uid: FancyCandles.CandleChart.DefaultCrossLinesBrush
   name: DefaultCrossLinesBrush
   href: api/FancyCandles.CandleChart.html#FancyCandles_CandleChart_DefaultCrossLinesBrush
