@@ -261,7 +261,7 @@ namespace FancyCandles
                 OnRender_DayAndMonth(drawingContext, axisTickPen);
 
             // Горизонтальные линии на всю ширину разделяющая и окаймляющая панели времени и даты:
-            drawingContext.DrawLine(axisTickPen, new Point(0, topTimePanelY), new Point(RenderSize.Width, topTimePanelY));
+            //drawingContext.DrawLine(axisTickPen, new Point(0, topTimePanelY), new Point(RenderSize.Width, topTimePanelY));
             drawingContext.DrawLine(axisTickPen, new Point(0, centerTimePanelY), new Point(RenderSize.Width, centerTimePanelY));
             drawingContext.DrawLine(axisTickPen, new Point(0, RenderSize.Height), new Point(RenderSize.Width, RenderSize.Height));
         }

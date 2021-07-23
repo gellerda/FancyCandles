@@ -424,7 +424,7 @@
                                   Visibility="{Binding Path=IsVolumePanelVisible, Converter={StaticResource boolToVisibilityConverter}}"/>
         <!-- ============================================================================================================================================================== -->
         <!-- Горизонтальная шкала c метками времени: -->
-        <local:TimeTicksElement Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"
+        <local:TimeTicksElement Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" HorizontalAlignment="Stretch"
                                 TickLabelFontFamily="{Binding Path=AxisTickLabelFontFamily, Mode=OneWay}"
                                 TickLabelFontSize="{Binding Path=TimeAxisTickLabelFontSize, Mode=OneWay}"
                                 TimeAxisHeight="{Binding Path=TimeAxisHeight, Mode=OneWay}"
