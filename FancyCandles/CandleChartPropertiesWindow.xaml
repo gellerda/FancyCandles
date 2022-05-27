@@ -25,7 +25,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FancyCandles"
         xmlns:localIndicators="clr-namespace:FancyCandles.Indicators"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:i="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
         xmlns:fp="clr-namespace:FancyPrimitives;assembly=FancyPrimitives"
         mc:Ignorable="d"
         ResizeMode="NoResize"

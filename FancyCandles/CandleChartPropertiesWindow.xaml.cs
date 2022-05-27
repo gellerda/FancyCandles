@@ -158,7 +158,7 @@ namespace FancyCandles
                 ParserContext context = new ParserContext();
                 context.XmlnsDictionary.Add("", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
                 context.XmlnsDictionary.Add("x", "http://schemas.microsoft.com/winfx/2006/xaml");
-                context.XmlnsDictionary.Add("i", "clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity");
+                context.XmlnsDictionary.Add("i", "clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors");
                 context.XmlnsDictionary.Add("local", "clr-namespace:FancyCandles;assembly=FancyCandles");
                 context.XmlnsDictionary.Add("fp", "clr-namespace:FancyPrimitives;assembly=FancyPrimitives");
                 UIElement indicatorEditorElement = (UIElement)XamlReader.Load(new MemoryStream(b), context);
